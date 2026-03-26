@@ -1,0 +1,2702 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nubi Creativa — Agencia Creativa en Buenos Aires</title>
+  <meta name="description" content="Nubi Creativa es una agencia creativa de Buenos Aires especializada en diseño gráfico, marketing digital, desarrollo web y producción audiovisual.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/logo/logo-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/logo/logo-icon.png">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Nubi Creativa — Agencia Creativa">
+  <meta property="og:description" content="Diseño, marketing, web y audiovisual para marcas que quieren destacar.">
+  <meta property="og:image" content="assets/logo/logo-blue.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <style>
+    /* =============================================
+       BRAND FONTS — LOCAL (Sniglet + Source Serif 4)
+    ============================================= */
+    @font-face {
+      font-family: 'Sniglet';
+      src: url('assets/fonts/Sniglet-ExtraBold.ttf') format('truetype');
+      font-weight: 800;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Sniglet';
+      src: url('assets/fonts/Sniglet-Regular.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Source Serif 4';
+      src: url('assets/fonts/SourceSerif4-VariableFont_opsz,wght.ttf') format('truetype');
+      font-weight: 200 900;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    /* =============================================
+       RESET & BASE
+    ============================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue: #1F67B0;
+      --navy: #0D1B2A;
+      --white: #F8FAFF;
+      --accent: #00D4FF;
+      --accent2: #7B2FFF;
+      --gray: #8A9BB0;
+      --card-bg: rgba(255,255,255,0.05);
+      --card-border: rgba(255,255,255,0.10);
+      --font-display: 'Sniglet', 'Syne', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+      --font-editorial: 'Source Serif 4', Georgia, serif;
+      --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
+    body {
+      font-family: var(--font-body);
+      background: var(--navy);
+      color: var(--white);
+      overflow-x: hidden;
+      cursor: none;
+    }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; display: block; }
+    ul { list-style: none; }
+    button { cursor: none; border: none; background: none; font-family: inherit; }
+    input, textarea, select { font-family: inherit; }
+
+    /* =============================================
+       CUSTOM CURSOR
+    ============================================= */
+    #cursor {
+      position: fixed; top: 0; left: 0; z-index: 9999;
+      pointer-events: none; mix-blend-mode: difference;
+    }
+    #cursor-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--white);
+      position: absolute; transform: translate(-50%, -50%);
+      transition: transform 0.1s;
+    }
+    #cursor-ring {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,0.6);
+      position: absolute; transform: translate(-50%, -50%);
+      transition: width 0.3s, height 0.3s, border-color 0.3s, transform 0.12s;
+    }
+    body.cursor-hover #cursor-ring {
+      width: 56px; height: 56px;
+      border-color: var(--accent);
+    }
+    @media (hover: none) { #cursor { display: none; } body { cursor: auto; } button { cursor: pointer; } }
+
+    /* =============================================
+       SCROLLBAR
+    ============================================= */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--navy); }
+    ::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 2px; }
+
+    /* =============================================
+       BRAND TYPOGRAPHY — Source Serif 4 for editorial body
+    ============================================= */
+    .hero-sub,
+    .about-left > p,
+    .service-card > p,
+    .testimonial-text,
+    .contact-subtitle,
+    .footer-brand > p {
+      font-family: var(--font-editorial);
+      font-weight: 300;
+    }
+    .testimonial-text { font-weight: 400; font-style: italic; }
+
+    /* =============================================
+       BRAND LOGO — Float animation
+    ============================================= */
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-5px); }
+    }
+    /* Navbar logo image */
+    .nav-logo-img {
+      height: 32px; width: auto;
+      filter: brightness(0) invert(1);
+      display: block; flex-shrink: 0;
+      animation: logoFloat 3.5s ease-in-out infinite;
+    }
+    /* Footer logo image */
+    .footer-logo-img {
+      height: 28px; width: auto;
+      filter: brightness(0) invert(1);
+      display: block;
+    }
+    /* Hero floating logo */
+    .hero-logo-float {
+      margin-bottom: 20px;
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    .hero-logo-float img {
+      height: 56px; width: auto;
+      filter: brightness(0) invert(1);
+      animation: logoFloat 3s ease-in-out infinite;
+      opacity: 0.85;
+    }
+    /* Footer logo layout */
+    .footer-logo {
+      display: flex; align-items: center; gap: 10px;
+    }
+
+    /* =============================================
+       NOISE TEXTURE OVERLAY
+    ============================================= */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0;
+      pointer-events: none;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-size: 128px 128px;
+    }
+
+    /* =============================================
+       UTILITY CLASSES
+    ============================================= */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .section-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--font-body); font-size: 12px; font-weight: 500;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 20px;
+    }
+    .section-tag::before {
+      content: ''; display: block;
+      width: 24px; height: 1.5px; background: var(--accent);
+    }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+
+    /* =============================================
+       BUTTONS
+    ============================================= */
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 28px; border-radius: 50px;
+      font-family: var(--font-body); font-size: 15px; font-weight: 500;
+      position: relative; overflow: hidden; transition: var(--transition);
+    }
+    .btn::after {
+      content: ''; position: absolute; inset: 0; border-radius: 50px;
+      opacity: 0; transition: opacity 0.3s;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.2) 0%, transparent 70%);
+    }
+    .btn:active::after { opacity: 1; }
+    .btn-primary {
+      background: var(--blue);
+      color: var(--white);
+      box-shadow: 0 0 0 0 rgba(31,103,176,0.4);
+    }
+    .btn-primary:hover {
+      background: #2478cc;
+      box-shadow: 0 8px 30px rgba(31,103,176,0.45);
+      transform: translateY(-2px);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 1.5px solid rgba(255,255,255,0.25);
+    }
+    .btn-outline:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 0 0 20px rgba(0,212,255,0.15);
+      transform: translateY(-2px);
+    }
+    .btn-accent {
+      background: linear-gradient(135deg, var(--accent), var(--blue));
+      color: var(--navy);
+      font-weight: 600;
+    }
+    .btn-accent:hover {
+      box-shadow: 0 8px 30px rgba(0,212,255,0.35);
+      transform: translateY(-2px);
+    }
+    .btn-glow {
+      position: relative;
+    }
+    .btn-glow::before {
+      content: ''; position: absolute; inset: -2px; border-radius: 52px;
+      background: linear-gradient(135deg, var(--accent), var(--blue), var(--accent2));
+      z-index: -1; opacity: 0; transition: opacity 0.3s;
+      filter: blur(8px);
+    }
+    .btn-glow:hover::before { opacity: 1; }
+
+    /* =============================================
+       NAVIGATION
+    ============================================= */
+    #navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 20px 0;
+      transition: padding 0.4s, background 0.4s, box-shadow 0.4s, backdrop-filter 0.4s;
+    }
+    #navbar.scrolled {
+      padding: 12px 0;
+      background: rgba(13,27,42,0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.05);
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    }
+    /* INSERT LOGO HERE */
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-family: var(--font-display); font-size: 22px; font-weight: 800;
+      letter-spacing: -0.02em;
+      opacity: 0; transform: translateY(-10px);
+      animation: logoEntrance 0.8s 0.2s cubic-bezier(0.4,0,0.2,1) forwards;
+    }
+    @keyframes logoEntrance {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links {
+      display: flex; align-items: center; gap: 32px;
+    }
+    .nav-links a {
+      font-size: 14px; font-weight: 500; color: rgba(248,250,255,0.7);
+      position: relative; transition: color var(--transition);
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0; right: 0;
+      height: 1.5px; background: var(--accent);
+      transform: scaleX(0); transform-origin: right;
+      transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-links a:hover::after { transform: scaleX(1); transform-origin: left; }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .lang-toggle {
+      display: flex; align-items: center;
+      background: rgba(255,255,255,0.07); border-radius: 50px;
+      padding: 4px; gap: 2px; border: 1px solid rgba(255,255,255,0.1);
+    }
+    .lang-btn {
+      padding: 5px 12px; border-radius: 50px;
+      font-size: 12px; font-weight: 600; letter-spacing: 0.05em;
+      color: rgba(248,250,255,0.5); transition: var(--transition);
+      cursor: none;
+    }
+    .lang-btn.active {
+      background: var(--blue); color: var(--white);
+    }
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      width: 32px; padding: 4px; cursor: none;
+    }
+    .hamburger span {
+      display: block; height: 1.5px; background: var(--white);
+      border-radius: 2px; transition: var(--transition);
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+    .mobile-menu {
+      display: none; position: fixed; inset: 0; z-index: 99;
+      background: rgba(13,27,42,0.97);
+      backdrop-filter: blur(20px);
+      flex-direction: column; align-items: center; justify-content: center; gap: 32px;
+      transform: translateX(100%); transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+    }
+    .mobile-menu.open { transform: translateX(0); }
+    .mobile-menu a {
+      font-family: var(--font-display); font-size: 36px; font-weight: 700;
+      color: rgba(248,250,255,0.8); transition: color 0.2s;
+    }
+    .mobile-menu a:hover { color: var(--accent); }
+    .mobile-lang { display: flex; gap: 12px; margin-top: 8px; }
+
+    /* =============================================
+       HERO SECTION
+    ============================================= */
+    #hero {
+      min-height: 100vh; position: relative;
+      display: flex; align-items: center; overflow: hidden;
+      padding: 120px 0 80px;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background: radial-gradient(ellipse 90% 70% at 65% 35%, rgba(31,103,176,0.32) 0%, transparent 65%),
+                  radial-gradient(ellipse 50% 60% at 15% 65%, rgba(0,212,255,0.1) 0%, transparent 55%),
+                  radial-gradient(ellipse 45% 50% at 85% 75%, rgba(123,47,255,0.14) 0%, transparent 55%),
+                  radial-gradient(ellipse 30% 30% at 50% 0%, rgba(31,103,176,0.12) 0%, transparent 60%),
+                  var(--navy);
+    }
+    .hero-shapes { position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+    .shape {
+      position: absolute; border-radius: 50%;
+      filter: blur(60px); opacity: 0.15;
+      animation: floatShape linear infinite;
+    }
+    .shape-1 { width: 400px; height: 400px; background: var(--blue); top: -100px; right: -50px; animation-duration: 18s; }
+    .shape-2 { width: 250px; height: 250px; background: var(--accent); bottom: 10%; left: 10%; animation-duration: 22s; animation-delay: -5s; }
+    .shape-3 { width: 180px; height: 180px; background: var(--accent2); top: 40%; right: 20%; animation-duration: 15s; animation-delay: -8s; }
+    @keyframes floatShape {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(30px, -40px) scale(1.05); }
+      66% { transform: translate(-20px, 20px) scale(0.95); }
+    }
+    /* Particle canvas */
+    #hero-canvas { position: absolute; inset: 0; z-index: 1; opacity: 0.4; width: 100%; height: 100%; }
+    .hero-content { position: relative; z-index: 2; max-width: 820px; }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 12px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 48px;
+      white-space: nowrap;
+      opacity: 0; transform: translateY(20px);
+    }
+    .hero-eyebrow span { width: 32px; height: 1px; background: var(--accent); }
+    .hero-headline {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 5.5vw, 76px);
+      font-weight: 800; line-height: 1.2; letter-spacing: -0.03em;
+      margin-bottom: 32px; color: var(--white);
+      padding-top: 4px;
+    }
+    .hero-headline .line { display: block; }
+    .hero-headline .word {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .hero-headline .accent-word {
+      background: linear-gradient(90deg, var(--accent) 0%, #7ec8ff 30%, var(--accent2) 60%, var(--accent) 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradientShift 3s linear infinite;
+    }
+    @keyframes gradientShift {
+      to { background-position: 200% center; }
+    }
+    .hero-headline .words-revealed .word {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .hero-sub {
+      font-size: clamp(17px, 2vw, 20px); font-weight: 300; line-height: 1.8;
+      color: rgba(248,250,255,0.78); max-width: 540px; margin-bottom: 44px;
+      opacity: 0; transform: translateY(20px);
+    }
+    .hero-ctas {
+      display: flex; flex-wrap: wrap; gap: 14px; align-items: center;
+      opacity: 0; transform: translateY(20px);
+    }
+    .scroll-indicator {
+      position: absolute; bottom: 48px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      opacity: 0.5; animation: scrollBounce 2s ease-in-out infinite;
+      z-index: 4;
+    }
+    .scroll-indicator span { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; }
+    .scroll-line {
+      width: 1px; height: 48px;
+      background: linear-gradient(to bottom, var(--white), transparent);
+    }
+    @keyframes scrollBounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(6px); }
+    }
+    /* Diagonal clip at bottom */
+    #hero::after {
+      content: ''; position: absolute; bottom: -1px; left: 0; right: 0; z-index: 3;
+      height: 80px;
+      background: #0a1520;
+      clip-path: polygon(0 100%, 100% 0, 100% 100%);
+    }
+
+    /* =============================================
+       MAGIC UI — RETRO GRID
+    ============================================= */
+    .retro-grid {
+      position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+    }
+    .retro-grid::before {
+      content: '';
+      position: absolute;
+      width: 200%; height: 200%;
+      bottom: -40px; left: -50%;
+      background-image:
+        linear-gradient(rgba(31,103,176,0.14) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(31,103,176,0.14) 1px, transparent 1px);
+      background-size: 52px 52px;
+      transform: rotateX(72deg);
+      transform-origin: bottom center;
+      -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 55%);
+      mask-image: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 55%);
+      animation: retroScroll 7s linear infinite;
+    }
+    @keyframes retroScroll {
+      to { background-position: 0 52px; }
+    }
+
+    /* =============================================
+       MAGIC UI — METEORS
+    ============================================= */
+    .meteors-container {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: hidden;
+    }
+    .meteor {
+      position: absolute;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(0,212,255,0.8), transparent);
+      border-radius: 9999px;
+      opacity: 0;
+      animation: meteorFall linear infinite;
+      filter: drop-shadow(0 0 3px rgba(0,212,255,0.6));
+    }
+    @keyframes meteorFall {
+      0%   { transform: translateY(-80px) translateX(100px) rotate(-35deg); opacity: 0; }
+      8%   { opacity: 0.9; }
+      80%  { opacity: 0.6; }
+      100% { transform: translateY(650px) translateX(-400px) rotate(-35deg); opacity: 0; }
+    }
+
+    /* =============================================
+       MAGIC UI — SHIMMER BEAM (buttons)
+    ============================================= */
+    .shimmer-beam {
+      position: absolute;
+      top: 0; left: -100%;
+      width: 50%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+      animation: shimmerSweep 3s ease-in-out infinite;
+      pointer-events: none;
+      border-radius: inherit;
+      z-index: 1;
+    }
+    @keyframes shimmerSweep {
+      0%      { left: -100%; }
+      55%, 100% { left: 160%; }
+    }
+
+    /* =============================================
+       MAGIC UI — MARQUEE
+    ============================================= */
+    .marquee-strip {
+      background: linear-gradient(90deg, #080f18 0%, #0a1520 50%, #080f18 100%);
+      border-top: 1px solid rgba(31,103,176,0.18);
+      border-bottom: 1px solid rgba(31,103,176,0.18);
+      padding: 18px 0;
+      overflow: hidden;
+      position: relative;
+      z-index: 5;
+    }
+    .marquee-strip::before,
+    .marquee-strip::after {
+      content: '';
+      position: absolute; top: 0; bottom: 0; width: 140px; z-index: 2;
+      pointer-events: none;
+    }
+    .marquee-strip::before { left: 0; background: linear-gradient(to right, #080f18, transparent); }
+    .marquee-strip::after  { right: 0; background: linear-gradient(to left, #080f18, transparent); }
+    .marquee-track {
+      display: flex; gap: 0; align-items: center;
+      white-space: nowrap;
+      animation: marqueeScroll 22s linear infinite;
+      width: max-content;
+    }
+    .marquee-track:hover { animation-play-state: paused; }
+    .marquee-item {
+      display: inline-flex; align-items: center; gap: 12px;
+      padding: 0 28px;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.18em;
+      text-transform: uppercase; color: rgba(248,250,255,0.35);
+      transition: color 0.3s;
+    }
+    .marquee-item:hover { color: rgba(0,212,255,0.7); }
+    .marquee-item::before {
+      content: ''; display: block;
+      width: 4px; height: 4px; border-radius: 50%;
+      background: rgba(31,103,176,0.5);
+      flex-shrink: 0;
+    }
+    @keyframes marqueeScroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* =============================================
+       SERVICES SECTION
+    ============================================= */
+    #servicios {
+      padding: 120px 0;
+      background: #0a1520;
+      background-image: radial-gradient(ellipse 60% 40% at 85% 15%, rgba(31,103,176,0.09) 0%, transparent 60%),
+                        radial-gradient(ellipse 40% 50% at 10% 85%, rgba(0,212,255,0.05) 0%, transparent 55%);
+      position: relative;
+    }
+    #servicios::after {
+      content: ''; position: absolute; bottom: -1px; left: 0; right: 0; z-index: 1;
+      height: 80px; background: var(--navy);
+      clip-path: polygon(0 0, 100% 100%, 0 100%);
+    }
+    .section-header { margin-bottom: 64px; }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 800; line-height: 1.15; letter-spacing: -0.025em;
+    }
+    .section-title em {
+      font-style: normal;
+      background: linear-gradient(90deg, var(--accent) 0%, #7ec8ff 35%, var(--accent2) 65%, var(--accent) 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradientShift 3s linear infinite;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+    .service-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 24px; padding: 40px 36px;
+      position: relative; overflow: hidden;
+      transition: border-color 0.4s, box-shadow 0.4s, transform 0.3s ease;
+      will-change: transform;
+    }
+    .service-card { --mouse-x: 50%; --mouse-y: 50%; }
+    .service-card::before {
+      content: ''; position: absolute; inset: 0; border-radius: 20px;
+      background: radial-gradient(280px circle at var(--mouse-x) var(--mouse-y), rgba(31,103,176,0.2), transparent 60%);
+      opacity: 0; transition: opacity 0.4s;
+    }
+    .service-card:hover {
+      border-color: rgba(0,212,255,0.25);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3),
+                  0 0 0 1px rgba(0,212,255,0.15),
+                  0 0 30px rgba(0,212,255,0.06);
+      animation: cardGlow 2.5s ease-in-out infinite;
+    }
+    @keyframes cardGlow {
+      0%, 100% { box-shadow: 0 20px 60px rgba(0,0,0,0.3), 0 0 0 1px rgba(0,212,255,0.15), 0 0 20px rgba(0,212,255,0.05); }
+      50%       { box-shadow: 0 20px 60px rgba(0,0,0,0.3), 0 0 0 1px rgba(0,212,255,0.35), 0 0 45px rgba(0,212,255,0.12); }
+    }
+    .service-card:hover::before { opacity: 1; }
+    .service-icon {
+      width: 52px; height: 52px; border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 28px;
+      background: rgba(31,103,176,0.15);
+      border: 1px solid rgba(31,103,176,0.28);
+      color: var(--accent);
+      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.4s, background 0.3s;
+    }
+    .service-icon svg {
+      width: 22px; height: 22px; stroke: currentColor; fill: none;
+      stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .service-card:hover .service-icon {
+      transform: scale(1.08) rotate(-3deg);
+      box-shadow: 0 8px 28px rgba(0,212,255,0.22);
+      background: rgba(31,103,176,0.28);
+    }
+    .service-card h3 {
+      font-family: var(--font-display); font-size: 21px; font-weight: 800;
+      margin-bottom: 14px; letter-spacing: -0.02em; line-height: 1.2;
+    }
+    .service-card p {
+      font-size: 15px; line-height: 1.8; color: rgba(248,250,255,0.68);
+    }
+    .service-num {
+      position: absolute; top: 28px; right: 28px;
+      font-family: var(--font-display); font-size: 64px; font-weight: 800;
+      color: rgba(255,255,255,0.03); line-height: 1; letter-spacing: -0.05em;
+      pointer-events: none;
+    }
+
+    /* =============================================
+       ABOUT SECTION
+    ============================================= */
+    #nosotros {
+      padding: 120px 0 140px;
+      background: var(--navy);
+      position: relative;
+    }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+    }
+    .big-statement {
+      font-family: var(--font-display);
+      font-size: clamp(24px, 3vw, 38px); font-weight: 800; line-height: 1.25;
+      letter-spacing: -0.025em; margin-bottom: 24px;
+    }
+    .big-statement em {
+      font-style: normal;
+      background: linear-gradient(90deg, var(--accent) 0%, #7ec8ff 35%, var(--accent2) 65%, var(--accent) 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradientShift 3s linear infinite;
+    }
+    .about-left p {
+      font-size: 16px; line-height: 1.85; color: rgba(248,250,255,0.70);
+      margin-bottom: 48px; max-width: 480px;
+    }
+    .stats-row { display: flex; gap: 40px; flex-wrap: wrap; }
+    .stat-item {}
+    .stat-number {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 4vw, 52px); font-weight: 800; line-height: 1;
+      color: var(--white); letter-spacing: -0.04em;
+      display: flex; align-items: baseline; gap: 4px;
+    }
+    .stat-number .suffix { color: var(--accent); }
+    .stat-label {
+      font-size: 13px; color: rgba(248,250,255,0.5); margin-top: 6px;
+      text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .about-right {
+      position: relative; height: 460px;
+      padding-bottom: 20px; padding-right: 20px;
+    }
+    .about-visual {
+      position: absolute; inset: 0 20px 20px 0;
+      border-radius: 24px; overflow: hidden;
+      background: linear-gradient(135deg, rgba(31,103,176,0.2), rgba(0,212,255,0.1));
+      border: 1px solid rgba(255,255,255,0.08);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .about-visual-inner {
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue), var(--accent));
+      opacity: 0.3; filter: blur(40px);
+      animation: floatShape 12s ease-in-out infinite;
+    }
+    .about-grid-deco {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image: linear-gradient(rgba(31,103,176,0.06) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(31,103,176,0.06) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .about-badge {
+      position: absolute; bottom: -20px; right: -20px;
+      width: 120px; height: 120px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue), var(--accent2));
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      font-family: var(--font-display); text-align: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      animation: rotateBadge 20s linear infinite;
+    }
+    .about-badge .badge-num { font-size: 28px; font-weight: 800; line-height: 1; }
+    .about-badge .badge-text { font-size: 10px; font-weight: 500; letter-spacing: 0.08em; opacity: 0.8; }
+    @keyframes rotateBadge {
+      0% { box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 0 0 rgba(31,103,176,0.4); }
+      50% { box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 0 16px rgba(31,103,176,0); }
+      100% { box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 0 0 rgba(31,103,176,0); }
+    }
+
+    /* =============================================
+       PROJECTS SECTION
+    ============================================= */
+    #proyectos {
+      padding: 120px 0;
+      background: #0a1520;
+      position: relative; overflow: hidden;
+    }
+    .filter-bar {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 48px;
+    }
+    .filter-btn {
+      padding: 9px 22px; border-radius: 50px;
+      font-size: 13px; font-weight: 500;
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(248,250,255,0.6);
+      transition: var(--transition); cursor: none;
+    }
+    .filter-btn.active, .filter-btn:hover {
+      background: var(--blue); border-color: var(--blue);
+      color: var(--white); box-shadow: 0 4px 20px rgba(31,103,176,0.35);
+    }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-auto-rows: 280px;
+      gap: 20px;
+    }
+    .project-card {
+      border-radius: 16px; overflow: hidden;
+      position: relative; cursor: none;
+      transition: transform 0.4s cubic-bezier(0.4,0,0.2,1), box-shadow 0.4s, opacity 0.5s;
+      will-change: transform;
+    }
+    .project-card.hidden { opacity: 0; transform: scale(0.9); pointer-events: none; position: absolute; }
+    .project-card:nth-child(1) { grid-column: span 2; }
+    .project-card:nth-child(4) { grid-column: span 2; }
+    .project-bg {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+      transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);
+    }
+    .proj-1 .project-bg { background: linear-gradient(135deg, #1F67B0 0%, #0D1B2A 100%); }
+    .proj-2 .project-bg { background: linear-gradient(135deg, #7B2FFF 0%, #1F67B0 100%); }
+    .proj-3 .project-bg { background: linear-gradient(135deg, #00D4FF 0%, #1F67B0 100%); }
+    .proj-4 .project-bg { background: linear-gradient(135deg, #0D1B2A 0%, #7B2FFF 100%); }
+    .proj-5 .project-bg { background: linear-gradient(135deg, #1F67B0 0%, #00D4FF 100%); }
+    .proj-6 .project-bg { background: linear-gradient(135deg, #7B2FFF 0%, #00D4FF 100%); }
+    .project-card:hover .project-bg { transform: scale(1.06); }
+    .project-noise {
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.1'/%3E%3C/svg%3E");
+      opacity: 0.2;
+    }
+    .project-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(13,27,42,0.9) 0%, transparent 60%);
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 28px;
+    }
+    .project-tag {
+      display: inline-block; padding: 4px 12px; border-radius: 50px;
+      background: rgba(31,103,176,0.5); backdrop-filter: blur(8px);
+      font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 10px; align-self: flex-start;
+      border: 1px solid rgba(0,212,255,0.2);
+    }
+    .project-title {
+      font-family: var(--font-display); font-size: 20px; font-weight: 700;
+      line-height: 1.25; margin-bottom: 0;
+    }
+    .project-hover-cta {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity 0.3s;
+      background: rgba(13,27,42,0.5); backdrop-filter: blur(4px);
+    }
+    .project-card:hover .project-hover-cta { opacity: 1; }
+    .project-hover-cta .cta-pill {
+      padding: 12px 24px; border-radius: 50px;
+      background: var(--white); color: var(--navy);
+      font-weight: 600; font-size: 14px;
+      transform: translateY(10px); transition: transform 0.3s;
+    }
+    .project-card:hover .cta-pill { transform: translateY(0); }
+
+    /* =============================================
+       TESTIMONIALS SECTION
+    ============================================= */
+    #testimonios {
+      padding: 120px 0;
+      background: var(--navy);
+      background-image: radial-gradient(rgba(31,103,176,0.13) 1px, transparent 1px);
+      background-size: 30px 30px;
+      position: relative; overflow: hidden;
+    }
+    .testimonials-carousel-wrap { position: relative; margin-top: 56px; }
+    .testimonials-track-outer { overflow: hidden; }
+    .testimonials-track {
+      display: flex; gap: 24px;
+      transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);
+    }
+    .testimonial-card {
+      flex: 0 0 calc(50% - 12px);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px; padding: 36px;
+      position: relative;
+    }
+    .testimonial-card::before {
+      content: '"';
+      position: absolute; top: 20px; right: 28px;
+      font-family: var(--font-display); font-size: 80px; font-weight: 800;
+      color: rgba(31,103,176,0.2); line-height: 1;
+    }
+    .testimonial-text {
+      font-size: 16px; line-height: 1.75; color: rgba(248,250,255,0.8);
+      margin-bottom: 28px; font-style: italic;
+    }
+    .testimonial-author { display: flex; align-items: center; gap: 14px; }
+    .author-avatar {
+      width: 48px; height: 48px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-size: 18px; font-weight: 700;
+      background: linear-gradient(135deg, var(--blue), var(--accent));
+      flex-shrink: 0;
+    }
+    .author-info .name { font-weight: 600; font-size: 15px; }
+    .author-info .company { font-size: 13px; color: rgba(248,250,255,0.45); margin-top: 2px; }
+    .carousel-nav {
+      display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 36px;
+    }
+    .carousel-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(255,255,255,0.2); transition: var(--transition); cursor: none;
+    }
+    .carousel-dot.active { background: var(--accent); width: 24px; border-radius: 4px; }
+
+    /* =============================================
+       CONTACT SECTION
+    ============================================= */
+    #contacto {
+      padding: 120px 0;
+      background: linear-gradient(180deg, #0a1520 0%, var(--navy) 50%, #060e17 100%);
+      position: relative; overflow: hidden;
+    }
+    #contacto::before {
+      content: ''; position: absolute; top: -200px; left: 50%; transform: translateX(-50%);
+      width: 600px; height: 600px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(31,103,176,0.15), transparent 70%);
+      pointer-events: none;
+    }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+    .contact-left .section-title { margin-bottom: 16px; }
+    .contact-subtitle {
+      font-size: 16px; line-height: 1.75; color: rgba(248,250,255,0.68); margin-bottom: 48px;
+    }
+    .contact-info { display: flex; flex-direction: column; gap: 20px; }
+    .contact-item {
+      display: flex; align-items: center; gap: 16px;
+      padding: 18px 22px; border-radius: 14px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .contact-item:hover { border-color: rgba(31,103,176,0.3); background: rgba(31,103,176,0.07); }
+    .contact-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: rgba(31,103,176,0.15);
+      border: 1px solid rgba(31,103,176,0.28);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent); flex-shrink: 0;
+    }
+    .contact-icon svg {
+      width: 18px; height: 18px; stroke: currentColor; fill: none;
+      stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .contact-item-text .label { font-size: 12px; color: rgba(248,250,255,0.4); margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.08em; }
+    .contact-item-text .value { font-size: 15px; font-weight: 500; }
+    /* Form */
+    .contact-form { display: flex; flex-direction: column; gap: 16px; }
+    .form-group { position: relative; }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%; padding: 16px 20px; border-radius: 12px;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      color: var(--white); font-size: 15px; outline: none;
+      transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
+      appearance: none; -webkit-appearance: none;
+    }
+    .form-group select option { background: #0d1b2a; color: #f8faff; }
+    .form-group select:invalid { color: rgba(248,250,255,0.35); }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: rgba(248,250,255,0.35); }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--blue);
+      background: rgba(31,103,176,0.08);
+      box-shadow: 0 0 0 3px rgba(31,103,176,0.15);
+    }
+    .form-group textarea { resize: vertical; min-height: 130px; }
+    .form-submit { margin-top: 4px; }
+    .form-submit .btn { width: 100%; justify-content: center; padding: 17px 28px; font-size: 16px; }
+
+    /* =============================================
+       FOOTER
+    ============================================= */
+    footer {
+      background: #060e17;
+      padding: 60px 0 32px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .footer-inner {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px;
+      margin-bottom: 48px;
+    }
+    .footer-brand .footer-logo {
+      font-family: var(--font-display); font-size: 20px; font-weight: 800;
+      letter-spacing: -0.02em; margin-bottom: 16px;
+      color: var(--white); text-decoration: none;
+    }
+    .footer-brand .footer-logo > span span { color: var(--accent); }
+    .footer-brand p { font-size: 14px; line-height: 1.7; color: rgba(248,250,255,0.4); max-width: 280px; }
+    .footer-col h4 {
+      font-family: var(--font-display); font-size: 13px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: rgba(248,250,255,0.4); margin-bottom: 20px;
+    }
+    .footer-col ul { display: flex; flex-direction: column; gap: 10px; }
+    .footer-col ul a { font-size: 14px; color: rgba(248,250,255,0.55); transition: color 0.2s; }
+    .footer-col ul a:hover { color: var(--white); }
+    .footer-socials { display: flex; gap: 12px; margin-top: 24px; }
+    .social-btn {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(248,250,255,0.55); transition: var(--transition); cursor: none;
+    }
+    .social-btn svg { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .social-btn:hover {
+      background: var(--blue); border-color: var(--blue); color: var(--white);
+      transform: translateY(-3px); box-shadow: 0 8px 20px rgba(31,103,176,0.35);
+    }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: 28px;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    }
+    .footer-bottom p { font-size: 13px; color: rgba(248,250,255,0.3); }
+    .footer-bottom a { color: var(--accent); transition: opacity 0.2s; }
+    .footer-bottom a:hover { opacity: 0.7; }
+
+    /* =============================================
+       SECTION REVEAL ANIMATIONS
+    ============================================= */
+    .reveal {
+      opacity: 0; transform: translateY(36px);
+      filter: blur(6px);
+      transition: opacity 0.75s cubic-bezier(0.4,0,0.2,1),
+                  transform 0.75s cubic-bezier(0.4,0,0.2,1),
+                  filter 0.75s cubic-bezier(0.4,0,0.2,1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); filter: blur(0); }
+    .reveal-left { opacity: 0; transform: translateX(-40px); filter: blur(5px); transition: opacity 0.75s cubic-bezier(0.4,0,0.2,1), transform 0.75s cubic-bezier(0.4,0,0.2,1), filter 0.75s cubic-bezier(0.4,0,0.2,1); }
+    .reveal-left.visible { opacity: 1; transform: translateX(0); filter: blur(0); }
+    .reveal-right { opacity: 0; transform: translateX(40px); filter: blur(5px); transition: opacity 0.75s cubic-bezier(0.4,0,0.2,1), transform 0.75s cubic-bezier(0.4,0,0.2,1), filter 0.75s cubic-bezier(0.4,0,0.2,1); }
+    .reveal-right.visible { opacity: 1; transform: translateX(0); filter: blur(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* =============================================
+       RESPONSIVE — TABLET
+    ============================================= */
+    @media (max-width: 1024px) {
+      .about-grid { grid-template-columns: 1fr; gap: 48px; }
+      .about-right { height: 380px; }
+      .contact-grid { grid-template-columns: 1fr; gap: 56px; }
+      .footer-inner { grid-template-columns: 1fr 1fr; gap: 36px; }
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* accent em — gradient animation safety fallback */
+    .section-title em, .big-statement em { font-style: normal; }
+
+    /* =============================================
+       WHATSAPP FLOATING BUTTON
+    ============================================= */
+    #whatsapp-fab {
+      position: fixed; bottom: 28px; right: 28px; z-index: 200;
+      width: 56px; height: 56px; border-radius: 50%;
+      background: #25D366;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s;
+      cursor: none;
+      animation: fabEntrance 0.6s 1.5s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    #whatsapp-fab:hover {
+      transform: scale(1.12);
+      box-shadow: 0 8px 32px rgba(37,211,102,0.55);
+    }
+    #whatsapp-fab svg { width: 28px; height: 28px; fill: #fff; }
+    @keyframes fabEntrance {
+      from { opacity: 0; transform: scale(0) translateY(20px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* =============================================
+       BACK TO TOP
+    ============================================= */
+    #back-top {
+      position: fixed; bottom: 92px; right: 28px; z-index: 200;
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(31,103,176,0.25);
+      border: 1px solid rgba(31,103,176,0.4);
+      display: flex; align-items: center; justify-content: center;
+      cursor: none; transition: var(--transition);
+      opacity: 0; pointer-events: none; transform: translateY(10px);
+      backdrop-filter: blur(8px);
+    }
+    #back-top.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    #back-top:hover { background: var(--blue); border-color: var(--blue); transform: translateY(-2px); }
+    #back-top svg { width: 16px; height: 16px; stroke: #fff; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* =============================================
+       ACTIVE NAV LINK
+    ============================================= */
+    .nav-links a.active { color: var(--white); }
+    .nav-links a.active::after { transform: scaleX(1); }
+
+    /* =============================================
+       RESPONSIVE — MOBILE
+    ============================================= */
+    @media (max-width: 768px) {
+      .nav-links, .nav-right { display: none; }
+      .hamburger { display: flex; }
+      .mobile-menu { display: flex; }
+      #hero { padding: 100px 0 80px; }
+      .hero-sub { font-size: 16px; }
+      .services-grid { grid-template-columns: 1fr; }
+      .projects-grid { grid-template-columns: 1fr; grid-auto-rows: 200px; }
+      .project-card:nth-child(1),
+      .project-card:nth-child(4) { grid-column: span 1; }
+      .about-right { height: 300px; }
+      .stats-row { gap: 24px; }
+      .stat-number { font-size: 36px; }
+      .testimonial-card { flex: 0 0 calc(90vw); }
+      .footer-inner { grid-template-columns: 1fr; gap: 28px; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+      .hero-ctas { flex-direction: column; }
+      .hero-ctas .btn { width: 100%; justify-content: center; }
+      #whatsapp-fab { bottom: 20px; right: 20px; }
+      #back-top { bottom: 84px; right: 20px; }
+      .section-header { margin-bottom: 40px; }
+      .service-card { padding: 28px 24px; }
+    }
+
+    /* =============================================
+       CHAT FAB + WINDOW
+    ============================================= */
+    #chat-fab {
+      position: fixed; bottom: 28px; left: 28px; z-index: 200;
+      width: 56px; height: 56px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--blue));
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 20px rgba(0,212,255,0.35);
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s;
+      cursor: none;
+      animation: fabEntrance 0.6s 2s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    #chat-fab:hover { transform: scale(1.12); box-shadow: 0 8px 32px rgba(0,212,255,0.55); }
+    #chat-fab svg { width: 26px; height: 26px; fill: var(--navy); }
+
+    #chat-unread-dot {
+      position: absolute; top: 10px; right: 10px;
+      width: 10px; height: 10px; border-radius: 50%;
+      background: #FF4D6D; border: 2px solid var(--navy);
+      animation: dotPulse 1.8s ease-in-out infinite;
+    }
+    #chat-unread-dot.hidden { display: none; }
+    @keyframes dotPulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50%       { transform: scale(1.35); opacity: 0.7; }
+    }
+
+    #chat-window {
+      position: fixed; bottom: 96px; left: 28px; z-index: 199;
+      width: 360px; height: 480px;
+      background: rgba(13,27,42,0.92);
+      border: 1px solid rgba(255,255,255,0.10); border-radius: 20px;
+      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      display: flex; flex-direction: column; overflow: hidden;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+      transform: scale(0.85) translateY(16px); opacity: 0; pointer-events: none;
+      transform-origin: bottom left;
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.35s cubic-bezier(0.4,0,0.2,1);
+    }
+    #chat-window.open { transform: scale(1) translateY(0); opacity: 1; pointer-events: auto; }
+
+    #chat-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.08); flex-shrink: 0;
+    }
+    #chat-header-left { display: flex; align-items: center; gap: 10px; }
+    .chat-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--blue));
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-size: 14px; font-weight: 800; color: var(--navy);
+    }
+    #chat-header-name { font-family: var(--font-display); font-size: 15px; font-weight: 800; color: var(--white); }
+    #chat-header-status { font-size: 11px; color: var(--accent); letter-spacing: 0.04em; }
+    #chat-close {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: rgba(255,255,255,0.07);
+      display: flex; align-items: center; justify-content: center;
+      transition: background var(--transition); cursor: none; flex-shrink: 0;
+    }
+    #chat-close:hover { background: rgba(255,255,255,0.14); }
+    #chat-close svg { width: 14px; height: 14px; stroke: var(--white); fill: none; stroke-width: 2; stroke-linecap: round; }
+
+    #chat-messages {
+      flex: 1; overflow-y: auto; padding: 16px 16px 8px;
+      display: flex; flex-direction: column; gap: 10px; scroll-behavior: smooth;
+    }
+    #chat-messages::-webkit-scrollbar { width: 3px; }
+    #chat-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 2px; }
+
+    .chat-msg { display: flex; max-width: 82%; }
+    .chat-msg.bot  { align-self: flex-start; }
+    .chat-msg.user { align-self: flex-end; flex-direction: row-reverse; }
+    .chat-bubble { padding: 10px 14px; border-radius: 16px; font-size: 14px; line-height: 1.55; color: var(--white); }
+    .chat-msg.bot  .chat-bubble { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.09); border-bottom-left-radius: 4px; }
+    .chat-msg.user .chat-bubble { background: linear-gradient(135deg, var(--blue), #1a55a0); border-bottom-right-radius: 4px; }
+
+    .typing-bubble { display: flex; align-items: center; gap: 5px; padding: 12px 16px; }
+    .typing-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.45); animation: typingBounce 1.2s ease-in-out infinite; }
+    .typing-dot:nth-child(2) { animation-delay: 0.18s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.36s; }
+    @keyframes typingBounce {
+      0%, 80%, 100% { transform: translateY(0); opacity: 0.45; }
+      40%            { transform: translateY(-6px); opacity: 1; }
+    }
+
+    #chat-input-row {
+      display: flex; align-items: center; gap: 8px; padding: 12px 16px;
+      border-top: 1px solid rgba(255,255,255,0.08); flex-shrink: 0;
+    }
+    #chat-input {
+      flex: 1; padding: 10px 14px; border-radius: 22px;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10);
+      color: var(--white); font-size: 14px; font-family: var(--font-body); outline: none;
+      transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
+    }
+    #chat-input::placeholder { color: rgba(248,250,255,0.3); }
+    #chat-input:focus { border-color: var(--blue); background: rgba(31,103,176,0.1); box-shadow: 0 0 0 3px rgba(31,103,176,0.15); }
+    #chat-send {
+      width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--accent), var(--blue));
+      display: flex; align-items: center; justify-content: center;
+      cursor: none; transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s;
+      box-shadow: 0 2px 10px rgba(0,212,255,0.25);
+    }
+    #chat-send:hover { transform: scale(1.12); box-shadow: 0 4px 16px rgba(0,212,255,0.45); }
+    #chat-send:disabled { opacity: 0.45; transform: none; }
+    #chat-send svg { width: 16px; height: 16px; fill: var(--navy); }
+
+    @media (max-width: 768px) {
+      #chat-fab    { bottom: 20px; left: 20px; }
+      #chat-window { bottom: 88px; left: 12px; right: 12px; width: auto; }
+    }
+    @media (hover: none) {
+      #chat-fab, #chat-close, #chat-send { cursor: pointer; }
+      #chat-input { cursor: text; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- =============================================
+     CUSTOM CURSOR
+============================================= -->
+<div id="cursor" aria-hidden="true">
+  <div id="cursor-dot"></div>
+  <div id="cursor-ring"></div>
+</div>
+
+<!-- =============================================
+     NAVIGATION
+============================================= -->
+<nav id="navbar" role="navigation" aria-label="Navegación principal">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo" aria-label="Nubi Creativa - Inicio">
+        <img src="assets/logo/logo-icon.png" alt="" class="nav-logo-img" aria-hidden="true">
+        Nubi<span>Creativa</span>
+      </a>
+
+      <ul class="nav-links" role="list">
+        <li><a href="#hero" data-i18n="nav.inicio">Inicio</a></li>
+        <li><a href="#servicios" data-i18n="nav.servicios">Servicios</a></li>
+        <li><a href="#nosotros" data-i18n="nav.nosotros">Nosotros</a></li>
+        <li><a href="#proyectos" data-i18n="nav.proyectos">Proyectos</a></li>
+        <li><a href="#contacto" data-i18n="nav.contacto">Contacto</a></li>
+      </ul>
+
+      <div class="nav-right">
+        <div class="lang-toggle" role="group" aria-label="Selector de idioma">
+          <button class="lang-btn active" data-lang="es" aria-pressed="true">ES</button>
+          <button class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+        <a href="#contacto" class="btn btn-primary btn-glow" data-i18n="nav.cta">Hablemos</a>
+      </div>
+
+      <button class="hamburger" id="hamburger" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menú móvil">
+  <ul role="list" style="text-align:center;">
+    <li><a href="#hero" class="mobile-nav-link" data-i18n="nav.inicio">Inicio</a></li>
+    <li><a href="#servicios" class="mobile-nav-link" data-i18n="nav.servicios">Servicios</a></li>
+    <li><a href="#nosotros" class="mobile-nav-link" data-i18n="nav.nosotros">Nosotros</a></li>
+    <li><a href="#proyectos" class="mobile-nav-link" data-i18n="nav.proyectos">Proyectos</a></li>
+    <li><a href="#contacto" class="mobile-nav-link" data-i18n="nav.contacto">Contacto</a></li>
+  </ul>
+  <div class="mobile-lang">
+    <button class="lang-btn active" data-lang="es" aria-pressed="true">ES</button>
+    <button class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+  </div>
+  <a href="#contacto" class="btn btn-primary mobile-nav-link" data-i18n="nav.cta">Hablemos</a>
+</div>
+
+<!-- =============================================
+     HERO SECTION
+============================================= -->
+<section id="hero" aria-label="Hero">
+  <div class="hero-bg"></div>
+  <div class="retro-grid" aria-hidden="true"></div>
+  <div class="meteors-container" id="meteors-container" aria-hidden="true"></div>
+  <div class="hero-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+  </div>
+  <canvas id="hero-canvas" aria-hidden="true"></canvas>
+
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-logo-float" id="hero-logo-float">
+        <img src="assets/logo/logo-icon.png" alt="Nubi Creativa">
+      </div>
+      <div class="hero-eyebrow" id="hero-eyebrow">
+        <span></span>
+        <span data-i18n="hero.eyebrow">Agencia Creativa · Buenos Aires</span>
+      </div>
+      <h1 class="hero-headline" id="hero-headline" aria-label="Creamos marcas que conectan. Ideas que mueven.">
+        <span class="line" id="hero-line-1"></span>
+        <span class="line" id="hero-line-2"></span>
+      </h1>
+      <p class="hero-sub" id="hero-sub" data-i18n="hero.sub">
+        Diseño, estrategia y tecnología al servicio de marcas que quieren destacar. Tu visión, nuestra ejecución.
+      </p>
+      <div class="hero-ctas" id="hero-ctas">
+        <a href="#servicios" class="btn btn-primary btn-glow" data-i18n="hero.cta1">Ver nuestros servicios</a>
+        <a href="#contacto" class="btn btn-outline" data-i18n="hero.cta2">Contactanos</a>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- =============================================
+     MARQUEE STRIP (Magic UI)
+============================================= -->
+<div class="marquee-strip" aria-hidden="true">
+  <div class="marquee-track">
+    <span class="marquee-item">Diseño Gráfico</span>
+    <span class="marquee-item">Marketing Digital</span>
+    <span class="marquee-item">Desarrollo Web</span>
+    <span class="marquee-item">Producción Audiovisual</span>
+    <span class="marquee-item">Branding Estratégico</span>
+    <span class="marquee-item">Buenos Aires</span>
+    <span class="marquee-item">Motion Graphics</span>
+    <span class="marquee-item">E-commerce</span>
+    <span class="marquee-item">UX · UI Design</span>
+    <span class="marquee-item">Social Media</span>
+    <!-- duplicate for seamless loop -->
+    <span class="marquee-item">Diseño Gráfico</span>
+    <span class="marquee-item">Marketing Digital</span>
+    <span class="marquee-item">Desarrollo Web</span>
+    <span class="marquee-item">Producción Audiovisual</span>
+    <span class="marquee-item">Branding Estratégico</span>
+    <span class="marquee-item">Buenos Aires</span>
+    <span class="marquee-item">Motion Graphics</span>
+    <span class="marquee-item">E-commerce</span>
+    <span class="marquee-item">UX · UI Design</span>
+    <span class="marquee-item">Social Media</span>
+  </div>
+</div>
+
+<!-- =============================================
+     SERVICES SECTION
+============================================= -->
+<section id="servicios" aria-labelledby="servicios-title">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag reveal" data-i18n="services.tag">Nuestros servicios</div>
+      <h2 class="section-title reveal reveal-delay-1" id="servicios-title">
+        <span data-i18n="services.title">Lo que <em>hacemos</em></span>
+      </h2>
+    </div>
+    <div class="services-grid">
+      <article class="service-card reveal reveal-delay-1" data-tilt>
+        <div class="service-num">01</div>
+        <div class="service-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg></div>
+        <h3 data-i18n="services.design.title">Diseño Gráfico</h3>
+        <p data-i18n="services.design.desc">Identidad visual, branding estratégico e ilustración. Construimos marcas que se recuerdan y comunican con claridad.</p>
+      </article>
+      <article class="service-card reveal reveal-delay-2" data-tilt>
+        <div class="service-num">02</div>
+        <div class="service-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
+        <h3 data-i18n="services.marketing.title">Marketing Digital</h3>
+        <p data-i18n="services.marketing.desc">Estrategia, redes sociales y campañas orientadas a resultados. Conectamos tu marca con la audiencia correcta.</p>
+      </article>
+      <article class="service-card reveal reveal-delay-3" data-tilt>
+        <div class="service-num">03</div>
+        <div class="service-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+        <h3 data-i18n="services.web.title">Desarrollo Web</h3>
+        <p data-i18n="services.web.desc">Sitios modernos, landing pages y e-commerce de alto rendimiento. Experiencias digitales que convierten visitantes en clientes.</p>
+      </article>
+      <article class="service-card reveal reveal-delay-4" data-tilt>
+        <div class="service-num">04</div>
+        <div class="service-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg></div>
+        <h3 data-i18n="services.av.title">Producción Audiovisual</h3>
+        <p data-i18n="services.av.desc">Video, fotografía y motion graphics. Contamos tu historia con imágenes que impactan y generan engagement real.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================
+     ABOUT SECTION
+============================================= -->
+<section id="nosotros" aria-labelledby="nosotros-title">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-left">
+        <div class="section-tag reveal" data-i18n="about.tag">Sobre nosotros</div>
+        <h2 class="big-statement reveal reveal-delay-1" id="nosotros-title" data-i18n-html="about.statement">
+          No somos solo una agencia.<br>Somos tu <em>equipo creativo</em>.
+        </h2>
+        <p class="reveal reveal-delay-2" data-i18n="about.desc">
+          En Nubi Creativa creemos que el mejor trabajo nace de entender profundamente a las marcas y las personas detrás de ellas. Combinamos pensamiento estratégico con ejecución impecable para crear resultados que se sienten.
+        </p>
+        <div class="stats-row">
+          <div class="stat-item reveal reveal-delay-2">
+            <div class="stat-number">
+              <span class="counter" data-target="50">0</span><span class="suffix">+</span>
+            </div>
+            <div class="stat-label" data-i18n="about.stat1">Clientes</div>
+          </div>
+          <div class="stat-item reveal reveal-delay-3">
+            <div class="stat-number">
+              <span class="counter" data-target="120">0</span><span class="suffix">+</span>
+            </div>
+            <div class="stat-label" data-i18n="about.stat2">Proyectos</div>
+          </div>
+          <div class="stat-item reveal reveal-delay-4">
+            <div class="stat-number">
+              <span class="counter" data-target="5">0</span><span class="suffix"></span>
+            </div>
+            <div class="stat-label" data-i18n="about.stat3">Años de experiencia</div>
+          </div>
+        </div>
+      </div>
+      <div class="about-right reveal-right">
+        <div class="about-visual">
+          <div class="about-grid-deco"></div>
+          <div class="about-visual-inner"></div>
+        </div>
+        <!-- COMMENT: Replace .about-visual content with an actual image: <img src="team.jpg" alt="Equipo Nubi Creativa"> -->
+        <div class="about-badge">
+          <div class="badge-num">BA</div>
+          <div class="badge-text" data-i18n="about.badge">Buenos<br>Aires</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================
+     PROJECTS SECTION
+============================================= -->
+<section id="proyectos" aria-labelledby="proyectos-title">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag reveal" data-i18n="projects.tag">Portfolio</div>
+      <h2 class="section-title reveal reveal-delay-1" id="proyectos-title">
+        <span data-i18n="projects.title">Algunos de nuestros <em>trabajos</em></span>
+      </h2>
+    </div>
+    <div class="filter-bar reveal reveal-delay-2" role="group" aria-label="Filtrar proyectos">
+      <button class="filter-btn active" data-filter="all" data-i18n="projects.filter.all">Todos</button>
+      <button class="filter-btn" data-filter="diseno" data-i18n="projects.filter.design">Diseño</button>
+      <button class="filter-btn" data-filter="marketing" data-i18n="projects.filter.marketing">Marketing</button>
+      <button class="filter-btn" data-filter="web" data-i18n="projects.filter.web">Web</button>
+      <button class="filter-btn" data-filter="audiovisual" data-i18n="projects.filter.av">Audiovisual</button>
+    </div>
+    <div class="projects-grid" id="projects-grid">
+      <article class="project-card proj-1 reveal" data-category="diseno" aria-label="Proyecto Rebrand Identidad Corporativa">
+        <div class="project-bg"></div>
+        <div class="project-noise"></div>
+        <div class="project-overlay">
+          <span class="project-tag" data-i18n="projects.filter.design">Diseño</span>
+          <h3 class="project-title" data-i18n="projects.p1.title">Rebrand Identidad Corporativa</h3>
+        </div>
+        <div class="project-hover-cta"><div class="cta-pill" data-i18n="projects.view">Ver proyecto</div></div>
+      </article>
+      <article class="project-card proj-2 reveal reveal-delay-1" data-category="marketing" aria-label="Proyecto Campaña Digital 360">
+        <div class="project-bg"></div>
+        <div class="project-noise"></div>
+        <div class="project-overlay">
+          <span class="project-tag" data-i18n="projects.filter.marketing">Marketing</span>
+          <h3 class="project-title" data-i18n="projects.p2.title">Campaña Digital 360</h3>
+        </div>
+        <div class="project-hover-cta"><div class="cta-pill" data-i18n="projects.view">Ver proyecto</div></div>
+      </article>
+      <article class="project-card proj-3 reveal reveal-delay-2" data-category="web" aria-label="Proyecto E-commerce Premium">
+        <div class="project-bg"></div>
+        <div class="project-noise"></div>
+        <div class="project-overlay">
+          <span class="project-tag" data-i18n="projects.filter.web">Web</span>
+          <h3 class="project-title" data-i18n="projects.p3.title">E-commerce Premium</h3>
+        </div>
+        <div class="project-hover-cta"><div class="cta-pill" data-i18n="projects.view">Ver proyecto</div></div>
+      </article>
+      <article class="project-card proj-4 reveal reveal-delay-1" data-category="audiovisual" aria-label="Proyecto Serie de Contenido Video">
+        <div class="project-bg"></div>
+        <div class="project-noise"></div>
+        <div class="project-overlay">
+          <span class="project-tag" data-i18n="projects.filter.av">Audiovisual</span>
+          <h3 class="project-title" data-i18n="projects.p4.title">Serie de Contenido Video</h3>
+        </div>
+        <div class="project-hover-cta"><div class="cta-pill" data-i18n="projects.view">Ver proyecto</div></div>
+      </article>
+      <article class="project-card proj-5 reveal reveal-delay-2" data-category="diseno" aria-label="Proyecto Packaging y Packaging System">
+        <div class="project-bg"></div>
+        <div class="project-noise"></div>
+        <div class="project-overlay">
+          <span class="project-tag" data-i18n="projects.filter.design">Diseño</span>
+          <h3 class="project-title" data-i18n="projects.p5.title">Packaging System</h3>
+        </div>
+        <div class="project-hover-cta"><div class="cta-pill" data-i18n="projects.view">Ver proyecto</div></div>
+      </article>
+      <article class="project-card proj-6 reveal reveal-delay-3" data-category="web" aria-label="Proyecto SaaS Landing Page">
+        <div class="project-bg"></div>
+        <div class="project-noise"></div>
+        <div class="project-overlay">
+          <span class="project-tag" data-i18n="projects.filter.web">Web</span>
+          <h3 class="project-title" data-i18n="projects.p6.title">SaaS Landing Page</h3>
+        </div>
+        <div class="project-hover-cta"><div class="cta-pill" data-i18n="projects.view">Ver proyecto</div></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================
+     TESTIMONIALS SECTION
+============================================= -->
+<section id="testimonios" aria-labelledby="testimonios-title">
+  <div class="container">
+    <div class="section-tag reveal" data-i18n="testimonials.tag">Clientes</div>
+    <h2 class="section-title reveal reveal-delay-1" id="testimonios-title">
+      <span data-i18n="testimonials.title">Lo que dicen nuestros <em>clientes</em></span>
+    </h2>
+    <div class="testimonials-carousel-wrap reveal reveal-delay-2">
+      <div class="testimonials-track-outer" role="region" aria-label="Testimonios de clientes" aria-live="polite">
+        <div class="testimonials-track" id="testimonials-track">
+          <div class="testimonial-card">
+            <p class="testimonial-text" data-i18n="testimonials.t1.text">"Nubi Creativa transformó completamente nuestra presencia digital. El trabajo de branding superó todas nuestras expectativas. Son un equipo que realmente escucha y entiende."</p>
+            <div class="testimonial-author">
+              <div class="author-avatar">M</div>
+              <div class="author-info">
+                <div class="name" data-i18n="testimonials.t1.name">Martina García</div>
+                <div class="company" data-i18n="testimonials.t1.company">CEO, Pura Vida Co.</div>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <p class="testimonial-text" data-i18n="testimonials.t2.text">"El sitio web que desarrollaron para nosotros multiplicó nuestras conversiones. Profesionales en todos los sentidos, con un ojo estético increíble."</p>
+            <div class="testimonial-author">
+              <div class="author-avatar">L</div>
+              <div class="author-info">
+                <div class="name" data-i18n="testimonials.t2.name">Lucas Fernández</div>
+                <div class="company" data-i18n="testimonials.t2.company">Founder, Nexo Tech</div>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <p class="testimonial-text" data-i18n="testimonials.t3.text">"La campaña de marketing que lanzaron para nuestra marca llegó exactamente a nuestro público objetivo. Los resultados hablan solos. Los recomiendo sin dudar."</p>
+            <div class="testimonial-author">
+              <div class="author-avatar">S</div>
+              <div class="author-info">
+                <div class="name" data-i18n="testimonials.t3.name">Sofía Morales</div>
+                <div class="company" data-i18n="testimonials.t3.company">Directora, Arco Studio</div>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <p class="testimonial-text" data-i18n="testimonials.t4.text">"Los videos que produjeron para nuestra empresa generaron más engagement que cualquier otra pieza de contenido. El nivel de producción es de otra categoría."</p>
+            <div class="testimonial-author">
+              <div class="author-avatar">A</div>
+              <div class="author-info">
+                <div class="name" data-i18n="testimonials.t4.name">Andrés Ruiz</div>
+                <div class="company" data-i18n="testimonials.t4.company">CMO, Zenit Brands</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-nav" role="tablist" aria-label="Navegación del carousel">
+        <button class="carousel-dot active" data-index="0" role="tab" aria-selected="true" aria-label="Testimonio 1"></button>
+        <button class="carousel-dot" data-index="1" role="tab" aria-selected="false" aria-label="Testimonio 2"></button>
+        <button class="carousel-dot" data-index="2" role="tab" aria-selected="false" aria-label="Testimonio 3"></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================
+     CONTACT SECTION
+============================================= -->
+<section id="contacto" aria-labelledby="contacto-title">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="contact-left">
+        <div class="section-tag reveal" data-i18n="contact.tag">Contacto</div>
+        <h2 class="section-title reveal reveal-delay-1" id="contacto-title">
+          <span data-i18n="contact.title">¿Empezamos algo <em>juntos</em>?</span>
+        </h2>
+        <p class="contact-subtitle reveal reveal-delay-2" data-i18n="contact.subtitle">
+          Contanos tu proyecto y te respondemos en menos de 24 horas. Sin compromisos.
+        </p>
+        <div class="contact-info reveal reveal-delay-3">
+          <div class="contact-item">
+            <div class="contact-icon"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></div>
+            <div class="contact-item-text">
+              <div class="label" data-i18n="contact.emailLabel">Email</div>
+              <div class="value">hola@nubicreativa.com</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
+            <div class="contact-item-text">
+              <div class="label">WhatsApp</div>
+              <div class="value">+54 9 11 XXXX XXXX</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></div>
+            <div class="contact-item-text">
+              <div class="label">Instagram</div>
+              <div class="value">@nubicreativa</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="contact-right reveal-right">
+        <form class="contact-form" id="contact-form" novalidate aria-label="Formulario de contacto">
+          <div class="form-group">
+            <input type="text" id="form-name" name="name" required autocomplete="name"
+              data-i18n-placeholder="contact.form.namePlaceholder" placeholder="Tu nombre">
+          </div>
+          <div class="form-group">
+            <input type="email" id="form-email" name="email" required autocomplete="email"
+              data-i18n-placeholder="contact.form.emailPlaceholder" placeholder="Tu email">
+          </div>
+          <div class="form-group">
+            <select id="form-service" name="service" required aria-label="Servicio de interés">
+              <option value="" data-i18n="contact.form.servicePlaceholder">Servicio de interés</option>
+              <option value="diseno" data-i18n="services.design.title">Diseño Gráfico</option>
+              <option value="marketing" data-i18n="services.marketing.title">Marketing Digital</option>
+              <option value="web" data-i18n="services.web.title">Desarrollo Web</option>
+              <option value="audiovisual" data-i18n="services.av.title">Producción Audiovisual</option>
+              <option value="otro" data-i18n="contact.form.other">Otro</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <textarea id="form-message" name="message" required
+              data-i18n-placeholder="contact.form.messagePlaceholder" placeholder="Contanos tu proyecto..."></textarea>
+          </div>
+          <div class="form-submit">
+            <button type="submit" class="btn btn-accent btn-glow" aria-label="Enviar mensaje">
+              <span data-i18n="contact.form.submit">Enviar mensaje</span>
+              <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================
+     FOOTER
+============================================= -->
+<footer role="contentinfo">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="#" class="footer-logo" aria-label="Nubi Creativa">
+          <img src="assets/logo/logo-icon.png" alt="" class="footer-logo-img" aria-hidden="true">
+          <span>Nubi<span>Creativa</span></span>
+        </a>
+        <p data-i18n="footer.desc">Agencia creativa en Buenos Aires. Diseño, marketing, web y audiovisual para marcas que quieren destacar.</p>
+        <div class="footer-socials" aria-label="Redes sociales">
+          <a href="#" class="social-btn" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+          <a href="#" class="social-btn" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+          <a href="#" class="social-btn" aria-label="Behance"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></a>
+          <a href="#" class="social-btn" aria-label="WhatsApp"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer.services">Servicios</h4>
+        <ul role="list">
+          <li><a href="#servicios" data-i18n="services.design.title">Diseño Gráfico</a></li>
+          <li><a href="#servicios" data-i18n="services.marketing.title">Marketing Digital</a></li>
+          <li><a href="#servicios" data-i18n="services.web.title">Desarrollo Web</a></li>
+          <li><a href="#servicios" data-i18n="services.av.title">Producción Audiovisual</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer.company">Empresa</h4>
+        <ul role="list">
+          <li><a href="#nosotros" data-i18n="nav.nosotros">Nosotros</a></li>
+          <li><a href="#proyectos" data-i18n="nav.proyectos">Proyectos</a></li>
+          <li><a href="#testimonios" data-i18n="nav.testimonios">Testimonios</a></li>
+          <li><a href="#contacto" data-i18n="nav.contacto">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer.contact">Contacto</h4>
+        <ul role="list">
+          <li><a href="mailto:hola@nubicreativa.com">hola@nubicreativa.com</a></li>
+          <li><a href="#">Buenos Aires, Argentina</a></li>
+          <li><a href="#">+54 9 11 XXXX XXXX</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p data-i18n="footer.copyright">© 2025 Nubi Creativa. Todos los derechos reservados.</p>
+      <p><a href="#" data-i18n="footer.privacy">Política de privacidad</a></p>
+    </div>
+  </div>
+</footer>
+
+<!-- =============================================
+     FLOATING WHATSAPP BUTTON
+============================================= -->
+<a href="https://wa.me/5491100000000" id="whatsapp-fab" target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.556 4.116 1.528 5.849L0 24l6.335-1.51A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.373l-.36-.214-3.727.888.939-3.613-.235-.373A9.793 9.793 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/>
+  </svg>
+</a>
+
+<!-- =============================================
+     FLOATING CHAT BUTTON + CHAT WINDOW
+============================================= -->
+<button id="chat-fab" aria-label="Abrir chat" aria-expanded="false" aria-controls="chat-window">
+  <span id="chat-unread-dot" aria-hidden="true"></span>
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20 2H4a2 2 0 00-2 2v18l4-4h14a2 2 0 002-2V4a2 2 0 00-2-2z"/>
+  </svg>
+</button>
+
+<div id="chat-window" role="dialog" aria-modal="true" aria-label="Chat Nubi IA" aria-hidden="true">
+  <div id="chat-header">
+    <div id="chat-header-left">
+      <div class="chat-avatar" aria-hidden="true">N</div>
+      <div>
+        <div id="chat-header-name">Nubi IA</div>
+        <div id="chat-header-status">En línea</div>
+      </div>
+    </div>
+    <button id="chat-close" aria-label="Cerrar chat">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div id="chat-messages" aria-live="polite" aria-atomic="false"></div>
+  <div id="chat-input-row">
+    <input type="text" id="chat-input" autocomplete="off" maxlength="500" placeholder="Escribí tu mensaje...">
+    <button id="chat-send" aria-label="Enviar mensaje" disabled>
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<!-- BACK TO TOP -->
+<button id="back-top" aria-label="Volver arriba">
+  <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"></polyline></svg>
+</button>
+
+<!-- =============================================
+     JAVASCRIPT
+============================================= -->
+<script>
+/* ==============================================
+   TRANSLATIONS (i18n)
+============================================== */
+const translations = {
+  es: {
+    "nav.inicio": "Inicio",
+    "nav.servicios": "Servicios",
+    "nav.nosotros": "Nosotros",
+    "nav.proyectos": "Proyectos",
+    "nav.testimonios": "Testimonios",
+    "nav.contacto": "Contacto",
+    "nav.cta": "Hablemos",
+    "hero.eyebrow": "Agencia Creativa · Buenos Aires",
+    "hero.line1": "Creamos marcas",
+    "hero.line1accent": "",
+    "hero.line2": "que conectan.",
+    "hero.line2b": "Ideas que mueven.",
+    "hero.sub": "Diseño, estrategia y tecnología al servicio de marcas que quieren destacar. Tu visión, nuestra ejecución.",
+    "hero.cta1": "Ver nuestros servicios",
+    "hero.cta2": "Contactanos",
+    "services.tag": "Nuestros servicios",
+    "services.title": "Lo que hacemos",
+    "services.design.title": "Diseño Gráfico",
+    "services.design.desc": "Identidad visual, branding estratégico e ilustración. Construimos marcas que se recuerdan y comunican con claridad.",
+    "services.marketing.title": "Marketing Digital",
+    "services.marketing.desc": "Estrategia, redes sociales y campañas orientadas a resultados. Conectamos tu marca con la audiencia correcta.",
+    "services.web.title": "Desarrollo Web",
+    "services.web.desc": "Sitios modernos, landing pages y e-commerce de alto rendimiento. Experiencias digitales que convierten visitantes en clientes.",
+    "services.av.title": "Producción Audiovisual",
+    "services.av.desc": "Video, fotografía y motion graphics. Contamos tu historia con imágenes que impactan y generan engagement real.",
+    "about.tag": "Sobre nosotros",
+    "about.statement": "No somos solo una agencia.<br>Somos tu <em>equipo creativo</em>.",
+    "about.desc": "En Nubi Creativa creemos que el mejor trabajo nace de entender profundamente a las marcas y las personas detrás de ellas. Combinamos pensamiento estratégico con ejecución impecable para crear resultados que se sienten.",
+    "about.stat1": "Clientes",
+    "about.stat2": "Proyectos",
+    "about.stat3": "Años de experiencia",
+    "about.badge": "Buenos Aires",
+    "projects.tag": "Portfolio",
+    "projects.title": "Algunos de nuestros trabajos",
+    "projects.filter.all": "Todos",
+    "projects.filter.design": "Diseño",
+    "projects.filter.marketing": "Marketing",
+    "projects.filter.web": "Web",
+    "projects.filter.av": "Audiovisual",
+    "projects.view": "Ver proyecto",
+    "projects.p1.title": "Rebrand Identidad Corporativa",
+    "projects.p2.title": "Campaña Digital 360",
+    "projects.p3.title": "E-commerce Premium",
+    "projects.p4.title": "Serie de Contenido Video",
+    "projects.p5.title": "Packaging System",
+    "projects.p6.title": "SaaS Landing Page",
+    "testimonials.tag": "Clientes",
+    "testimonials.title": "Lo que dicen nuestros clientes",
+    "testimonials.t1.text": "\"Nubi Creativa transformó completamente nuestra presencia digital. El trabajo de branding superó todas nuestras expectativas. Son un equipo que realmente escucha y entiende.\"",
+    "testimonials.t1.name": "Martina García",
+    "testimonials.t1.company": "CEO, Pura Vida Co.",
+    "testimonials.t2.text": "\"El sitio web que desarrollaron para nosotros multiplicó nuestras conversiones. Profesionales en todos los sentidos, con un ojo estético increíble.\"",
+    "testimonials.t2.name": "Lucas Fernández",
+    "testimonials.t2.company": "Founder, Nexo Tech",
+    "testimonials.t3.text": "\"La campaña de marketing que lanzaron para nuestra marca llegó exactamente a nuestro público objetivo. Los resultados hablan solos. Los recomiendo sin dudar.\"",
+    "testimonials.t3.name": "Sofía Morales",
+    "testimonials.t3.company": "Directora, Arco Studio",
+    "testimonials.t4.text": "\"Los videos que produjeron para nuestra empresa generaron más engagement que cualquier otra pieza de contenido. El nivel de producción es de otra categoría.\"",
+    "testimonials.t4.name": "Andrés Ruiz",
+    "testimonials.t4.company": "CMO, Zenit Brands",
+    "contact.tag": "Contacto",
+    "contact.title": "¿Empezamos algo juntos?",
+    "contact.subtitle": "Contanos tu proyecto y te respondemos en menos de 24 horas. Sin compromisos.",
+    "contact.emailLabel": "Email",
+    "contact.form.namePlaceholder": "Tu nombre",
+    "contact.form.emailPlaceholder": "Tu email",
+    "contact.form.servicePlaceholder": "Servicio de interés",
+    "contact.form.messagePlaceholder": "Contanos tu proyecto...",
+    "contact.form.submit": "Enviar mensaje",
+    "contact.form.other": "Otro",
+    "footer.desc": "Agencia creativa en Buenos Aires. Diseño, marketing, web y audiovisual para marcas que quieren destacar.",
+    "footer.services": "Servicios",
+    "footer.company": "Empresa",
+    "footer.contact": "Contacto",
+    "footer.copyright": "© 2025 Nubi Creativa. Todos los derechos reservados.",
+    "footer.privacy": "Política de privacidad",
+    "page.title": "Nubi Creativa — Agencia Creativa en Buenos Aires",
+    "page.description": "Nubi Creativa es una agencia creativa de Buenos Aires especializada en diseño gráfico, marketing digital, desarrollo web y producción audiovisual.",
+  },
+  en: {
+    "nav.inicio": "Home",
+    "nav.servicios": "Services",
+    "nav.nosotros": "About",
+    "nav.proyectos": "Projects",
+    "nav.testimonios": "Testimonials",
+    "nav.contacto": "Contact",
+    "nav.cta": "Let's talk",
+    "hero.eyebrow": "Creative Agency · Buenos Aires",
+    "hero.line1": "We build brands",
+    "hero.line1accent": "",
+    "hero.line2": "that connect.",
+    "hero.line2b": "Ideas that move.",
+    "hero.sub": "Design, strategy and technology at the service of brands that want to stand out. Your vision, our execution.",
+    "hero.cta1": "See our services",
+    "hero.cta2": "Contact us",
+    "services.tag": "Our services",
+    "services.title": "What we do",
+    "services.design.title": "Graphic Design",
+    "services.design.desc": "Visual identity, strategic branding and illustration. We build brands that are remembered and communicate with clarity.",
+    "services.marketing.title": "Digital Marketing",
+    "services.marketing.desc": "Strategy, social media and result-driven campaigns. We connect your brand with the right audience.",
+    "services.web.title": "Web Development",
+    "services.web.desc": "Modern websites, landing pages and high-performance e-commerce. Digital experiences that turn visitors into customers.",
+    "services.av.title": "Audiovisual Production",
+    "services.av.desc": "Video, photography and motion graphics. We tell your story with images that impact and drive real engagement.",
+    "about.tag": "About us",
+    "about.statement": "We're not just an agency.<br>We're your <em>creative team</em>.",
+    "about.desc": "At Nubi Creativa we believe the best work comes from deeply understanding brands and the people behind them. We combine strategic thinking with impeccable execution to create results that are felt.",
+    "about.stat1": "Clients",
+    "about.stat2": "Projects",
+    "about.stat3": "Years of experience",
+    "about.badge": "Buenos Aires",
+    "projects.tag": "Portfolio",
+    "projects.title": "Some of our work",
+    "projects.filter.all": "All",
+    "projects.filter.design": "Design",
+    "projects.filter.marketing": "Marketing",
+    "projects.filter.web": "Web",
+    "projects.filter.av": "Audiovisual",
+    "projects.view": "View project",
+    "projects.p1.title": "Corporate Identity Rebrand",
+    "projects.p2.title": "360 Digital Campaign",
+    "projects.p3.title": "Premium E-commerce",
+    "projects.p4.title": "Video Content Series",
+    "projects.p5.title": "Packaging System",
+    "projects.p6.title": "SaaS Landing Page",
+    "testimonials.tag": "Clients",
+    "testimonials.title": "What our clients say",
+    "testimonials.t1.text": "\"Nubi Creativa completely transformed our digital presence. The branding work exceeded all our expectations. They're a team that truly listens and understands.\"",
+    "testimonials.t1.name": "Martina García",
+    "testimonials.t1.company": "CEO, Pura Vida Co.",
+    "testimonials.t2.text": "\"The website they developed for us multiplied our conversions. Professionals in every sense, with an incredible aesthetic eye.\"",
+    "testimonials.t2.name": "Lucas Fernández",
+    "testimonials.t2.company": "Founder, Nexo Tech",
+    "testimonials.t3.text": "\"The marketing campaign they launched for our brand reached exactly our target audience. The results speak for themselves. I recommend them without hesitation.\"",
+    "testimonials.t3.name": "Sofía Morales",
+    "testimonials.t3.company": "Director, Arco Studio",
+    "testimonials.t4.text": "\"The videos they produced for our company generated more engagement than any other piece of content. The production level is in a league of its own.\"",
+    "testimonials.t4.name": "Andrés Ruiz",
+    "testimonials.t4.company": "CMO, Zenit Brands",
+    "contact.tag": "Contact",
+    "contact.title": "Shall we start something together?",
+    "contact.subtitle": "Tell us about your project and we'll get back to you in less than 24 hours. No commitment.",
+    "contact.emailLabel": "Email",
+    "contact.form.namePlaceholder": "Your name",
+    "contact.form.emailPlaceholder": "Your email",
+    "contact.form.servicePlaceholder": "Service of interest",
+    "contact.form.messagePlaceholder": "Tell us about your project...",
+    "contact.form.submit": "Send message",
+    "contact.form.other": "Other",
+    "footer.desc": "Creative agency in Buenos Aires. Design, marketing, web and audiovisual for brands that want to stand out.",
+    "footer.services": "Services",
+    "footer.company": "Company",
+    "footer.contact": "Contact",
+    "footer.copyright": "© 2025 Nubi Creativa. All rights reserved.",
+    "footer.privacy": "Privacy policy",
+    "page.title": "Nubi Creativa — Creative Agency in Buenos Aires",
+    "page.description": "Nubi Creativa is a creative agency in Buenos Aires specializing in graphic design, digital marketing, web development and audiovisual production.",
+  }
+};
+
+/* ==============================================
+   i18n ENGINE
+============================================== */
+let currentLang = localStorage.getItem('nc_lang') || 'es';
+let heroReady = false;
+
+function t(key) {
+  return translations[currentLang][key] || translations['es'][key] || key;
+}
+
+function applyTranslations() {
+  // Update html lang attribute and meta tags
+  document.documentElement.lang = currentLang;
+  document.title = t('page.title');
+  const metaDesc = document.querySelector('meta[name="description"]');
+  if (metaDesc) metaDesc.content = t('page.description');
+
+  // data-i18n text content
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    el.textContent = t(el.dataset.i18n);
+  });
+
+  // data-i18n-html (allows HTML like <em>)
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    el.innerHTML = t(el.dataset.i18nHtml);
+  });
+
+  // data-i18n-placeholder
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    el.placeholder = t(el.dataset.i18nPlaceholder);
+  });
+
+  // Update services title with em tag
+  const servicesTitle = document.querySelector('#servicios .section-title span');
+  if (servicesTitle) {
+    if (currentLang === 'es') {
+      servicesTitle.innerHTML = 'Lo que <em>hacemos</em>';
+    } else {
+      servicesTitle.innerHTML = 'What <em>we do</em>';
+    }
+  }
+
+  const projectsTitle = document.querySelector('#proyectos .section-title span');
+  if (projectsTitle) {
+    if (currentLang === 'es') {
+      projectsTitle.innerHTML = 'Algunos de nuestros <em>trabajos</em>';
+    } else {
+      projectsTitle.innerHTML = 'Some of <em>our work</em>';
+    }
+  }
+
+  const testimonialsTitle = document.querySelector('#testimonios .section-title span');
+  if (testimonialsTitle) {
+    if (currentLang === 'es') {
+      testimonialsTitle.innerHTML = 'Lo que dicen nuestros <em>clientes</em>';
+    } else {
+      testimonialsTitle.innerHTML = 'What our <em>clients say</em>';
+    }
+  }
+
+  const contactTitle = document.querySelector('#contacto .section-title span');
+  if (contactTitle) {
+    if (currentLang === 'es') {
+      contactTitle.innerHTML = '¿Empezamos algo <em>juntos</em>?';
+    } else {
+      contactTitle.innerHTML = 'Shall we start something <em>together</em>?';
+    }
+  }
+
+  // Hero headline words (instant update on lang switch, no re-animation)
+  buildHeroHeadline(false);
+  // Only reveal instantly on lang switch (heroReady), not on initial load
+  // (initial load reveal is handled by initHeroAnimations with proper timing)
+  if (heroReady) {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        document.getElementById('hero-line-1')?.classList.add('words-revealed');
+        document.getElementById('hero-line-2')?.classList.add('words-revealed');
+      });
+    });
+  }
+
+  // Update lang buttons
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    const isActive = btn.dataset.lang === currentLang;
+    btn.classList.toggle('active', isActive);
+    btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+  });
+}
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('nc_lang', lang);
+  applyTranslations();
+}
+
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.addEventListener('click', () => setLang(btn.dataset.lang));
+});
+
+/* ==============================================
+   HERO HEADLINE BUILDER
+============================================== */
+function buildHeroHeadline(animate) {
+  const line1El = document.getElementById('hero-line-1');
+  const line2El = document.getElementById('hero-line-2');
+  if (!line1El || !line2El) return;
+
+  const lines = currentLang === 'es'
+    ? [['Creamos', 'marcas', 'que', 'conectan.'], ['Ideas', 'que', 'mueven.']]
+    : [['We', 'build', 'brands', 'that', 'connect.'], ['Ideas', 'that', 'move.']];
+
+  const accentWords = currentLang === 'es' ? ['conectan.'] : ['connect.'];
+
+  function buildLine(el, words, offset) {
+    el.innerHTML = words.map((w, i) =>
+      `<span class="word${accentWords.includes(w) ? ' accent-word' : ''}" style="transition-delay:${(i + offset) * 0.08}s">${w}&nbsp;</span>`
+    ).join('');
+  }
+
+  // Reset animation state
+  line1El.classList.remove('words-revealed');
+  line2El.classList.remove('words-revealed');
+
+  buildLine(line1El, lines[0], 0);
+  buildLine(line2El, lines[1], lines[0].length);
+
+  if (animate) {
+    requestAnimationFrame(() => {
+      line1El.classList.add('words-revealed');
+      line2El.classList.add('words-revealed');
+    });
+  }
+}
+
+/* ==============================================
+   HERO ANIMATIONS
+============================================== */
+function initHeroAnimations() {
+  heroReady = true; // Mark hero as initialized so lang-switch reveals work
+  buildHeroHeadline(false);
+
+  // Hero logo float entrance
+  setTimeout(() => {
+    const logoFloat = document.getElementById('hero-logo-float');
+    if (logoFloat) {
+      logoFloat.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+      logoFloat.style.opacity = '1';
+      logoFloat.style.transform = 'translateY(0)';
+    }
+  }, 100);
+
+  // Stagger entrance
+  setTimeout(() => {
+    const eyebrow = document.getElementById('hero-eyebrow');
+    if (eyebrow) {
+      eyebrow.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+      eyebrow.style.opacity = '1';
+      eyebrow.style.transform = 'translateY(0)';
+    }
+  }, 300);
+
+  setTimeout(() => {
+    document.getElementById('hero-line-1')?.classList.add('words-revealed');
+    document.getElementById('hero-line-2')?.classList.add('words-revealed');
+  }, 500);
+
+  setTimeout(() => {
+    const sub = document.getElementById('hero-sub');
+    if (sub) {
+      sub.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+      sub.style.opacity = '1';
+      sub.style.transform = 'translateY(0)';
+    }
+  }, 900);
+
+  setTimeout(() => {
+    const ctas = document.getElementById('hero-ctas');
+    if (ctas) {
+      ctas.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+      ctas.style.opacity = '1';
+      ctas.style.transform = 'translateY(0)';
+    }
+  }, 1100);
+}
+
+/* ==============================================
+   PARTICLE CANVAS
+============================================== */
+function initParticles() {
+  const canvas = document.getElementById('hero-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+
+  function resize() {
+    const hero = document.getElementById('hero');
+    W = canvas.width = hero ? hero.offsetWidth : window.innerWidth;
+    H = canvas.height = hero ? hero.offsetHeight : window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const COLORS = ['rgba(31,103,176,', 'rgba(0,212,255,', 'rgba(123,47,255,'];
+  for (let i = 0; i < 55; i++) {
+    particles.push({
+      x: Math.random() * W, y: Math.random() * H,
+      r: Math.random() * 2 + 0.5,
+      vx: (Math.random() - 0.5) * 0.4,
+      vy: (Math.random() - 0.5) * 0.4,
+      color: COLORS[Math.floor(Math.random() * COLORS.length)],
+      alpha: Math.random() * 0.5 + 0.2
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0) p.x = W;
+      if (p.x > W) p.x = 0;
+      if (p.y < 0) p.y = H;
+      if (p.y > H) p.y = 0;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.color + p.alpha + ')';
+      ctx.fill();
+    });
+    // Draw lines between close particles
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(31,103,176,${0.06 * (1 - dist / 120)})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+/* ==============================================
+   CUSTOM CURSOR
+============================================== */
+function initCursor() {
+  const dot = document.getElementById('cursor-dot');
+  const ring = document.getElementById('cursor-ring');
+  if (!dot || !ring) return;
+
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.left = mx + 'px';
+    dot.style.top = my + 'px';
+  });
+
+  function animateRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  const hoverTargets = 'a, button, [data-tilt], .project-card, .social-btn, .filter-btn, .carousel-dot, .contact-item';
+  document.addEventListener('mouseover', e => {
+    if (e.target.closest(hoverTargets)) {
+      document.body.classList.add('cursor-hover');
+    }
+  });
+  document.addEventListener('mouseout', e => {
+    if (e.target.closest(hoverTargets)) {
+      document.body.classList.remove('cursor-hover');
+    }
+  });
+}
+
+/* ==============================================
+   NAVBAR SCROLL
+============================================== */
+function initNavbar() {
+  const nav = document.getElementById('navbar');
+  let lastY = 0;
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    nav.classList.toggle('scrolled', y > 60);
+    lastY = y;
+  }, { passive: true });
+}
+
+/* ==============================================
+   HAMBURGER MENU
+============================================== */
+function initMobileMenu() {
+  const btn = document.getElementById('hamburger');
+  const menu = document.getElementById('mobile-menu');
+  if (!btn || !menu) return;
+
+  btn.addEventListener('click', () => {
+    const open = menu.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.setAttribute('aria-expanded', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+
+  document.querySelectorAll('.mobile-nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+      menu.classList.remove('open');
+      btn.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    });
+  });
+
+  // Close on Escape key
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && menu.classList.contains('open')) {
+      menu.classList.remove('open');
+      btn.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+  });
+}
+
+/* ==============================================
+   SCROLL REVEAL (IntersectionObserver)
+============================================== */
+function initScrollReveal() {
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => obs.observe(el));
+}
+
+/* ==============================================
+   COUNT-UP ANIMATION
+============================================== */
+function initCounters() {
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const target = parseInt(el.dataset.target);
+        const duration = 1600;
+        const step = target / (duration / 16);
+        let current = 0;
+        const interval = setInterval(() => {
+          current = Math.min(current + step, target);
+          el.textContent = Math.floor(current);
+          if (current >= target) clearInterval(interval);
+        }, 16);
+        obs.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  document.querySelectorAll('.counter').forEach(el => obs.observe(el));
+}
+
+/* ==============================================
+   3D TILT + MAGIC SPOTLIGHT
+============================================== */
+function initTilt() {
+  document.querySelectorAll('[data-tilt]').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const cx = rect.width / 2;
+      const cy = rect.height / 2;
+      const rotY = ((x - cx) / cx) * 6;
+      const rotX = -((y - cy) / cy) * 6;
+      // Magic Card spotlight
+      card.style.setProperty('--mouse-x', x + 'px');
+      card.style.setProperty('--mouse-y', y + 'px');
+      card.style.transition = 'transform 0.1s ease, border-color 0.4s, box-shadow 0.4s';
+      card.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateZ(8px)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transition = 'transform 0.5s cubic-bezier(0.4,0,0.2,1), border-color 0.4s, box-shadow 0.4s';
+      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
+    });
+  });
+}
+
+/* ==============================================
+   MAGIC UI — METEORS
+============================================== */
+function initMeteors() {
+  const container = document.getElementById('meteors-container');
+  if (!container) return;
+  const count = 14;
+  for (let i = 0; i < count; i++) {
+    const m = document.createElement('div');
+    m.className = 'meteor';
+    const width = Math.random() * 80 + 40;
+    const delay  = Math.random() * 12;
+    const dur    = Math.random() * 5 + 5;
+    m.style.cssText = `
+      width:${width}px;
+      left:${Math.random() * 120}%;
+      top:${Math.random() * 30}%;
+      animation-delay:${delay}s;
+      animation-duration:${dur}s;
+    `;
+    container.appendChild(m);
+  }
+}
+
+/* ==============================================
+   MAGIC UI — SHIMMER BEAMS on primary buttons
+============================================== */
+function initShimmer() {
+  document.querySelectorAll('.btn-primary, .btn-accent').forEach(btn => {
+    if (btn.querySelector('.shimmer-beam')) return; // no duplicate
+    const beam = document.createElement('span');
+    beam.className = 'shimmer-beam';
+    beam.setAttribute('aria-hidden', 'true');
+    btn.appendChild(beam);
+  });
+}
+
+/* ==============================================
+   PROJECT FILTER
+============================================== */
+function initProjectFilter() {
+  const btns = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('.project-card');
+
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      cards.forEach(card => {
+        const match = filter === 'all' || card.dataset.category === filter;
+        card.style.transition = 'opacity 0.4s, transform 0.4s';
+        card.style.opacity = match ? '1' : '0.2';
+        card.style.transform = match ? '' : 'scale(0.96)';
+        card.style.pointerEvents = match ? '' : 'none';
+      });
+    });
+  });
+}
+
+/* ==============================================
+   TESTIMONIALS CAROUSEL
+============================================== */
+function initCarousel() {
+  const track = document.getElementById('testimonials-track');
+  const outer = track ? track.parentElement : null;
+  const dots = document.querySelectorAll('.carousel-dot');
+  if (!track || !outer || !dots.length) return;
+
+  let current = 0;
+  const total = dots.length; // 3 dots = 3 stops
+
+  function goTo(index) {
+    current = ((index % total) + total) % total;
+    // Step by one card width so 3 dots map to 3 valid positions (cards 1+2, 2+3, 3+4)
+    const step = Math.round(outer.offsetWidth / 2 + 12);
+    track.style.transform = `translateX(-${current * step}px)`;
+    dots.forEach((d, i) => {
+      d.classList.toggle('active', i === current);
+      d.setAttribute('aria-selected', String(i === current));
+    });
+  }
+
+  dots.forEach((dot, i) => dot.addEventListener('click', () => goTo(i)));
+
+  // Touch/swipe support
+  let touchStartX = 0;
+  outer.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  outer.addEventListener('touchend', e => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) goTo(diff > 0 ? current + 1 : current - 1);
+  });
+
+  // Auto scroll
+  let autoInterval = setInterval(() => goTo(current + 1), 4800);
+  const wrap = track.closest('.testimonials-carousel-wrap');
+  wrap.addEventListener('mouseenter', () => clearInterval(autoInterval));
+  wrap.addEventListener('mouseleave', () => {
+    clearInterval(autoInterval);
+    autoInterval = setInterval(() => goTo(current + 1), 4800);
+  });
+
+  window.addEventListener('resize', () => goTo(current));
+}
+
+/* ==============================================
+   FORM RIPPLE & SUBMIT
+============================================== */
+function initForm() {
+  const form = document.getElementById('contact-form');
+  if (!form) return;
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+
+    // Validate required fields
+    const fields = [
+      form.querySelector('#form-name'),
+      form.querySelector('#form-email'),
+      form.querySelector('#form-service'),
+      form.querySelector('#form-message'),
+    ];
+    let valid = true;
+    fields.forEach(field => {
+      if (!field || !field.value.trim()) {
+        valid = false;
+        if (field) field.style.borderColor = 'rgba(255,90,90,0.7)';
+      } else {
+        field.style.borderColor = '';
+      }
+    });
+    // Basic email format check
+    const emailField = form.querySelector('#form-email');
+    if (emailField && emailField.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailField.value)) {
+      valid = false;
+      emailField.style.borderColor = 'rgba(255,90,90,0.7)';
+    }
+    if (!valid) return;
+
+    const btn = form.querySelector('[type="submit"]');
+    const originalText = btn.querySelector('[data-i18n]').textContent;
+    btn.querySelector('[data-i18n]').textContent = currentLang === 'es' ? '¡Enviado! ✓' : 'Sent! ✓';
+    btn.style.background = 'linear-gradient(135deg, #00c875, #00a660)';
+    setTimeout(() => {
+      btn.querySelector('[data-i18n]').textContent = originalText;
+      btn.style.background = '';
+      form.reset();
+      fields.forEach(f => { if (f) f.style.borderColor = ''; });
+    }, 3000);
+  });
+}
+
+/* ==============================================
+   BTN RIPPLE
+============================================== */
+function initRipple() {
+  document.querySelectorAll('.btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      const rect = this.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const ripple = document.createElement('span');
+      ripple.style.cssText = `
+        position:absolute; border-radius:50%; background:rgba(255,255,255,0.25);
+        width:0; height:0; top:${y}px; left:${x}px;
+        transform:translate(-50%,-50%);
+        animation:rippleAnim 0.6s ease-out forwards;
+        pointer-events:none;
+      `;
+      this.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 600);
+    });
+  });
+
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes rippleAnim {
+      to { width:200px; height:200px; opacity:0; }
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+/* ==============================================
+   SCROLL SPY — active nav link
+============================================== */
+function initScrollSpy() {
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navLinks.forEach(a => {
+          a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { threshold: 0.35 });
+  sections.forEach(s => obs.observe(s));
+}
+
+/* ==============================================
+   BACK TO TOP
+============================================== */
+function initBackTop() {
+  const btn = document.getElementById('back-top');
+  if (!btn) return;
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', window.scrollY > 500);
+  }, { passive: true });
+  btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+}
+
+/* ==============================================
+   GSAP SCROLL ANIMATIONS (if available)
+============================================== */
+function initGSAP() {
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Parallax hero shapes
+  gsap.to('.shape-1', {
+    y: -140, ease: 'none',
+    scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 1.5 }
+  });
+  gsap.to('.shape-2', {
+    y: -80, ease: 'none',
+    scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 1 }
+  });
+  gsap.to('.shape-3', {
+    y: -50, ease: 'none',
+    scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 0.8 }
+  });
+
+  // Project cards stagger — set invisible via GSAP immediately, before reveal fires
+  const projectCards = document.querySelectorAll('.project-card');
+  projectCards.forEach(el => {
+    el.classList.remove('reveal', 'reveal-delay-1', 'reveal-delay-2', 'reveal-delay-3');
+    gsap.set(el, { opacity: 0, y: 40 }); // GSAP takes full ownership
+  });
+  gsap.to('.project-card', {
+    opacity: 1, y: 0, stagger: 0.08, duration: 0.65, ease: 'power3.out',
+    scrollTrigger: { trigger: '#projects-grid', start: 'top 80%', once: true }
+  });
+}
+
+/* ==============================================
+   CHATBOT
+============================================== */
+function initChatbot() {
+  const fab        = document.getElementById('chat-fab');
+  const win        = document.getElementById('chat-window');
+  const closeBtn   = document.getElementById('chat-close');
+  const messagesEl = document.getElementById('chat-messages');
+  const input      = document.getElementById('chat-input');
+  const sendBtn    = document.getElementById('chat-send');
+  const unreadDot  = document.getElementById('chat-unread-dot');
+  const statusEl   = document.getElementById('chat-header-status');
+  if (!fab || !win) return;
+
+  let isOpen = false, isLoading = false, history = [], greeted = false;
+
+  function getLang() { return (typeof currentLang !== 'undefined') ? currentLang : 'es'; }
+
+  const uiStrings = {
+    es: { placeholder: 'Escribí tu mensaje...', online: 'En línea',
+          greeting: '¡Hola! Soy Nubi IA. ¿En qué puedo ayudarte hoy?',
+          error: 'Lo siento, hubo un problema. Intentá de nuevo.',
+          ariaOpen: 'Abrir chat', ariaClose: 'Cerrar chat' },
+    en: { placeholder: 'Type your message...', online: 'Online',
+          greeting: "Hi! I'm Nubi AI. How can I help you today?",
+          error: 'Sorry, something went wrong. Please try again.',
+          ariaOpen: 'Open chat', ariaClose: 'Close chat' }
+  };
+  function ui(key) { return (uiStrings[getLang()] || uiStrings.es)[key]; }
+
+  function openChat() {
+    isOpen = true;
+    win.classList.add('open'); win.setAttribute('aria-hidden', 'false');
+    fab.setAttribute('aria-expanded', 'true'); fab.setAttribute('aria-label', ui('ariaClose'));
+    if (unreadDot) unreadDot.classList.add('hidden');
+    input.focus();
+    if (!greeted) { greeted = true; appendMessage('bot', ui('greeting')); }
+  }
+  function closeChat() {
+    isOpen = false;
+    win.classList.remove('open'); win.setAttribute('aria-hidden', 'true');
+    fab.setAttribute('aria-expanded', 'false'); fab.setAttribute('aria-label', ui('ariaOpen'));
+  }
+
+  fab.addEventListener('click', () => isOpen ? closeChat() : openChat());
+  closeBtn.addEventListener('click', closeChat);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && isOpen) closeChat(); });
+
+  function appendMessage(role, text) {
+    const wrap   = document.createElement('div');
+    const bubble = document.createElement('div');
+    wrap.className   = `chat-msg ${role}`;
+    bubble.className = 'chat-bubble';
+    bubble.textContent = text;
+    wrap.appendChild(bubble);
+    messagesEl.appendChild(wrap);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+  function showTyping() {
+    const wrap   = document.createElement('div');
+    const bubble = document.createElement('div');
+    wrap.className   = 'chat-msg bot'; wrap.id = 'typing-indicator';
+    bubble.className = 'chat-bubble typing-bubble';
+    bubble.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+    wrap.appendChild(bubble); messagesEl.appendChild(wrap);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+  function hideTyping() { const el = document.getElementById('typing-indicator'); if (el) el.remove(); }
+
+  input.addEventListener('input', () => { sendBtn.disabled = input.value.trim().length === 0 || isLoading; });
+
+  async function sendMessage() {
+    const text = input.value.trim();
+    if (!text || isLoading) return;
+    appendMessage('user', text);
+    history.push({ role: 'user', content: text });
+    if (history.length > 20) history = history.slice(-20);
+    input.value = ''; sendBtn.disabled = true; isLoading = true;
+    showTyping();
+    if (statusEl) statusEl.textContent = getLang() === 'en' ? 'Typing...' : 'Escribiendo...';
+    try {
+      const res = await fetch('/.netlify/functions/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: history, lang: getLang() }),
+      });
+      hideTyping();
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data  = await res.json();
+      const reply = data.reply || ui('error');
+      appendMessage('bot', reply);
+      history.push({ role: 'assistant', content: reply });
+      if (history.length > 20) history = history.slice(-20);
+    } catch (err) {
+      hideTyping(); appendMessage('bot', ui('error')); console.warn('Chat error:', err);
+    } finally {
+      isLoading = false;
+      if (statusEl) statusEl.textContent = ui('online');
+      sendBtn.disabled = input.value.trim().length === 0;
+    }
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  input.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
+
+  // Keep UI strings in sync on language switch
+  const _origSetLang = typeof setLang === 'function' ? setLang : null;
+  if (_origSetLang) {
+    window.setLang = function(lang) {
+      _origSetLang(lang);
+      input.placeholder = ui('placeholder');
+      if (statusEl && !isLoading) statusEl.textContent = ui('online');
+      fab.setAttribute('aria-label', isOpen ? ui('ariaClose') : ui('ariaOpen'));
+    };
+  }
+}
+
+/* ==============================================
+   INIT ALL
+============================================== */
+document.addEventListener('DOMContentLoaded', () => {
+  applyTranslations();
+  initHeroAnimations();
+  initParticles();
+  initMeteors();
+  initCursor();
+  initNavbar();
+  initMobileMenu();
+  initScrollReveal();
+  initCounters();
+  initTilt();
+  initProjectFilter();
+  initCarousel();
+  initForm();
+  initRipple();
+  initShimmer();
+  initScrollSpy();
+  initBackTop();
+  initGSAP();
+  initChatbot();
+});
+</script>
+</body>
+</html>
