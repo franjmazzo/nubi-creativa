@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nubi Creativa — Agencia Creativa en Buenos Aires</title>
-  <meta name="description" content="Nubi Creativa es una agencia creativa de Buenos Aires especializada en diseño gráfico, marketing digital, desarrollo web y producción audiovisual.">
+  <title>Nubi Creativa — Elevo tu marca con identidad | Buenos Aires</title>
+  <meta name="description" content="Agencia digital en Buenos Aires que construye marcas con identidad, estrategia y propósito. Diseño gráfico, marketing digital, desarrollo web, producción audiovisual y gestión de redes sociales.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
@@ -15,8 +15,8 @@
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Nubi Creativa — Agencia Creativa">
-  <meta property="og:description" content="Diseño, marketing, web y audiovisual para marcas que quieren destacar.">
+  <meta property="og:title" content="Nubi Creativa — Elevo tu marca con identidad">
+  <meta property="og:description" content="Construimos marcas con identidad, estrategia y propósito. Agencia digital en Buenos Aires.">
   <meta property="og:image" content="assets/logo/logo-blue.jpg">
   <meta name="twitter:card" content="summary_large_image">
 
@@ -373,7 +373,7 @@
       white-space: nowrap;
       opacity: 0; transform: translateY(20px);
     }
-    .hero-eyebrow span { width: 32px; height: 1px; background: var(--accent); }
+    .hero-eyebrow span:first-child { width: 32px; height: 1px; background: var(--accent); flex-shrink: 0; }
     .hero-headline {
       font-family: var(--font-display);
       font-size: clamp(36px, 5.5vw, 76px);
@@ -634,10 +634,17 @@
       font-size: 15px; line-height: 1.8; color: rgba(248,250,255,0.68);
     }
     .service-num {
-      position: absolute; top: 28px; right: 28px;
-      font-family: var(--font-display); font-size: 64px; font-weight: 800;
-      color: rgba(255,255,255,0.03); line-height: 1; letter-spacing: -0.05em;
-      pointer-events: none;
+      position: absolute; bottom: -24px; right: -8px;
+      font-family: var(--font-display); font-size: 148px; font-weight: 800;
+      line-height: 1; letter-spacing: -0.05em;
+      pointer-events: none; user-select: none;
+      background: linear-gradient(135deg,
+        rgba(0,212,255,0.32) 0%,
+        rgba(31,103,176,0.18) 45%,
+        transparent 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     /* =============================================
@@ -1201,6 +1208,140 @@
       #chat-fab, #chat-close, #chat-send { cursor: pointer; }
       #chat-input { cursor: text; }
     }
+
+    /* =============================================
+       PROJECT MODAL
+    ============================================= */
+    #project-modal {
+      position: fixed; inset: 0; z-index: 600;
+      display: flex; align-items: flex-end;
+      pointer-events: none;
+    }
+    #project-modal.is-open { pointer-events: auto; }
+
+    .pm-backdrop {
+      position: absolute; inset: 0;
+      background: rgba(13,27,42,0.88);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      opacity: 0; transition: opacity 0.45s ease;
+    }
+    #project-modal.is-open .pm-backdrop { opacity: 1; }
+
+    .pm-sheet {
+      position: relative; z-index: 1; width: 100%; height: 92vh;
+      background: var(--navy);
+      border-radius: 24px 24px 0 0;
+      border: 1px solid rgba(255,255,255,0.09); border-bottom: none;
+      overflow: hidden; display: flex; flex-direction: column;
+      transform: translateY(100%);
+      transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform;
+    }
+    #project-modal.is-open .pm-sheet { transform: translateY(0); }
+
+    .pm-handle {
+      width: 40px; height: 4px; border-radius: 2px;
+      background: rgba(255,255,255,0.16); margin: 14px auto 0; flex-shrink: 0;
+    }
+    .pm-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 32px; border-bottom: 1px solid rgba(255,255,255,0.07); flex-shrink: 0;
+    }
+    .pm-nav { display: flex; align-items: center; gap: 8px; }
+    .pm-nav-btn, .pm-close {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10);
+      display: flex; align-items: center; justify-content: center;
+      cursor: none; transition: background var(--transition), border-color var(--transition);
+      flex-shrink: 0;
+    }
+    .pm-nav-btn:hover { background: rgba(31,103,176,0.25); border-color: rgba(0,212,255,0.3); }
+    .pm-nav-btn:disabled { opacity: 0.28; pointer-events: none; }
+    .pm-close:hover { background: rgba(255,70,70,0.18); border-color: rgba(255,70,70,0.3); }
+    .pm-nav-btn svg, .pm-close svg {
+      width: 16px; height: 16px; stroke: var(--white); fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .pm-counter {
+      font-size: 12px; color: rgba(248,250,255,0.4); letter-spacing: 0.08em;
+      min-width: 36px; text-align: center;
+    }
+
+    .pm-body {
+      flex: 1; overflow-y: auto; scroll-behavior: smooth;
+    }
+    .pm-body::-webkit-scrollbar { width: 3px; }
+    .pm-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+    .pm-hero {
+      position: relative; height: 360px;
+      display: flex; align-items: flex-end; overflow: hidden; flex-shrink: 0;
+    }
+    .pm-hero-bg {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+      transform-origin: center; transition: transform 8s ease;
+    }
+    #project-modal.is-open .pm-hero-bg { transform: scale(1.04); }
+    .pm-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(13,27,42,0.97) 0%, rgba(13,27,42,0.4) 55%, transparent 100%);
+    }
+    .pm-hero-content { position: relative; z-index: 1; padding: 36px 48px; width: 100%; }
+    .pm-tag {
+      display: inline-block; padding: 4px 14px; border-radius: 20px;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+      background: rgba(0,212,255,0.12); border: 1px solid rgba(0,212,255,0.28);
+      color: var(--accent); margin-bottom: 14px;
+    }
+    .pm-title {
+      font-family: var(--font-display);
+      font-size: clamp(26px, 4vw, 52px); font-weight: 800;
+      line-height: 1.1; letter-spacing: -0.03em; color: var(--white);
+    }
+
+    .pm-content { padding: 48px 48px 100px; max-width: 880px; }
+    .pm-section-label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 14px;
+    }
+    .pm-description {
+      font-size: 17px; line-height: 1.85; color: rgba(248,250,255,0.72); margin-bottom: 48px;
+    }
+    .pm-meta-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 28px; padding: 32px 0; margin-bottom: 40px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .pm-meta-label {
+      font-size: 11px; color: rgba(248,250,255,0.38); text-transform: uppercase;
+      letter-spacing: 0.1em; margin-bottom: 6px;
+    }
+    .pm-meta-value {
+      font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--white);
+    }
+    .pm-deliverables-label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(248,250,255,0.45); margin-bottom: 16px;
+    }
+    .pm-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pm-chip {
+      padding: 7px 16px; border-radius: 20px; font-size: 13px;
+      background: rgba(31,103,176,0.12); border: 1px solid rgba(31,103,176,0.22);
+      color: rgba(248,250,255,0.72);
+    }
+
+    @media (max-width: 768px) {
+      .pm-sheet { height: 96vh; border-radius: 20px 20px 0 0; }
+      .pm-header { padding: 14px 20px; }
+      .pm-hero { height: 260px; }
+      .pm-hero-content { padding: 24px 24px; }
+      .pm-content { padding: 32px 24px 80px; }
+    }
+    @media (hover: none) {
+      .pm-nav-btn, .pm-close { cursor: pointer; }
+    }
   </style>
 </head>
 <body>
@@ -1291,7 +1432,7 @@
         <span class="line" id="hero-line-2"></span>
       </h1>
       <p class="hero-sub" id="hero-sub" data-i18n="hero.sub">
-        Diseño, estrategia y tecnología al servicio de marcas que quieren destacar. Tu visión, nuestra ejecución.
+        No hacemos solo diseño — construimos marcas con identidad, estrategia y propósito. Un equipo cercano y profesional para hacer crecer tu marca.
       </p>
       <div class="hero-ctas" id="hero-ctas">
         <a href="#servicios" class="btn btn-primary btn-glow" data-i18n="hero.cta1">Ver nuestros servicios</a>
@@ -1312,7 +1453,6 @@
     <span class="marquee-item">Desarrollo Web</span>
     <span class="marquee-item">Producción Audiovisual</span>
     <span class="marquee-item">Branding Estratégico</span>
-    <span class="marquee-item">Buenos Aires</span>
     <span class="marquee-item">Motion Graphics</span>
     <span class="marquee-item">E-commerce</span>
     <span class="marquee-item">UX · UI Design</span>
@@ -1323,7 +1463,6 @@
     <span class="marquee-item">Desarrollo Web</span>
     <span class="marquee-item">Producción Audiovisual</span>
     <span class="marquee-item">Branding Estratégico</span>
-    <span class="marquee-item">Buenos Aires</span>
     <span class="marquee-item">Motion Graphics</span>
     <span class="marquee-item">E-commerce</span>
     <span class="marquee-item">UX · UI Design</span>
@@ -1365,7 +1504,13 @@
         <div class="service-num">04</div>
         <div class="service-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg></div>
         <h3 data-i18n="services.av.title">Producción Audiovisual</h3>
-        <p data-i18n="services.av.desc">Video, fotografía y motion graphics. Contamos tu historia con imágenes que impactan y generan engagement real.</p>
+        <p data-i18n="services.av.desc">Video, edición y animación. Contamos tu historia con producción audiovisual que impacta y genera engagement real.</p>
+      </article>
+      <article class="service-card reveal reveal-delay-1" data-tilt>
+        <div class="service-num">05</div>
+        <div class="service-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M17 2H7a5 5 0 0 0-5 5v10a5 5 0 0 0 5 5h10a5 5 0 0 0 5-5V7a5 5 0 0 0-5-5z"/><circle cx="12" cy="12" r="3"/><circle cx="17.5" cy="6.5" r="1"/></svg></div>
+        <h3 data-i18n="services.social.title">Gestión de Redes Sociales</h3>
+        <p data-i18n="services.social.desc">Contenido estratégico, comunidad y presencia digital consistente. Gestionamos tus redes para que puedas enfocarte en tu negocio.</p>
       </article>
     </div>
   </div>
@@ -1380,10 +1525,10 @@
       <div class="about-left">
         <div class="section-tag reveal" data-i18n="about.tag">Sobre nosotros</div>
         <h2 class="big-statement reveal reveal-delay-1" id="nosotros-title" data-i18n-html="about.statement">
-          No somos solo una agencia.<br>Somos tu <em>equipo creativo</em>.
+          No hacemos solo diseño.<br>Construimos marcas con <em>identidad y propósito</em>.
         </h2>
         <p class="reveal reveal-delay-2" data-i18n="about.desc">
-          En Nubi Creativa creemos que el mejor trabajo nace de entender profundamente a las marcas y las personas detrás de ellas. Combinamos pensamiento estratégico con ejecución impecable para crear resultados que se sienten.
+          Nubi Creativa nace de la pasión por el diseño y la comunicación. Trabajamos cada proyecto de manera personalizada — entendemos que no existen soluciones genéricas. Combinamos diseño, estrategia y cercanía humana para construir marcas que se destacan y crecen de forma sostenida.
         </p>
         <div class="stats-row">
           <div class="stat-item reveal reveal-delay-2">
@@ -1616,6 +1761,7 @@
               <option value="marketing" data-i18n="services.marketing.title">Marketing Digital</option>
               <option value="web" data-i18n="services.web.title">Desarrollo Web</option>
               <option value="audiovisual" data-i18n="services.av.title">Producción Audiovisual</option>
+              <option value="redes" data-i18n="services.social.title">Gestión de Redes Sociales</option>
               <option value="otro" data-i18n="contact.form.other">Otro</option>
             </select>
           </div>
@@ -1646,7 +1792,7 @@
           <img src="assets/logo/logo-icon.png" alt="" class="footer-logo-img" aria-hidden="true">
           <span>Nubi<span>Creativa</span></span>
         </a>
-        <p data-i18n="footer.desc">Agencia creativa en Buenos Aires. Diseño, marketing, web y audiovisual para marcas que quieren destacar.</p>
+        <p data-i18n="footer.desc">Agencia digital en Buenos Aires. Construimos marcas con identidad, estrategia y propósito. <em>Elevo tu marca con identidad.</em></p>
         <div class="footer-socials" aria-label="Redes sociales">
           <a href="#" class="social-btn" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
           <a href="#" class="social-btn" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
@@ -1661,6 +1807,7 @@
           <li><a href="#servicios" data-i18n="services.marketing.title">Marketing Digital</a></li>
           <li><a href="#servicios" data-i18n="services.web.title">Desarrollo Web</a></li>
           <li><a href="#servicios" data-i18n="services.av.title">Producción Audiovisual</a></li>
+          <li><a href="#servicios" data-i18n="services.social.title">Gestión de Redes Sociales</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -1732,6 +1879,45 @@
   </div>
 </div>
 
+<!-- PROJECT MODAL -->
+<div id="project-modal" role="dialog" aria-modal="true" aria-label="Detalle de proyecto" aria-hidden="true">
+  <div class="pm-backdrop" id="pm-backdrop"></div>
+  <div class="pm-sheet" id="pm-sheet">
+    <div class="pm-handle" aria-hidden="true"></div>
+    <div class="pm-header">
+      <div class="pm-nav">
+        <button class="pm-nav-btn" id="pm-prev" aria-label="Proyecto anterior">
+          <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <span class="pm-counter" id="pm-counter">1 / 6</span>
+        <button class="pm-nav-btn" id="pm-next" aria-label="Siguiente proyecto">
+          <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+        </button>
+      </div>
+      <button class="pm-close" id="pm-close" aria-label="Cerrar">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="pm-body" id="pm-body">
+      <div class="pm-hero">
+        <div class="pm-hero-bg" id="pm-hero-bg"></div>
+        <div class="pm-hero-overlay"></div>
+        <div class="pm-hero-content">
+          <div class="pm-tag" id="pm-tag"></div>
+          <h2 class="pm-title" id="pm-title"></h2>
+        </div>
+      </div>
+      <div class="pm-content">
+        <p class="pm-section-label" id="pm-section-label">Sobre el proyecto</p>
+        <p class="pm-description" id="pm-description"></p>
+        <div class="pm-meta-grid" id="pm-meta-grid"></div>
+        <p class="pm-deliverables-label" id="pm-deliverables-label">Entregables</p>
+        <div class="pm-chips" id="pm-chips"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- BACK TO TOP -->
 <button id="back-top" aria-label="Volver arriba">
   <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"></polyline></svg>
@@ -1758,22 +1944,24 @@ const translations = {
     "hero.line1accent": "",
     "hero.line2": "que conectan.",
     "hero.line2b": "Ideas que mueven.",
-    "hero.sub": "Diseño, estrategia y tecnología al servicio de marcas que quieren destacar. Tu visión, nuestra ejecución.",
+    "hero.sub": "No hacemos solo diseño — construimos marcas con identidad, estrategia y propósito. Un equipo cercano y profesional para hacer crecer tu marca.",
     "hero.cta1": "Ver nuestros servicios",
     "hero.cta2": "Contactanos",
     "services.tag": "Nuestros servicios",
     "services.title": "Lo que hacemos",
     "services.design.title": "Diseño Gráfico",
-    "services.design.desc": "Identidad visual, branding estratégico e ilustración. Construimos marcas que se recuerdan y comunican con claridad.",
+    "services.design.desc": "Identidad visual y branding estratégico. No solo hacemos que se vea bien — construimos marcas que comunican quiénes son y conectan con su público.",
     "services.marketing.title": "Marketing Digital",
-    "services.marketing.desc": "Estrategia, redes sociales y campañas orientadas a resultados. Conectamos tu marca con la audiencia correcta.",
+    "services.marketing.desc": "Estrategia, contenido y campañas orientadas a resultados. Conectamos tu marca con la audiencia correcta en el momento justo.",
     "services.web.title": "Desarrollo Web",
     "services.web.desc": "Sitios modernos, landing pages y e-commerce de alto rendimiento. Experiencias digitales que convierten visitantes en clientes.",
     "services.av.title": "Producción Audiovisual",
-    "services.av.desc": "Video, fotografía y motion graphics. Contamos tu historia con imágenes que impactan y generan engagement real.",
+    "services.av.desc": "Video, edición y animación. Contamos tu historia con producción audiovisual que impacta y genera engagement real.",
+    "services.social.title": "Gestión de Redes Sociales",
+    "services.social.desc": "Contenido estratégico, comunidad y presencia digital consistente. Gestionamos tus redes para que puedas enfocarte en tu negocio.",
     "about.tag": "Sobre nosotros",
-    "about.statement": "No somos solo una agencia.<br>Somos tu <em>equipo creativo</em>.",
-    "about.desc": "En Nubi Creativa creemos que el mejor trabajo nace de entender profundamente a las marcas y las personas detrás de ellas. Combinamos pensamiento estratégico con ejecución impecable para crear resultados que se sienten.",
+    "about.statement": "No hacemos solo diseño.<br>Construimos marcas con <em>identidad y propósito</em>.",
+    "about.desc": "Nubi Creativa nace de la pasión por el diseño y la comunicación. Trabajamos cada proyecto de manera personalizada — entendemos que no existen soluciones genéricas. Combinamos diseño, estrategia y cercanía humana para construir marcas que se destacan y crecen de forma sostenida.",
     "about.stat1": "Clientes",
     "about.stat2": "Proyectos",
     "about.stat3": "Años de experiencia",
@@ -1816,14 +2004,22 @@ const translations = {
     "contact.form.messagePlaceholder": "Contanos tu proyecto...",
     "contact.form.submit": "Enviar mensaje",
     "contact.form.other": "Otro",
-    "footer.desc": "Agencia creativa en Buenos Aires. Diseño, marketing, web y audiovisual para marcas que quieren destacar.",
+    "footer.desc": "Agencia digital en Buenos Aires. Construimos marcas con identidad, estrategia y propósito.",
     "footer.services": "Servicios",
     "footer.company": "Empresa",
     "footer.contact": "Contacto",
-    "footer.copyright": "© 2025 Nubi Creativa. Todos los derechos reservados.",
+    "footer.copyright": "© 2026 Nubi Creativa. Todos los derechos reservados.",
     "footer.privacy": "Política de privacidad",
-    "page.title": "Nubi Creativa — Agencia Creativa en Buenos Aires",
-    "page.description": "Nubi Creativa es una agencia creativa de Buenos Aires especializada en diseño gráfico, marketing digital, desarrollo web y producción audiovisual.",
+    "page.title": "Nubi Creativa — Elevo tu marca con identidad | Buenos Aires",
+    "page.description": "Agencia digital en Buenos Aires que construye marcas con identidad, estrategia y propósito. Diseño gráfico, marketing digital, desarrollo web, producción audiovisual y gestión de redes sociales.",
+    "modal.about": "Sobre el proyecto",
+    "modal.deliverables": "Entregables",
+    "modal.client": "Cliente",
+    "modal.year": "Año",
+    "modal.duration": "Duración",
+    "modal.prev": "Proyecto anterior",
+    "modal.next": "Siguiente proyecto",
+    "modal.close": "Cerrar",
   },
   en: {
     "nav.inicio": "Home",
@@ -1838,22 +2034,24 @@ const translations = {
     "hero.line1accent": "",
     "hero.line2": "that connect.",
     "hero.line2b": "Ideas that move.",
-    "hero.sub": "Design, strategy and technology at the service of brands that want to stand out. Your vision, our execution.",
+    "hero.sub": "We don't just design — we build brands with identity, strategy and purpose. A close, professional and personalized team to grow your brand.",
     "hero.cta1": "See our services",
     "hero.cta2": "Contact us",
     "services.tag": "Our services",
     "services.title": "What we do",
     "services.design.title": "Graphic Design",
-    "services.design.desc": "Visual identity, strategic branding and illustration. We build brands that are remembered and communicate with clarity.",
+    "services.design.desc": "Visual identity and strategic branding. We don't just make it look good — we build brands that communicate who they are and connect with their audience.",
     "services.marketing.title": "Digital Marketing",
-    "services.marketing.desc": "Strategy, social media and result-driven campaigns. We connect your brand with the right audience.",
+    "services.marketing.desc": "Strategy, content and result-driven campaigns. We connect your brand with the right audience at the right time.",
     "services.web.title": "Web Development",
     "services.web.desc": "Modern websites, landing pages and high-performance e-commerce. Digital experiences that turn visitors into customers.",
     "services.av.title": "Audiovisual Production",
-    "services.av.desc": "Video, photography and motion graphics. We tell your story with images that impact and drive real engagement.",
+    "services.av.desc": "Video, editing and animation. We tell your story with audiovisual production that impacts and drives real engagement.",
+    "services.social.title": "Social Media Management",
+    "services.social.desc": "Strategic content, community building and consistent digital presence. We manage your social media so you can focus on your business.",
     "about.tag": "About us",
-    "about.statement": "We're not just an agency.<br>We're your <em>creative team</em>.",
-    "about.desc": "At Nubi Creativa we believe the best work comes from deeply understanding brands and the people behind them. We combine strategic thinking with impeccable execution to create results that are felt.",
+    "about.statement": "We don't just design.<br>We build brands with <em>identity and purpose</em>.",
+    "about.desc": "Nubi Creativa was born from a passion for design and communication. We work on each project in a personalized way — we understand there are no generic solutions. We combine design, strategy and human closeness to build brands that stand out and grow sustainably.",
     "about.stat1": "Clients",
     "about.stat2": "Projects",
     "about.stat3": "Years of experience",
@@ -1896,14 +2094,22 @@ const translations = {
     "contact.form.messagePlaceholder": "Tell us about your project...",
     "contact.form.submit": "Send message",
     "contact.form.other": "Other",
-    "footer.desc": "Creative agency in Buenos Aires. Design, marketing, web and audiovisual for brands that want to stand out.",
+    "footer.desc": "Digital agency in Buenos Aires. Building brands with identity, strategy and purpose.",
     "footer.services": "Services",
     "footer.company": "Company",
     "footer.contact": "Contact",
-    "footer.copyright": "© 2025 Nubi Creativa. All rights reserved.",
+    "footer.copyright": "© 2026 Nubi Creativa. All rights reserved.",
     "footer.privacy": "Privacy policy",
-    "page.title": "Nubi Creativa — Creative Agency in Buenos Aires",
-    "page.description": "Nubi Creativa is a creative agency in Buenos Aires specializing in graphic design, digital marketing, web development and audiovisual production.",
+    "page.title": "Nubi Creativa — Building brands with identity | Buenos Aires",
+    "page.description": "Digital agency in Buenos Aires building brands with identity, strategy and purpose. Graphic design, digital marketing, web development, audiovisual production and social media management.",
+    "modal.about": "About the project",
+    "modal.deliverables": "Deliverables",
+    "modal.client": "Client",
+    "modal.year": "Year",
+    "modal.duration": "Duration",
+    "modal.prev": "Previous project",
+    "modal.next": "Next project",
+    "modal.close": "Close",
   }
 };
 
@@ -2674,6 +2880,227 @@ function initChatbot() {
 }
 
 /* ==============================================
+   PROJECT MODAL
+============================================== */
+const PROJECTS = [
+  {
+    slug: 'rebrand-identidad',
+    gradient: 'linear-gradient(135deg,#0f1c35 0%,#16305a 45%,#1a4a7a 100%)',
+    es: {
+      tag:'Diseño', title:'Rebrand Identidad Corporativa',
+      description:'Transformación completa de la identidad visual de una marca consolidada del sector servicios. Desarrollamos un sistema de marca sólido: nuevo logo, paleta cromática, tipografía y lineamientos de uso para todos los puntos de contacto. El resultado fue una identidad coherente, memorable y con proyección de crecimiento.',
+      client:'Marca de Servicios', year:'2024', duration:'6 semanas',
+      deliverables:['Logo principal','Manual de marca','Paleta cromática','Tipografía','Papelería corporativa','Aplicaciones digitales']
+    },
+    en: {
+      tag:'Design', title:'Corporate Identity Rebrand',
+      description:'Complete visual identity transformation for an established services brand. We developed a solid brand system: new logo, color palette, typography and usage guidelines for all touchpoints. The result was a coherent, memorable identity with growth projection.',
+      client:'Services Brand', year:'2024', duration:'6 weeks',
+      deliverables:['Primary logo','Brand manual','Color palette','Typography','Corporate stationery','Digital applications']
+    }
+  },
+  {
+    slug: 'campana-digital-360',
+    gradient: 'linear-gradient(135deg,#0d1b2a 0%,#1a3f6e 45%,#1f67b0 100%)',
+    es: {
+      tag:'Marketing', title:'Campaña Digital 360',
+      description:'Estrategia integral de comunicación para el lanzamiento de un nuevo producto. Diseñamos y ejecutamos campañas en Meta Ads y Google Ads con contenido adaptado para cada plataforma y audiencia. Los resultados superaron las proyecciones: +180% en alcance orgánico y ×3 en conversiones respecto al baseline.',
+      client:'Marca de Consumo', year:'2024', duration:'3 meses',
+      deliverables:['Estrategia de contenido','Piezas para Meta Ads','Campañas Google','Copywriting','Reportes de performance','Optimización continua']
+    },
+    en: {
+      tag:'Marketing', title:'360 Digital Campaign',
+      description:'Comprehensive communication strategy for a new product launch. We designed and executed campaigns on Meta Ads and Google Ads with content tailored for each platform and audience. Results exceeded projections: +180% organic reach and ×3 conversions vs baseline.',
+      client:'Consumer Brand', year:'2024', duration:'3 months',
+      deliverables:['Content strategy','Meta Ads creatives','Google campaigns','Copywriting','Performance reports','Ongoing optimization']
+    }
+  },
+  {
+    slug: 'ecommerce-premium',
+    gradient: 'linear-gradient(135deg,#0d1b2a 0%,#162032 45%,#1e2d42 100%)',
+    es: {
+      tag:'Web', title:'E-commerce Premium',
+      description:'Desarrollo de tienda online de alto rendimiento para marca de indumentaria premium. Diseño UX/UI orientado a conversión, integración con pasarela de pagos, gestión de inventario en tiempo real y optimización SEO completa. Velocidad de carga <1.8s y tasa de conversión del 5.2%.',
+      client:'Marca de Moda', year:'2025', duration:'10 semanas',
+      deliverables:['Diseño UX/UI','Desarrollo frontend','Integración de pagos','Panel de administración','SEO técnico','Testing QA']
+    },
+    en: {
+      tag:'Web', title:'Premium E-commerce',
+      description:'High-performance online store development for a premium clothing brand. Conversion-oriented UX/UI design, payment gateway integration, real-time inventory management and full SEO optimization. Load speed <1.8s and 5.2% conversion rate.',
+      client:'Fashion Brand', year:'2025', duration:'10 weeks',
+      deliverables:['UX/UI Design','Frontend development','Payment integration','Admin panel','Technical SEO','QA Testing']
+    }
+  },
+  {
+    slug: 'serie-contenido-video',
+    gradient: 'linear-gradient(135deg,#1a0d2e 0%,#2d1b50 45%,#1f0d3a 100%)',
+    es: {
+      tag:'Audiovisual', title:'Serie de Contenido Video',
+      description:'Producción de serie de 12 episodios para redes sociales de una marca de fitness. Incluye preproducción, dirección creativa, filmación, edición y postproducción con motion graphics. La serie generó más de 250.000 reproducciones orgánicas en el primer mes de publicación.',
+      client:'Marca Fitness', year:'2024', duration:'8 semanas',
+      deliverables:['Guión y storyboard','Dirección creativa','Filmación','Edición y color','Motion graphics','Formatos para cada red']
+    },
+    en: {
+      tag:'Audiovisual', title:'Video Content Series',
+      description:"Production of a 12-episode series for a fitness brand's social media. Includes pre-production, creative direction, filming, editing and post-production with motion graphics. The series generated over 250,000 organic views in its first month.",
+      client:'Fitness Brand', year:'2024', duration:'8 weeks',
+      deliverables:['Script & storyboard','Creative direction','Filming','Editing & color grading','Motion graphics','Platform formats']
+    }
+  },
+  {
+    slug: 'packaging-system',
+    gradient: 'linear-gradient(135deg,#0a2218 0%,#0f3828 45%,#1a5c3e 100%)',
+    es: {
+      tag:'Diseño', title:'Packaging System',
+      description:'Sistema de packaging para línea de productos gourmet con 8 SKUs. Desarrollamos estructura, selección de materiales y diseño gráfico manteniendo coherencia visual en toda la línea. El nuevo packaging incrementó la percepción de valor percibido en +40% según estudio de usuario.',
+      client:'Marca Gourmet', year:'2025', duration:'5 semanas',
+      deliverables:['Concepto creativo','Diseño de packaging','Sistema de colores por línea','Archivos para impresión','Mockups de presentación','Guía de materiales']
+    },
+    en: {
+      tag:'Design', title:'Packaging System',
+      description:'Packaging system for a gourmet product line with 8 SKUs. We developed structure, material selection and graphic design maintaining visual consistency throughout the line. The new packaging increased perceived value by +40% according to user research.',
+      client:'Gourmet Brand', year:'2025', duration:'5 weeks',
+      deliverables:['Creative concept','Packaging design','Color system per line','Print-ready files','Presentation mockups','Materials guide']
+    }
+  },
+  {
+    slug: 'saas-landing-page',
+    gradient: 'linear-gradient(135deg,#0d1b2a 0%,#0f2640 45%,#123552 100%)',
+    es: {
+      tag:'Web', title:'SaaS Landing Page',
+      description:'Landing page de alta conversión para producto SaaS B2B. Diseño orientado a leads con secciones de prueba social, pricing claro y demos interactivas. Animaciones optimizadas, velocidad <2s. Tasa de conversión alcanzada: 8.4%, superando el benchmark del sector (2.8%).',
+      client:'Startup Tech', year:'2025', duration:'3 semanas',
+      deliverables:['Diseño UI','Copywriting','Desarrollo web','Animaciones GSAP','Optimización de velocidad','Configuración A/B testing']
+    },
+    en: {
+      tag:'Web', title:'SaaS Landing Page',
+      description:'High-conversion landing page for a B2B SaaS product. Lead-oriented design with social proof sections, clear pricing and interactive demos. Optimized animations, <2s speed. Conversion rate achieved: 8.4%, exceeding industry benchmark (2.8%).',
+      client:'Tech Startup', year:'2025', duration:'3 weeks',
+      deliverables:['UI Design','Copywriting','Web development','GSAP animations','Speed optimization','A/B testing setup']
+    }
+  }
+];
+
+function initProjectModal() {
+  const modal    = document.getElementById('project-modal');
+  const backdrop = document.getElementById('pm-backdrop');
+  const sheet    = document.getElementById('pm-sheet');
+  const body     = document.getElementById('pm-body');
+  const prevBtn  = document.getElementById('pm-prev');
+  const nextBtn  = document.getElementById('pm-next');
+  const closeBtn = document.getElementById('pm-close');
+  const counter  = document.getElementById('pm-counter');
+  if (!modal) return;
+
+  let currentIndex = 0;
+  let isOpen = false;
+
+  function t(key) {
+    const lang = typeof currentLang !== 'undefined' ? currentLang : 'es';
+    return (translations[lang] && translations[lang][key]) || key;
+  }
+
+  function populate(idx) {
+    const lang = typeof currentLang !== 'undefined' ? currentLang : 'es';
+    const p = PROJECTS[idx];
+    const d = p[lang] || p.es;
+    document.getElementById('pm-hero-bg').style.background = p.gradient;
+    document.getElementById('pm-tag').textContent = d.tag;
+    document.getElementById('pm-title').textContent = d.title;
+    document.getElementById('pm-section-label').textContent = t('modal.about');
+    document.getElementById('pm-description').textContent = d.description;
+    document.getElementById('pm-deliverables-label').textContent = t('modal.deliverables');
+    // meta grid
+    const metaGrid = document.getElementById('pm-meta-grid');
+    metaGrid.innerHTML = [
+      { label: t('modal.client'),   value: d.client },
+      { label: t('modal.year'),     value: d.year },
+      { label: t('modal.duration'), value: d.duration },
+    ].map(m => `<div><p class="pm-meta-label">${m.label}</p><p class="pm-meta-value">${m.value}</p></div>`).join('');
+    // chips
+    document.getElementById('pm-chips').innerHTML =
+      d.deliverables.map(item => `<span class="pm-chip">${item}</span>`).join('');
+    // counter
+    counter.textContent = `${idx + 1} / ${PROJECTS.length}`;
+    // nav state
+    prevBtn.disabled = idx === 0;
+    nextBtn.disabled = idx === PROJECTS.length - 1;
+    // aria
+    prevBtn.setAttribute('aria-label', t('modal.prev'));
+    nextBtn.setAttribute('aria-label', t('modal.next'));
+    closeBtn.setAttribute('aria-label', t('modal.close'));
+    // scroll body to top
+    body.scrollTop = 0;
+  }
+
+  function openModal(idx) {
+    currentIndex = idx;
+    populate(idx);
+    modal.removeAttribute('aria-hidden');
+    modal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    history.replaceState(null, '', '#' + PROJECTS[idx].slug);
+    isOpen = true;
+    // GSAP entrance for content
+    if (typeof gsap !== 'undefined') {
+      gsap.fromTo('#pm-hero-bg',   { scale: 1.08 }, { scale: 1, duration: 1.2, ease: 'power3.out', delay: 0.3 });
+      gsap.fromTo('#pm-tag',       { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out', delay: 0.5 });
+      gsap.fromTo('#pm-title',     { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out', delay: 0.6 });
+      gsap.fromTo('.pm-section-label,#pm-description', { opacity: 0, y: 20 }, { opacity: 1, y: 0, stagger: 0.12, duration: 0.55, ease: 'power3.out', delay: 0.75 });
+      gsap.fromTo('.pm-meta-grid > div', { opacity: 0, y: 16 }, { opacity: 1, y: 0, stagger: 0.08, duration: 0.45, ease: 'power3.out', delay: 0.9 });
+      gsap.fromTo('.pm-chip', { opacity: 0, scale: 0.88 }, { opacity: 1, scale: 1, stagger: 0.05, duration: 0.35, ease: 'back.out(1.5)', delay: 1.05 });
+    }
+  }
+
+  function closeModal() {
+    if (!isOpen) return;
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    history.replaceState(null, '', window.location.pathname);
+    isOpen = false;
+  }
+
+  // Hook project cards
+  document.querySelectorAll('.project-card').forEach((card, idx) => {
+    card.style.cursor = 'none';
+    card.addEventListener('click', () => openModal(idx));
+  });
+
+  // Nav
+  prevBtn.addEventListener('click', () => { if (currentIndex > 0) { currentIndex--; populate(currentIndex); history.replaceState(null,'','#'+PROJECTS[currentIndex].slug); } });
+  nextBtn.addEventListener('click', () => { if (currentIndex < PROJECTS.length - 1) { currentIndex++; populate(currentIndex); history.replaceState(null,'','#'+PROJECTS[currentIndex].slug); } });
+
+  // Close
+  closeBtn.addEventListener('click', closeModal);
+  backdrop.addEventListener('click', closeModal);
+  document.addEventListener('keydown', (e) => {
+    if (!isOpen) return;
+    if (e.key === 'Escape') closeModal();
+    if (e.key === 'ArrowLeft' && currentIndex > 0) prevBtn.click();
+    if (e.key === 'ArrowRight' && currentIndex < PROJECTS.length - 1) nextBtn.click();
+  });
+
+  // Swipe down to close (mobile)
+  let touchStartY = 0;
+  sheet.addEventListener('touchstart', (e) => { touchStartY = e.touches[0].clientY; }, { passive: true });
+  sheet.addEventListener('touchend', (e) => {
+    const delta = e.changedTouches[0].clientY - touchStartY;
+    if (delta > 90 && body.scrollTop < 8) closeModal();
+  }, { passive: true });
+
+  // Re-populate labels on lang switch
+  const _origSetLang2 = typeof window.setLang === 'function' ? window.setLang : null;
+  if (_origSetLang2) {
+    const wrappedForModal = function(lang) {
+      _origSetLang2(lang);
+      if (isOpen) populate(currentIndex);
+    };
+    window.setLang = wrappedForModal;
+  }
+}
+
+/* ==============================================
    INIT ALL
 ============================================== */
 document.addEventListener('DOMContentLoaded', () => {
@@ -2696,6 +3123,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initBackTop();
   initGSAP();
   initChatbot();
+  initProjectModal();
 });
 </script>
 </body>
