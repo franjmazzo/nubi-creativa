@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nubi Creativa — Backend Setup Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #0D1B2A; --blue: #1F67B0; --accent: #00D4FF;
+      --white: #F8FAFF; --bg: #ffffff; --text: #1a2a3a;
+      --muted: #5a7080; --border: #dde6ee; --soft: #f0f6fc;
+      --success: #0a7a4a; --warn: #7a4a00;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.7; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    a { color: var(--blue); }
+
+    /* COVER */
+    .cover {
+      background: linear-gradient(135deg, var(--navy) 0%, #1a3a6a 60%, #1f5090 100%);
+      color: var(--white); padding: 80px 72px; min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      page-break-after: always;
+    }
+    .cover-badge { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 24px; }
+    .cover-title { font-family: 'Syne', sans-serif; font-size: 48px; font-weight: 800; line-height: 1.1; margin-bottom: 20px; }
+    .cover-title span { color: var(--accent); }
+    .cover-sub { font-size: 18px; color: rgba(248,250,255,0.65); max-width: 520px; line-height: 1.6; margin-bottom: 40px; }
+    .cover-stack { display: flex; gap: 10px; flex-wrap: wrap; }
+    .pill { padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; background: rgba(0,212,255,0.12); border: 1px solid rgba(0,212,255,0.3); color: var(--accent); }
+    .cover-meta { margin-top: auto; padding-top: 48px; font-size: 13px; color: rgba(248,250,255,0.4); display: flex; gap: 32px; }
+
+    /* LAYOUT */
+    .page { padding: 60px 72px; max-width: 860px; margin: 0 auto; }
+    @media print { .page { padding: 40px 48px; } }
+
+    h1 { font-family: 'Syne', sans-serif; font-size: 30px; font-weight: 800; color: var(--navy); margin: 0 0 32px; padding-bottom: 14px; border-bottom: 3px solid var(--accent); }
+    h2 { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; color: var(--navy); margin: 36px 0 14px; }
+    h3 { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: var(--blue); margin: 22px 0 8px; text-transform: uppercase; letter-spacing: 0.06em; }
+    p { margin: 0 0 14px; color: var(--text); }
+    ul, ol { margin: 0 0 16px 20px; }
+    li { margin-bottom: 7px; }
+    strong { color: var(--navy); }
+
+    pre {
+      background: #04101e; color: #e8f0f8; font-family: 'JetBrains Mono', monospace; font-size: 13px;
+      padding: 20px 22px; border-radius: 10px; overflow-x: auto; margin: 14px 0 20px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    pre .comment { color: #7aaccc; font-style: italic; }
+    pre .key     { color: #00d4ff; font-weight: 500; }
+    pre .val     { color: #00e87a; font-weight: 500; }
+    pre .str     { color: #ffd44d; }
+    pre .fn      { color: #ff9a3c; font-weight: 500; }
+    code { font-family: 'JetBrains Mono', monospace; font-size: 13px; background: #ddeeff; color: #0a2040; padding: 2px 7px; border-radius: 5px; font-weight: 600; border: 1px solid #aaccee; }
+
+    .env-table { width: 100%; border-collapse: collapse; margin: 14px 0 22px; font-size: 14px; }
+    .env-table th { background: var(--navy); color: var(--white); padding: 10px 14px; text-align: left; font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+    .env-table td { padding: 9px 14px; border-bottom: 1px solid var(--border); }
+    .env-table tr:nth-child(even) td { background: var(--soft); }
+    .env-table td:first-child { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: var(--blue); font-weight: 600; }
+    .req { color: #c0392b; font-weight: 700; font-size: 11px; text-transform: uppercase; }
+    .opt { color: var(--muted); font-weight: 600; font-size: 11px; text-transform: uppercase; }
+
+    .step { display: flex; gap: 16px; margin-bottom: 18px; align-items: flex-start; }
+    .step-num { flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--blue), var(--accent)); color: var(--navy); font-family: 'Syne', sans-serif; font-weight: 800; font-size: 14px; display: flex; align-items: center; justify-content: center; margin-top: 2px; }
+    .step-body p { margin-bottom: 6px; }
+
+    .callout { padding: 16px 20px; border-radius: 10px; margin: 16px 0; font-size: 14px; }
+    .callout.info    { background: #e8f4ff; border-left: 4px solid var(--blue); color: #0a2040; }
+    .callout.success { background: #e6f9f0; border-left: 4px solid #00a855; color: var(--success); }
+    .callout.warn    { background: #fff8e8; border-left: 4px solid #e6a817; color: var(--warn); }
+
+    .api-table { width: 100%; border-collapse: collapse; margin: 14px 0 22px; font-size: 13.5px; }
+    .api-table th { background: #f0f6fc; color: var(--navy); padding: 9px 12px; text-align: left; font-weight: 700; border-bottom: 2px solid var(--border); font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .api-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .method { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; padding: 3px 8px; border-radius: 5px; }
+    .get    { background: #e3f5e3; color: #1a6b1a; }
+    .post   { background: #fff3d9; color: #7a4a00; }
+    .put    { background: #e0eeff; color: #0a3a80; }
+    .delete { background: #ffe0e3; color: #8a0015; }
+    .patch  { background: #f3e3ff; color: #4a0a80; }
+
+    .section-break { page-break-before: always; }
+    hr { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
+  </style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-badge">Nubi Creativa · Documentación Técnica</div>
+  <h1 class="cover-title">Backend<br><span>Setup Guide</span></h1>
+  <p class="cover-sub">Guía completa de configuración del backend: Netlify Functions, Supabase, Resend y Panel de Administración CMS.</p>
+  <div class="cover-stack">
+    <span class="pill">Netlify Functions</span>
+    <span class="pill">Supabase</span>
+    <span class="pill">Resend</span>
+    <span class="pill">Admin CMS</span>
+    <span class="pill">Node 18+</span>
+  </div>
+  <div class="cover-meta">
+    <span>Versión 1.0</span>
+    <span>2026</span>
+    <span>hola@nubicreativa.com</span>
+  </div>
+</div>
+
+<!-- SECTION 1: OVERVIEW -->
+<div class="page">
+  <h1>1. Arquitectura del backend</h1>
+
+  <p>El backend de Nubi Creativa usa <strong>Netlify Functions</strong> (serverless Node.js) como capa de API. No hay servidor propio — todo se ejecuta como funciones Lambda directamente en Netlify. La base de datos es <strong>Supabase</strong> (PostgreSQL gratuito) y los emails se envían vía <strong>Resend</strong> (API REST, sin paquetes npm extra).</p>
+
+  <h2>Funciones creadas</h2>
+  <table class="api-table">
+    <thead>
+      <tr><th>Archivo</th><th>Ruta</th><th>Descripción</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>contact.js</code></td><td><code>/.netlify/functions/contact</code></td><td>Recibe el formulario de contacto, valida, aplica rate limiting y envía emails vía Resend</td></tr>
+      <tr><td><code>projects.js</code></td><td><code>/.netlify/functions/projects</code></td><td>Devuelve proyectos publicados desde Supabase (GET público, cacheado 60s)</td></tr>
+      <tr><td><code>admin.js</code></td><td><code>/.netlify/functions/admin</code></td><td>CRUD completo para proyectos, protegido con <code>x-admin-secret</code></td></tr>
+      <tr><td><code>chat.js</code></td><td><code>/.netlify/functions/chat</code></td><td>Proxy para la IA Nubi (Anthropic Claude) — ya existía</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Panel de administración</h2>
+  <p>En <code>/admin/index.html</code> hay un panel CMS independiente. El acceso está protegido por la clave <code>ADMIN_SECRET</code>. Permite agregar, editar, eliminar y reordenar proyectos con contenido bilingüe (ES/EN).</p>
+
+  <h2>Flujo de datos</h2>
+  <ol>
+    <li>Al cargar el sitio, <code>renderProjectCards()</code> renderiza la grilla con los datos estáticos de respaldo (<code>PROJECTS</code>).</li>
+    <li>Luego, <code>loadProjects()</code> hace fetch a <code>/.netlify/functions/projects</code>.</li>
+    <li>Si hay datos en Supabase, reemplaza la grilla con los proyectos del CMS.</li>
+    <li>El formulario de contacto envía a <code>/.netlify/functions/contact</code>, que valida, guarda y envía emails.</li>
+  </ol>
+</div>
+
+<!-- SECTION 2: SUPABASE -->
+<div class="page section-break">
+  <h1>2. Configurar Supabase</h1>
+
+  <p>Supabase provee una base de datos PostgreSQL gratuita con API REST automática, perfecta para este caso de uso.</p>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <p><strong>Crear proyecto</strong> en <a href="https://supabase.com">supabase.com</a> → New Project. Elegí una región cercana (São Paulo o US East).</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <p><strong>Ejecutar el schema SQL</strong>: en el dashboard ir a <em>SQL Editor → New Query</em>. Pegar el contenido completo de <code>config/supabase-schema.sql</code> y hacer clic en Run.</p>
+      <div class="callout success">El script crea las tablas <code>projects</code>, <code>rate_limits</code> y <code>contact_submissions</code>, configura Row Level Security y agrega los 6 proyectos de demo.</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-body">
+      <p><strong>Obtener las claves</strong>: en el dashboard ir a <em>Settings → API</em>. Copiar:</p>
+      <ul>
+        <li><strong>Project URL</strong> → valor para <code>SUPABASE_URL</code></li>
+        <li><strong>anon / public key</strong> → valor para <code>SUPABASE_ANON_KEY</code></li>
+        <li><strong>service_role key</strong> → valor para <code>SUPABASE_SERVICE_KEY</code> (mantenerla secreta)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout warn"><strong>⚠ Importante:</strong> La <code>service_role key</code> bypasea Row Level Security. Nunca exponerla en el frontend — solo se usa en las Netlify Functions del lado del servidor.</div>
+
+  <h2>Estructura de la tabla <code>projects</code></h2>
+  <pre><span class="comment">-- Columnas principales</span>
+<span class="key">id</span>              SERIAL PRIMARY KEY
+<span class="key">slug</span>            TEXT UNIQUE          <span class="comment">-- URL del proyecto (ej: "mi-proyecto")</span>
+<span class="key">order_index</span>     INTEGER              <span class="comment">-- Orden en la grilla (0 = primero)</span>
+<span class="key">gradient</span>        TEXT                 <span class="comment">-- CSS gradient para el fondo</span>
+<span class="key">category</span>        TEXT                 <span class="comment">-- diseno|marketing|web|audiovisual|redes</span>
+<span class="key">published</span>       BOOLEAN              <span class="comment">-- false = borrador</span>
+
+<span class="comment">-- Español (prefijo es_)</span>
+<span class="key">es_tag</span>          TEXT                 <span class="comment">-- "Diseño" / "Marketing" / etc.</span>
+<span class="key">es_title</span>        TEXT
+<span class="key">es_description</span>  TEXT
+<span class="key">es_client</span>       TEXT
+<span class="key">es_year</span>         TEXT
+<span class="key">es_duration</span>     TEXT
+<span class="key">es_deliverables</span> TEXT                 <span class="comment">-- JSON array: '["Logo","Manual"]'</span>
+
+<span class="comment">-- English (prefijo en_) — misma estructura</span>
+<span class="key">en_tag</span>          TEXT
+...</pre>
+</div>
+
+<!-- SECTION 3: RESEND (EMAIL) -->
+<div class="page section-break">
+  <h1>3. Configurar Resend (emails)</h1>
+
+  <p>Resend es un servicio de email transaccional con una API REST simple y plan gratuito (3000 emails/mes). No requiere paquetes npm — se llama con <code>fetch()</code>.</p>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <p><strong>Crear cuenta</strong> en <a href="https://resend.com">resend.com</a> → Add API Key. Copiar la clave generada.</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <p><strong>Verificar dominio (opcional pero recomendado)</strong>: en Resend → Domains → Add Domain. Agregar el registro DNS indicado en el proveedor de dominio. Esto permite usar <code>noreply@nubicreativa.com</code> como remitente.</p>
+      <div class="callout info">Sin dominio verificado, los emails salen desde <code>onboarding@resend.dev</code> — funciona para pruebas pero no se puede usar en producción para el cliente final.</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-body">
+      <p>Una vez verificado el dominio, configurar la variable <code>RESEND_FROM</code> con el remitente deseado:</p>
+      <pre><span class="key">RESEND_FROM</span>=<span class="str">Nubi Creativa &lt;hola@nubicreativa.com&gt;</span></pre>
+    </div>
+  </div>
+
+  <h2>Emails que se envían</h2>
+  <table class="api-table">
+    <thead><tr><th>Destinatario</th><th>Asunto</th><th>Contenido</th></tr></thead>
+    <tbody>
+      <tr><td><code>AGENCY_EMAIL</code></td><td>Nuevo contacto: {nombre} — {servicio}</td><td>Tabla HTML con todos los datos del formulario</td></tr>
+      <tr><td>Email del cliente</td><td>Recibimos tu mensaje, {nombre} ✓</td><td>Confirmación con links al sitio e Instagram</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SECTION 4: ENV VARIABLES -->
+<div class="page section-break">
+  <h1>4. Variables de entorno</h1>
+
+  <p>Nunca commitear estas variables. En local usar un archivo <code>.env</code> (ignorado por <code>.gitignore</code>). En Netlify configurarlas desde el dashboard.</p>
+
+  <table class="env-table">
+    <thead><tr><th>Variable</th><th>Descripción</th><th>Estado</th></tr></thead>
+    <tbody>
+      <tr><td>ANTHROPIC_API_KEY</td><td>Clave de Anthropic para el chatbot IA (ya existía)</td><td><span class="req">requerida</span></td></tr>
+      <tr><td>SUPABASE_URL</td><td>URL del proyecto Supabase (ej: <code>https://xxx.supabase.co</code>)</td><td><span class="req">requerida</span></td></tr>
+      <tr><td>SUPABASE_ANON_KEY</td><td>Clave pública de Supabase — solo lectura de proyectos publicados</td><td><span class="req">requerida</span></td></tr>
+      <tr><td>SUPABASE_SERVICE_KEY</td><td>Clave de servicio de Supabase — acceso completo, solo para funciones server-side</td><td><span class="req">requerida</span></td></tr>
+      <tr><td>ADMIN_SECRET</td><td>Contraseña del panel de admin CMS. Elegir una cadena larga y aleatoria (32+ caracteres)</td><td><span class="req">requerida</span></td></tr>
+      <tr><td>RESEND_API_KEY</td><td>Clave de API de Resend para envío de emails</td><td><span class="req">requerida</span></td></tr>
+      <tr><td>AGENCY_EMAIL</td><td>Email que recibe las notificaciones del formulario. Por defecto: <code>hola@nubicreativa.com</code></td><td><span class="opt">opcional</span></td></tr>
+      <tr><td>RESEND_FROM</td><td>Remitente de los emails. Por defecto: <code>Nubi Creativa &lt;onboarding@resend.dev&gt;</code></td><td><span class="opt">opcional</span></td></tr>
+      <tr><td>IP_SALT</td><td>Salt para hashear IPs en el rate limiting. Usar cualquier cadena aleatoria</td><td><span class="opt">opcional</span></td></tr>
+    </tbody>
+  </table>
+
+  <h2>Archivo <code>.env</code> para desarrollo local</h2>
+  <pre><span class="comment"># .env — NUNCA commitear este archivo</span>
+
+<span class="key">ANTHROPIC_API_KEY</span>=<span class="str">sk-ant-api03-...</span>
+<span class="key">SUPABASE_URL</span>=<span class="str">https://abcdefghijkl.supabase.co</span>
+<span class="key">SUPABASE_ANON_KEY</span>=<span class="str">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</span>
+<span class="key">SUPABASE_SERVICE_KEY</span>=<span class="str">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</span>
+<span class="key">ADMIN_SECRET</span>=<span class="str">tu-contrasena-super-secreta-32-chars</span>
+<span class="key">RESEND_API_KEY</span>=<span class="str">re_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
+<span class="key">AGENCY_EMAIL</span>=<span class="str">hola@nubicreativa.com</span>
+<span class="key">RESEND_FROM</span>=<span class="str">Nubi Creativa &lt;hola@nubicreativa.com&gt;</span></pre>
+</div>
+
+<!-- SECTION 5: LOCAL DEV -->
+<div class="page section-break">
+  <h1>5. Desarrollo local</h1>
+
+  <p>Netlify CLI ejecuta las funciones localmente con hot reload, replicando el entorno de producción.</p>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <p><strong>Instalar Netlify CLI</strong> (una sola vez, globalmente):</p>
+      <pre><span class="fn">npm</span> install -g netlify-cli</pre>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <p><strong>Instalar dependencias</strong>:</p>
+      <pre><span class="fn">npm</span> install   <span class="comment"># instala @anthropic-ai/sdk</span></pre>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-body">
+      <p><strong>Crear el archivo <code>.env</code></strong> en la raíz del proyecto con las variables del apartado anterior.</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">4</div>
+    <div class="step-body">
+      <p><strong>Iniciar el servidor local</strong>:</p>
+      <pre><span class="fn">netlify</span> dev</pre>
+      <p>El sitio queda disponible en <code>http://localhost:8888</code>. Las funciones responden en <code>http://localhost:8888/.netlify/functions/</code>.</p>
+    </div>
+  </div>
+
+  <div class="callout info"><strong>Nota:</strong> <code>netlify dev</code> carga automáticamente el archivo <code>.env</code> de la raíz del proyecto.</div>
+
+  <h2>Probar las funciones</h2>
+  <pre><span class="comment"># GET proyectos</span>
+<span class="fn">curl</span> http://localhost:8888/.netlify/functions/projects
+
+<span class="comment"># POST formulario de contacto</span>
+<span class="fn">curl</span> -X POST http://localhost:8888/.netlify/functions/contact \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d <span class="str">'{"name":"Test","email":"test@test.com","message":"Hola, quiero más info."}'</span>
+
+<span class="comment"># GET admin (reemplazar con tu ADMIN_SECRET)</span>
+<span class="fn">curl</span> http://localhost:8888/.netlify/functions/admin \
+  -H <span class="str">"x-admin-secret: tu-contrasena"</span></pre>
+</div>
+
+<!-- SECTION 6: DEPLOY -->
+<div class="page section-break">
+  <h1>6. Deploy en Netlify</h1>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <p><strong>Conectar repositorio</strong>: en el dashboard de Netlify hacer clic en <em>Add new site → Import an existing project</em>. Seleccionar el repositorio de GitHub.</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <p><strong>Configurar el build</strong>: Netlify detecta automáticamente el <code>netlify.toml</code>. Verificar que:</p>
+      <ul>
+        <li>Publish directory: <code>.</code> (raíz)</li>
+        <li>Functions directory: <code>netlify/functions</code> (ya configurado en <code>netlify.toml</code>)</li>
+      </ul>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-body">
+      <p><strong>Agregar las variables de entorno</strong>: en el dashboard de Netlify ir a <em>Site settings → Environment variables → Add variable</em>. Agregar todas las variables del apartado 4.</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">4</div>
+    <div class="step-body">
+      <p><strong>Desplegar</strong>: hacer clic en <em>Deploy site</em>. Netlify ejecuta <code>npm install</code> automáticamente para instalar el SDK de Anthropic.</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">5</div>
+    <div class="step-body">
+      <p><strong>Verificar</strong>: acceder al sitio desplegado y probar el formulario de contacto, el chatbot y la carga dinámica de proyectos.</p>
+    </div>
+  </div>
+
+  <div class="callout warn"><strong>⚠ Nunca commitear <code>.env</code>.</strong> El archivo <code>.gitignore</code> ya lo excluye. Las variables de entorno solo se configuran en el dashboard de Netlify.</div>
+</div>
+
+<!-- SECTION 7: ADMIN PANEL -->
+<div class="page section-break">
+  <h1>7. Panel de administración CMS</h1>
+
+  <p>El panel se encuentra en <code>/admin</code> (ej: <code>https://nubicreativa.com/admin</code>).</p>
+
+  <h2>Acceso</h2>
+  <ol>
+    <li>Navegar a <code>https://nubicreativa.com/admin</code></li>
+    <li>Ingresar el valor de <code>ADMIN_SECRET</code> configurado en Netlify</li>
+    <li>La sesión se guarda en <code>sessionStorage</code> hasta que se cierra el navegador o se hace clic en "Salir"</li>
+  </ol>
+
+  <h2>Gestión de proyectos</h2>
+  <table class="api-table">
+    <thead><tr><th>Operación</th><th>Cómo hacerla</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Crear proyecto</strong></td><td>Clic en "+ Nuevo proyecto". Completar Slug, Categoría, Gradiente y los contenidos en ES e EN. El slug debe ser único (ej: <code>mi-nuevo-proyecto</code>).</td></tr>
+      <tr><td><strong>Editar proyecto</strong></td><td>Clic en "Editar" en la fila del proyecto. Modificar los campos y guardar.</td></tr>
+      <tr><td><strong>Reordenar</strong></td><td>Usar los botones ↑ ↓ en la columna "Orden". El orden se guarda automáticamente.</td></tr>
+      <tr><td><strong>Publicar / borrrador</strong></td><td>En el formulario de edición, desmarcar "Publicado" oculta el proyecto del sitio sin eliminarlo.</td></tr>
+      <tr><td><strong>Eliminar</strong></td><td>Clic en "Eliminar". Se pide confirmación. Esta acción es permanente.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Gradiente CSS</h2>
+  <p>El campo "Gradiente" acepta cualquier valor CSS válido para <code>background</code>. Se puede previsualizar en tiempo real en el formulario.</p>
+  <pre><span class="comment">-- Ejemplos de gradientes</span>
+linear-gradient(135deg, #0f1c35 0%, #1a4a7a 100%)
+linear-gradient(135deg, #0d1b2a 0%, #1f67b0 100%)
+linear-gradient(135deg, #1a0d2e 0%, #2d1b50 100%)</pre>
+
+  <h2>Seguridad del admin</h2>
+  <ul>
+    <li>El HTML del panel es de acceso público, pero no puede hacer nada sin la clave correcta</li>
+    <li>Todas las operaciones de escritura/lectura requieren el header <code>x-admin-secret</code></li>
+    <li>La función <code>admin.js</code> usa <code>SUPABASE_SERVICE_KEY</code> que solo existe en el servidor</li>
+    <li>Para mayor seguridad se puede agregar autenticación de Netlify Identity en el futuro</li>
+  </ul>
+</div>
+
+<!-- SECTION 8: API REFERENCE -->
+<div class="page section-break">
+  <h1>8. Referencia de la API</h1>
+
+  <h2>POST <code>/.netlify/functions/contact</code></h2>
+  <pre><span class="comment">// Request body</span>
+{
+  <span class="key">"name"</span>:    <span class="str">"María García"</span>,          <span class="comment">// requerido, mín 2 chars</span>
+  <span class="key">"email"</span>:   <span class="str">"maria@ejemplo.com"</span>,     <span class="comment">// requerido, formato válido</span>
+  <span class="key">"service"</span>: <span class="str">"diseno"</span>,              <span class="comment">// opcional</span>
+  <span class="key">"message"</span>: <span class="str">"Quiero saber más..."</span>,   <span class="comment">// requerido, mín 10 chars</span>
+  <span class="key">"_trap"</span>:   <span class="str">""</span>                      <span class="comment">// honeypot (siempre vacío en humanos)</span>
+}
+
+<span class="comment">// Response 200</span>
+{ <span class="key">"ok"</span>: <span class="val">true</span> }
+
+<span class="comment">// Response 400/429</span>
+{ <span class="key">"error"</span>: <span class="str">"Nombre inválido"</span> }</pre>
+
+  <h2>GET <code>/.netlify/functions/projects</code></h2>
+  <pre><span class="comment">// Response 200</span>
+{
+  <span class="key">"projects"</span>: [
+    {
+      <span class="key">"slug"</span>:     <span class="str">"rebrand-identidad"</span>,
+      <span class="key">"gradient"</span>: <span class="str">"linear-gradient(...)"</span>,
+      <span class="key">"category"</span>: <span class="str">"diseno"</span>,
+      <span class="key">"es"</span>: { <span class="key">"tag"</span>: <span class="str">"Diseño"</span>, <span class="key">"title"</span>: <span class="str">"..."</span>, ... },
+      <span class="key">"en"</span>: { <span class="key">"tag"</span>: <span class="str">"Design"</span>, <span class="key">"title"</span>: <span class="str">"..."</span>, ... }
+    },
+    ...
+  ]
+}</pre>
+
+  <h2>Admin API <code>/.netlify/functions/admin</code></h2>
+  <p>Todas las requests requieren el header <code>x-admin-secret: {ADMIN_SECRET}</code>.</p>
+  <table class="api-table">
+    <thead><tr><th>Método</th><th>Descripción</th><th>Body / Params</th></tr></thead>
+    <tbody>
+      <tr><td><span class="method get">GET</span></td><td>Listar todos los proyectos (incluye borradores)</td><td>—</td></tr>
+      <tr><td><span class="method post">POST</span></td><td>Crear proyecto nuevo</td><td>Objeto del proyecto (sin <code>id</code>)</td></tr>
+      <tr><td><span class="method put">PUT</span></td><td>Actualizar proyecto existente</td><td>Objeto con <code>id</code> + campos a actualizar</td></tr>
+      <tr><td><span class="method delete">DELETE</span></td><td>Eliminar proyecto</td><td>Query param: <code>?id=123</code></td></tr>
+      <tr><td><span class="method patch">PATCH</span></td><td>Reordenar proyectos</td><td>Array: <code>[{id, order_index}, ...]</code></td></tr>
+    </tbody>
+  </table>
+
+  <h2>Rate limiting del formulario de contacto</h2>
+  <p>Máximo <strong>3 envíos por IP por hora</strong>. Las IPs se almacenan hasheadas (SHA-256 + salt) en la tabla <code>rate_limits</code> de Supabase. Pasada la hora, el contador se reinicia automáticamente.</p>
+  <p>Para limpiar registros viejos manualmente:</p>
+  <pre><span class="comment">-- Limpiar registros de rate limiting de más de 2 horas</span>
+DELETE FROM rate_limits WHERE created_at &lt; NOW() - INTERVAL <span class="str">'2 hours'</span>;</pre>
+</div>
+
+</body>
+</html>

@@ -1342,6 +1342,8 @@
     @media (hover: none) {
       .pm-nav-btn, .pm-close { cursor: pointer; }
     }
+    /* Honeypot — hidden from humans, visible to bots */
+    .hp-trap { display: none !important; }
   </style>
 </head>
 <body>
@@ -1585,60 +1587,7 @@
       <button class="filter-btn" data-filter="audiovisual" data-i18n="projects.filter.av">Audiovisual</button>
     </div>
     <div class="projects-grid" id="projects-grid">
-      <article class="project-card proj-1 reveal" data-category="diseno" aria-label="Proyecto Rebrand Identidad Corporativa">
-        <div class="project-bg"></div>
-        <div class="project-noise"></div>
-        <div class="project-overlay">
-          <span class="project-tag" data-i18n="projects.filter.design">Diseño</span>
-          <h3 class="project-title" data-i18n="projects.p1.title">Rebrand Identidad Corporativa</h3>
-        </div>
-        <div class="project-hover-cta"><div class="cta-pill" data-i18n="projects.view">Ver proyecto</div></div>
-      </article>
-      <article class="project-card proj-2 reveal reveal-delay-1" data-category="marketing" aria-label="Proyecto Campaña Digital 360">
-        <div class="project-bg"></div>
-        <div class="project-noise"></div>
-        <div class="project-overlay">
-          <span class="project-tag" data-i18n="projects.filter.marketing">Marketing</span>
-          <h3 class="project-title" data-i18n="projects.p2.title">Campaña Digital 360</h3>
-        </div>
-        <div class="project-hover-cta"><div class="cta-pill" data-i18n="projects.view">Ver proyecto</div></div>
-      </article>
-      <article class="project-card proj-3 reveal reveal-delay-2" data-category="web" aria-label="Proyecto E-commerce Premium">
-        <div class="project-bg"></div>
-        <div class="project-noise"></div>
-        <div class="project-overlay">
-          <span class="project-tag" data-i18n="projects.filter.web">Web</span>
-          <h3 class="project-title" data-i18n="projects.p3.title">E-commerce Premium</h3>
-        </div>
-        <div class="project-hover-cta"><div class="cta-pill" data-i18n="projects.view">Ver proyecto</div></div>
-      </article>
-      <article class="project-card proj-4 reveal reveal-delay-1" data-category="audiovisual" aria-label="Proyecto Serie de Contenido Video">
-        <div class="project-bg"></div>
-        <div class="project-noise"></div>
-        <div class="project-overlay">
-          <span class="project-tag" data-i18n="projects.filter.av">Audiovisual</span>
-          <h3 class="project-title" data-i18n="projects.p4.title">Serie de Contenido Video</h3>
-        </div>
-        <div class="project-hover-cta"><div class="cta-pill" data-i18n="projects.view">Ver proyecto</div></div>
-      </article>
-      <article class="project-card proj-5 reveal reveal-delay-2" data-category="diseno" aria-label="Proyecto Packaging y Packaging System">
-        <div class="project-bg"></div>
-        <div class="project-noise"></div>
-        <div class="project-overlay">
-          <span class="project-tag" data-i18n="projects.filter.design">Diseño</span>
-          <h3 class="project-title" data-i18n="projects.p5.title">Packaging System</h3>
-        </div>
-        <div class="project-hover-cta"><div class="cta-pill" data-i18n="projects.view">Ver proyecto</div></div>
-      </article>
-      <article class="project-card proj-6 reveal reveal-delay-3" data-category="web" aria-label="Proyecto SaaS Landing Page">
-        <div class="project-bg"></div>
-        <div class="project-noise"></div>
-        <div class="project-overlay">
-          <span class="project-tag" data-i18n="projects.filter.web">Web</span>
-          <h3 class="project-title" data-i18n="projects.p6.title">SaaS Landing Page</h3>
-        </div>
-        <div class="project-hover-cta"><div class="cta-pill" data-i18n="projects.view">Ver proyecto</div></div>
-      </article>
+      <!-- Rendered dynamically by renderProjectCards() from PROJECTS array or CMS -->
     </div>
   </div>
 </section>
@@ -1746,6 +1695,11 @@
       </div>
       <div class="contact-right reveal-right">
         <form class="contact-form" id="contact-form" novalidate aria-label="Formulario de contacto">
+          <!-- Honeypot: bots fill this, humans don't see it -->
+          <div class="hp-trap" aria-hidden="true">
+            <label for="form-trap">Do not fill this field</label>
+            <input type="text" id="form-trap" name="_trap" tabindex="-1" autocomplete="off">
+          </div>
           <div class="form-group">
             <input type="text" id="form-name" name="name" required autocomplete="name"
               data-i18n-placeholder="contact.form.namePlaceholder" placeholder="Tu nombre">
@@ -2555,22 +2509,85 @@ function initShimmer() {
 /* ==============================================
    PROJECT FILTER
 ============================================== */
-function initProjectFilter() {
-  const btns = document.querySelectorAll('.filter-btn');
-  const cards = document.querySelectorAll('.project-card');
+/* ==============================================
+   RENDER PROJECT CARDS FROM PROJECTS ARRAY
+============================================== */
+function renderProjectCards() {
+  const grid = document.getElementById('projects-grid');
+  if (!grid) return;
+  const lang = typeof currentLang !== 'undefined' ? currentLang : 'es';
+  const viewLabel = ((translations[lang] || translations.es || {})['projects.view']) || 'Ver proyecto';
+  const TAG_CAT = {
+    'Diseño':'diseno','Design':'diseno',
+    'Marketing':'marketing',
+    'Web':'web',
+    'Audiovisual':'audiovisual',
+    'Social':'redes','Redes':'redes',
+  };
+  grid.innerHTML = PROJECTS.map((p, i) => {
+    const d = p[lang] || p.es;
+    const cat = p.category || TAG_CAT[d.tag] || TAG_CAT[(p.es || {}).tag] || 'otro';
+    return `
+      <article class="project-card" data-category="${cat}" data-index="${i}" aria-label="Proyecto ${d.title}" style="cursor:none">
+        <div class="project-bg" style="background:${p.gradient}"></div>
+        <div class="project-noise"></div>
+        <div class="project-overlay">
+          <span class="project-tag">${d.tag}</span>
+          <h3 class="project-title">${d.title}</h3>
+        </div>
+        <div class="project-hover-cta"><div class="cta-pill">${viewLabel}</div></div>
+      </article>`;
+  }).join('');
+}
 
-  btns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      btns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      const filter = btn.dataset.filter;
-      cards.forEach(card => {
-        const match = filter === 'all' || card.dataset.category === filter;
-        card.style.transition = 'opacity 0.4s, transform 0.4s';
-        card.style.opacity = match ? '1' : '0.2';
-        card.style.transform = match ? '' : 'scale(0.96)';
-        card.style.pointerEvents = match ? '' : 'none';
-      });
+/* ==============================================
+   LOAD PROJECTS FROM CMS (async, non-blocking)
+============================================== */
+async function loadProjects() {
+  try {
+    const res = await fetch('/.netlify/functions/projects');
+    if (!res.ok) return;
+    const data = await res.json();
+    if (!Array.isArray(data.projects) || data.projects.length === 0) return;
+    // Replace global PROJECTS array in-place
+    PROJECTS.length = 0;
+    data.projects.forEach(p => PROJECTS.push(p));
+    // Re-render cards with CMS data
+    renderProjectCards();
+    // Animate new cards via CSS transition (GSAP ScrollTrigger already fired)
+    const cards = document.querySelectorAll('.project-card');
+    cards.forEach((el, i) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(32px)';
+      el.style.transition = `opacity 0.55s ${i * 0.07}s ease, transform 0.55s ${i * 0.07}s ease`;
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        el.style.opacity = '1';
+        el.style.transform = '';
+      }));
+    });
+    // Re-init tilt on new cards if available
+    if (typeof VanillaTilt !== 'undefined') {
+      VanillaTilt.init(document.querySelectorAll('[data-tilt]'), { max: 8, speed: 400, glare: true, 'max-glare': 0.15 });
+    }
+  } catch { /* silently fall back to static data */ }
+}
+
+function initProjectFilter() {
+  // Event delegation — works with dynamically rendered cards
+  const bar = document.querySelector('.filter-bar');
+  if (!bar) return;
+  bar.addEventListener('click', (e) => {
+    const btn = e.target.closest('.filter-btn');
+    if (!btn) return;
+    bar.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    document.querySelectorAll('.project-card').forEach(card => {
+      const match = filter === 'all' || card.dataset.category === filter;
+      card.style.transition = 'opacity 0.4s, transform 0.4s';
+      card.style.opacity = match ? '1' : '0.2';
+      card.style.transform = match ? '' : 'scale(0.96)';
+      card.style.pointerEvents = match ? '' : 'none';
     });
   });
 }
@@ -2627,10 +2644,9 @@ function initForm() {
   const form = document.getElementById('contact-form');
   if (!form) return;
 
-  form.addEventListener('submit', e => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    // Validate required fields
     const fields = [
       form.querySelector('#form-name'),
       form.querySelector('#form-email'),
@@ -2646,7 +2662,6 @@ function initForm() {
         field.style.borderColor = '';
       }
     });
-    // Basic email format check
     const emailField = form.querySelector('#form-email');
     if (emailField && emailField.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailField.value)) {
       valid = false;
@@ -2655,15 +2670,56 @@ function initForm() {
     if (!valid) return;
 
     const btn = form.querySelector('[type="submit"]');
-    const originalText = btn.querySelector('[data-i18n]').textContent;
-    btn.querySelector('[data-i18n]').textContent = currentLang === 'es' ? '¡Enviado! ✓' : 'Sent! ✓';
-    btn.style.background = 'linear-gradient(135deg, #00c875, #00a660)';
-    setTimeout(() => {
-      btn.querySelector('[data-i18n]').textContent = originalText;
-      btn.style.background = '';
-      form.reset();
-      fields.forEach(f => { if (f) f.style.borderColor = ''; });
-    }, 3000);
+    const labelEl = btn.querySelector('[data-i18n]');
+    const originalText = labelEl.textContent;
+    btn.disabled = true;
+    labelEl.textContent = currentLang === 'es' ? 'Enviando…' : 'Sending…';
+
+    const payload = {
+      name:    form.querySelector('#form-name').value.trim(),
+      email:   form.querySelector('#form-email').value.trim(),
+      service: form.querySelector('#form-service').value.trim(),
+      message: form.querySelector('#form-message').value.trim(),
+      _trap:   (form.querySelector('#form-trap') || {}).value || '',
+    };
+
+    try {
+      const res = await fetch('/.netlify/functions/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (res.ok) {
+        labelEl.textContent = currentLang === 'es' ? '¡Enviado! ✓' : 'Sent! ✓';
+        btn.style.background = 'linear-gradient(135deg, #00c875, #00a660)';
+        setTimeout(() => {
+          labelEl.textContent = originalText;
+          btn.style.background = '';
+          btn.disabled = false;
+          form.reset();
+          fields.forEach(f => { if (f) f.style.borderColor = ''; });
+        }, 3000);
+      } else {
+        const data = await res.json().catch(() => ({}));
+        const errMsg = data.error || (currentLang === 'es' ? 'Error. Intentá de nuevo.' : 'Error. Try again.');
+        labelEl.textContent = errMsg;
+        btn.style.background = 'rgba(255,77,109,0.5)';
+        setTimeout(() => {
+          labelEl.textContent = originalText;
+          btn.style.background = '';
+          btn.disabled = false;
+        }, 3500);
+      }
+    } catch {
+      labelEl.textContent = currentLang === 'es' ? 'Error de red.' : 'Network error.';
+      btn.style.background = 'rgba(255,77,109,0.5)';
+      setTimeout(() => {
+        labelEl.textContent = originalText;
+        btn.style.background = '';
+        btn.disabled = false;
+      }, 3500);
+    }
   });
 }
 
@@ -3061,11 +3117,16 @@ function initProjectModal() {
     isOpen = false;
   }
 
-  // Hook project cards
-  document.querySelectorAll('.project-card').forEach((card, idx) => {
-    card.style.cursor = 'none';
-    card.addEventListener('click', () => openModal(idx));
-  });
+  // Hook project cards via event delegation (supports dynamically rendered cards)
+  const projectsGrid = document.getElementById('projects-grid');
+  if (projectsGrid) {
+    projectsGrid.addEventListener('click', (e) => {
+      const card = e.target.closest('.project-card');
+      if (!card) return;
+      const idx = parseInt(card.dataset.index, 10);
+      if (!isNaN(idx)) openModal(idx);
+    });
+  }
 
   // Nav
   prevBtn.addEventListener('click', () => { if (currentIndex > 0) { currentIndex--; populate(currentIndex); history.replaceState(null,'','#'+PROJECTS[currentIndex].slug); } });
@@ -3104,6 +3165,7 @@ function initProjectModal() {
    INIT ALL
 ============================================== */
 document.addEventListener('DOMContentLoaded', () => {
+  renderProjectCards();     // render project cards from static PROJECTS array before anything else
   applyTranslations();
   initHeroAnimations();
   initParticles();
@@ -3124,6 +3186,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initGSAP();
   initChatbot();
   initProjectModal();
+  loadProjects();           // async: updates cards from CMS if configured
 });
 </script>
 </body>
