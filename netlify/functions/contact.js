@@ -123,7 +123,7 @@ exports.handler = async (event) => {
       <p style="color:#444;line-height:1.7">Mientras tanto, podés explorar nuestro trabajo en
         <a href="https://nubicreativa.com" style="color:#1f67b0">nubicreativa.com</a>
         o seguirnos en
-        <a href="https://instagram.com/nubicreativa" style="color:#1f67b0">@nubicreativa</a>.
+        <a href="https://instagram.com/nubi_creativa" style="color:#1f67b0">@nubi_creativa</a>.
       </p>
       <p style="color:#888;margin-top:28px;font-size:14px">— El equipo de Nubi Creativa</p>
     </div>`;
