@@ -5,7 +5,7 @@
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const AGENCY_EMAIL = process.env.AGENCY_EMAIL || 'hola@nubicreativa.com';
+const AGENCY_EMAIL = process.env.AGENCY_EMAIL || 'nubicreativa@gmail.com';
 
 function sanitize(val) {
   return String(val ?? '').trim().slice(0, 2000).replace(/<[^>]*>/g, '');
