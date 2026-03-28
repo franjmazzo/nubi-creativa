@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nubi Creativa — Documentación Técnica</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap');
+
+  :root {
+    --navy: #0D1B2A;
+    --blue: #1F67B0;
+    --accent: #00D4FF;
+    --accent2: #7B2FFF;
+    --text: #1a2a3a;
+    --muted: #5a7080;
+    --border: #d0dce8;
+    --bg-soft: #f0f6ff;
+    --bg-tag: #e6f4ff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; color: var(--text); background: #fff; font-size: 14px; line-height: 1.75; }
+
+  /* COVER */
+  .cover {
+    background: var(--navy);
+    color: #fff; min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: space-between;
+    padding: 60px 72px; page-break-after: always; position: relative; overflow: hidden;
+  }
+  .cover::before {
+    content: ''; position: absolute; bottom: -80px; left: -80px;
+    width: 400px; height: 400px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(123,47,255,0.15) 0%, transparent 70%);
+  }
+  .cover::after {
+    content: ''; position: absolute; top: -60px; right: -60px;
+    width: 360px; height: 360px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,212,255,0.1) 0%, transparent 70%);
+  }
+  .cover-logo { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -0.02em; }
+  .cover-logo span { color: var(--accent); }
+  .cover-main { position: relative; z-index: 1; }
+  .cover-tag {
+    display: inline-block;
+    background: rgba(123,47,255,0.2); border: 1px solid rgba(123,47,255,0.4);
+    color: #b388ff; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 5px 14px; border-radius: 20px; margin-bottom: 24px;
+  }
+  .cover h1 { font-family: 'Syne', sans-serif; font-size: 52px; font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 20px; }
+  .cover h1 em { color: var(--accent); font-style: normal; }
+  .cover-sub { font-size: 16px; color: rgba(255,255,255,0.6); max-width: 480px; line-height: 1.7; }
+  .cover-footer { display: flex; justify-content: space-between; align-items: flex-end; font-size: 12px; color: rgba(255,255,255,0.4); }
+  .cover-footer strong { color: rgba(255,255,255,0.7); }
+
+  /* PAGE */
+  .page { padding: 56px 72px; page-break-after: always; }
+  .page:last-child { page-break-after: auto; }
+  .page-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 16px; margin-bottom: 40px; border-bottom: 1px solid var(--border); font-size: 11px; color: var(--muted); font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; }
+  .page-header strong { color: var(--navy); }
+
+  .section-num { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 800; color: var(--accent2); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 8px; }
+  h2 { font-family: 'Syne', sans-serif; font-size: 30px; font-weight: 800; color: var(--navy); letter-spacing: -0.02em; margin-bottom: 6px; line-height: 1.2; }
+  .section-divider { width: 48px; height: 3px; background: linear-gradient(90deg, var(--accent2), var(--accent)); border-radius: 2px; margin-bottom: 32px; }
+  h3 { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; color: var(--navy); margin: 32px 0 10px; }
+  h4 { font-size: 13px; font-weight: 600; color: var(--blue); text-transform: uppercase; letter-spacing: 0.08em; margin: 22px 0 8px; }
+  p { margin-bottom: 14px; color: #2a3a4a; }
+  ul, ol { margin: 10px 0 18px 20px; }
+  li { margin-bottom: 6px; }
+  a { color: var(--blue); }
+
+  .callout { border-radius: 12px; padding: 16px 20px; margin: 20px 0; font-size: 13.5px; }
+  .callout-info { background: var(--bg-tag); border-left: 4px solid var(--accent); }
+  .callout-warn { background: #fff8e6; border-left: 4px solid #f0a020; }
+  .callout-purple { background: #f5f0ff; border-left: 4px solid var(--accent2); }
+  .callout strong { display: block; font-weight: 600; margin-bottom: 4px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+  code { font-family: 'Courier New', monospace; font-size: 12.5px; background: #d0e4f5; border: 1px solid #a8c4de; padding: 2px 8px; border-radius: 5px; color: #0a1e35; font-weight: 600; }
+  pre { background: #050f18; color: #ffffff; font-family: 'Courier New', monospace; font-size: 12px; padding: 20px 24px; border-radius: 12px; overflow-x: auto; margin: 14px 0; line-height: 1.7; }
+  pre .comment { color: #8fb8cc; font-style: italic; }
+  pre .key { color: #00c8f0; font-weight: bold; }
+  pre .val { color: #00e87a; font-weight: bold; }
+  pre .fn { color: #ffaa33; font-weight: bold; }
+  pre .str { color: #ffd44d; font-weight: bold; }
+
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+  th { background: var(--navy); color: #fff; font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 10px 14px; text-align: left; }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: var(--bg-soft); }
+
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+  .badge-green { background: #edfcf4; color: #16a34a; }
+  .badge-blue  { background: var(--bg-tag); color: var(--blue); }
+  .badge-purple{ background: #f5f0ff; color: var(--accent2); }
+
+  /* Architecture diagram */
+  .arch-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
+  .arch-box { border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
+  .arch-box-title { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+  .arch-box ul { margin: 0; padding-left: 16px; }
+  .arch-box li { font-size: 12.5px; color: var(--muted); margin-bottom: 3px; }
+
+  /* Function flow */
+  .flow { display: flex; align-items: center; gap: 0; margin: 20px 0; flex-wrap: wrap; }
+  .flow-step { background: var(--bg-soft); border: 1px solid var(--border); border-radius: 8px; padding: 10px 16px; font-size: 12.5px; font-weight: 500; color: var(--navy); }
+  .flow-arrow { padding: 0 8px; color: var(--muted); font-size: 16px; }
+
+  @media print {
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .page { page-break-after: always; }
+    .no-break { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-logo">Nubi<span>Creativa</span></div>
+  <div class="cover-main">
+    <div class="cover-tag">Documentación técnica</div>
+    <h1>Referencia<br><em>Técnica</em></h1>
+    <p class="cover-sub">Arquitectura, sistemas de componentes, animaciones, i18n, chatbot y guía de extensión del sitio web.</p>
+  </div>
+  <div class="cover-footer">
+    <div><strong>Para desarrolladores</strong><br>Requiere conocimiento de HTML, CSS y JavaScript</div>
+    <div style="text-align:right">Versión 1.0<br>Marzo 2026</div>
+  </div>
+</div>
+
+<!-- SECCIÓN 1 — ARQUITECTURA -->
+<div class="page">
+  <div class="page-header"><strong>Nubi Creativa — Documentación Técnica</strong><span>01 · Arquitectura</span></div>
+
+  <div class="section-num">01</div>
+  <h2>Arquitectura general</h2>
+  <div class="section-divider"></div>
+
+  <p>El sitio es una <strong>Single Page Application estática</strong> sin framework ni bundler. Todo el código reside en <code>index.html</code>. El único componente server-side es la Netlify Function para el chatbot.</p>
+
+  <div class="arch-grid">
+    <div class="arch-box">
+      <div class="arch-box-title">Frontend (index.html)</div>
+      <ul>
+        <li>CSS inline (~1300 líneas)</li>
+        <li>HTML semántico (~500 líneas)</li>
+        <li>JavaScript vanilla (~900 líneas)</li>
+        <li>GSAP 3.12.5 (CDN)</li>
+        <li>ScrollTrigger (CDN)</li>
+        <li>Google Fonts (CDN)</li>
+        <li>Fuentes locales (Sniglet, Source Serif 4)</li>
+      </ul>
+    </div>
+    <div class="arch-box">
+      <div class="arch-box-title">Backend (Netlify Functions)</div>
+      <ul>
+        <li>Node.js Lambda serverless</li>
+        <li>@anthropic-ai/sdk (npm)</li>
+        <li>Ruta: /.netlify/functions/chat</li>
+        <li>Método: POST</li>
+        <li>Variables de entorno: ANTHROPIC_API_KEY</li>
+      </ul>
+    </div>
+    <div class="arch-box">
+      <div class="arch-box-title">Deploy (Netlify)</div>
+      <ul>
+        <li>Git push → auto-deploy</li>
+        <li>Directorio raíz como publish dir</li>
+        <li>npm install automático (SDK)</li>
+        <li>CORS headers en netlify.toml</li>
+      </ul>
+    </div>
+    <div class="arch-box">
+      <div class="arch-box-title">Repositorio (GitHub)</div>
+      <ul>
+        <li>github.com/franjmazzo/nubi-creativa</li>
+        <li>Branch principal: master</li>
+        <li>.gitignore: .env, node_modules, .netlify</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Stack tecnológico</h3>
+  <table>
+    <tr><th>Categoría</th><th>Tecnología</th><th>Versión</th><th>Uso</th></tr>
+    <tr><td>Animaciones</td><td>GSAP + ScrollTrigger</td><td>3.12.5</td><td>Hero, reveal, parallax, modal</td></tr>
+    <tr><td>Tipografía display</td><td>Sniglet</td><td>Local</td><td>Títulos, números, logo</td></tr>
+    <tr><td>Tipografía cuerpo</td><td>DM Sans</td><td>Google Fonts</td><td>Párrafos, UI</td></tr>
+    <tr><td>Tipografía editorial</td><td>Source Serif 4</td><td>Local</td><td>Citas, énfasis</td></tr>
+    <tr><td>AI SDK</td><td>@anthropic-ai/sdk</td><td>^0.36.3</td><td>Chatbot (server-side)</td></tr>
+    <tr><td>Hosting</td><td>Netlify</td><td>—</td><td>Deploy, funciones, CDN</td></tr>
+  </table>
+</div>
+
+<!-- SECCIÓN 2 — SISTEMA DE DISEÑO -->
+<div class="page">
+  <div class="page-header"><strong>Nubi Creativa — Documentación Técnica</strong><span>02 · Design System</span></div>
+
+  <div class="section-num">02</div>
+  <h2>Design System — Variables CSS</h2>
+  <div class="section-divider"></div>
+
+  <h3>Paleta de colores</h3>
+  <pre><code>:root {
+  <span class="key">--blue</span>:         <span class="val">#1F67B0</span>;   <span class="comment">/* Azul principal — botones, acentos */</span>
+  <span class="key">--navy</span>:         <span class="val">#0D1B2A</span>;   <span class="comment">/* Fondo base oscuro */</span>
+  <span class="key">--white</span>:        <span class="val">#F8FAFF</span>;   <span class="comment">/* Blanco ligeramente azulado */</span>
+  <span class="key">--accent</span>:       <span class="val">#00D4FF</span>;   <span class="comment">/* Cian brillante — highlights, links */</span>
+  <span class="key">--accent2</span>:      <span class="val">#7B2FFF</span>;   <span class="comment">/* Violeta — gradientes secundarios */</span>
+  <span class="key">--gray</span>:         <span class="val">#8A9BB0</span>;   <span class="comment">/* Texto secundario */</span>
+  <span class="key">--card-bg</span>:      <span class="val">rgba(255,255,255,0.05)</span>;
+  <span class="key">--card-border</span>:  <span class="val">rgba(255,255,255,0.10)</span>;
+}</code></pre>
+
+  <h3>Tipografía</h3>
+  <pre><code>:root {
+  <span class="key">--font-display</span>:   <span class="val">'Sniglet', 'Syne', sans-serif</span>;   <span class="comment">/* Títulos, números */</span>
+  <span class="key">--font-body</span>:      <span class="val">'DM Sans', sans-serif</span>;            <span class="comment">/* Párrafos, UI */</span>
+  <span class="key">--font-editorial</span>:<span class="val"> 'Source Serif 4', Georgia, serif</span>; <span class="comment">/* Citas */</span>
+}</code></pre>
+
+  <h3>Transiciones</h3>
+  <pre><code>:root {
+  <span class="key">--transition</span>: <span class="val">0.35s cubic-bezier(0.4, 0, 0.2, 1)</span>;
+}</code></pre>
+
+  <h3>Escala de espaciado (convención)</h3>
+  <table>
+    <tr><th>Uso</th><th>Valor</th></tr>
+    <tr><td>Gap entre cards</td><td>24px</td></tr>
+    <tr><td>Padding interno cards</td><td>40px 36px</td></tr>
+    <tr><td>Padding secciones</td><td>120px 0</td></tr>
+    <tr><td>Container max-width</td><td>1200px</td></tr>
+    <tr><td>Border-radius cards</td><td>24px</td></tr>
+    <tr><td>Border-radius botones</td><td>50px</td></tr>
+  </table>
+
+  <h3>Clases de utilidad</h3>
+  <table>
+    <tr><th>Clase</th><th>Efecto</th></tr>
+    <tr><td><code>.btn-primary</code></td><td>Botón relleno azul</td></tr>
+    <tr><td><code>.btn-outline</code></td><td>Botón con borde</td></tr>
+    <tr><td><code>.btn-accent</code></td><td>Botón con gradiente accent</td></tr>
+    <tr><td><code>.btn-glow</code></td><td>Agrega halo de brillo al hover</td></tr>
+    <tr><td><code>.reveal</code></td><td>Elemento animado al aparecer en viewport</td></tr>
+    <tr><td><code>.reveal-delay-1</code> a <code>-4</code></td><td>Delay escalonado (150ms c/u)</td></tr>
+    <tr><td><code>.reveal-right</code></td><td>Entra desde la derecha</td></tr>
+    <tr><td><code>.container</code></td><td>Max-width 1200px, padding horizontal 32px</td></tr>
+  </table>
+</div>
+
+<!-- SECCIÓN 3 — I18N -->
+<div class="page">
+  <div class="page-header"><strong>Nubi Creativa — Documentación Técnica</strong><span>03 · i18n</span></div>
+
+  <div class="section-num">03</div>
+  <h2>Sistema de internacionalización (i18n)</h2>
+  <div class="section-divider"></div>
+
+  <p>El sistema i18n es completamente custom, sin librerías externas. Soporta ES y EN con actualización en tiempo real al cambiar idioma.</p>
+
+  <h3>Estructura de datos</h3>
+  <pre><code><span class="comment">// Objeto global de traducciones (~línea 1750 del script)</span>
+const translations = {
+  es: {
+    <span class="str">"hero.sub"</span>: <span class="val">"No hacemos solo diseño..."</span>,
+    <span class="str">"services.design.title"</span>: <span class="val">"Diseño Gráfico"</span>,
+    <span class="comment">// ...</span>
+  },
+  en: {
+    <span class="str">"hero.sub"</span>: <span class="val">"We don't just design..."</span>,
+    <span class="str">"services.design.title"</span>: <span class="val">"Graphic Design"</span>,
+    <span class="comment">// ...</span>
+  }
+};</code></pre>
+
+  <h3>Atributos HTML para i18n</h3>
+  <table>
+    <tr><th>Atributo</th><th>Efecto</th><th>Ejemplo</th></tr>
+    <tr><td><code>data-i18n="clave"</code></td><td>Reemplaza <code>textContent</code></td><td><code>&lt;p data-i18n="hero.sub"&gt;</code></td></tr>
+    <tr><td><code>data-i18n-html="clave"</code></td><td>Reemplaza <code>innerHTML</code> (permite tags)</td><td><code>&lt;h2 data-i18n-html="about.statement"&gt;</code></td></tr>
+    <tr><td><code>data-i18n-placeholder="clave"</code></td><td>Reemplaza atributo <code>placeholder</code></td><td><code>&lt;input data-i18n-placeholder="contact.form.name"&gt;</code></td></tr>
+    <tr><td><code>data-i18n-label="clave"</code></td><td>Reemplaza <code>aria-label</code></td><td>Botones con solo ícono</td></tr>
+  </table>
+
+  <h3>Función applyTranslations()</h3>
+  <pre><code><span class="fn">function</span> applyTranslations() {
+  const t = translations[currentLang] || translations.es;
+
+  document.querySelectorAll(<span class="str">'[data-i18n]'</span>).forEach(el => {
+    const key = el.dataset.i18n;
+    if (t[key]) el.textContent = t[key];
+  });
+
+  document.querySelectorAll(<span class="str">'[data-i18n-html]'</span>).forEach(el => {
+    const key = el.dataset.i18nHtml;
+    if (t[key]) el.innerHTML = t[key];
+  });
+  <span class="comment">// ... (placeholder, label)</span>
+
+  <span class="comment">// Actualizar título y meta description de la página</span>
+  if (t[<span class="str">'page.title'</span>]) document.title = t[<span class="str">'page.title'</span>];
+}</code></pre>
+
+  <h3>Función setLang()</h3>
+  <pre><code><span class="fn">function</span> setLang(lang) {
+  currentLang = lang;          <span class="comment">// Variable global</span>
+  applyTranslations();
+  <span class="comment">// Actualiza aria-pressed de los botones ES/EN</span>
+  <span class="comment">// Hero headline se re-anima</span>
+}
+
+<span class="comment">// IMPORTANTE: setLang es decorado por initChatbot() e initProjectModal()
+// para sincronizar sus propios textos. Cada decorador llama al anterior,
+// formando una cadena: setLang → chatbot → modal → applyTranslations</span></code></pre>
+
+  <div class="callout callout-warn">
+    <strong>Cadena de decoradores de setLang</strong>
+    Si añadís un nuevo componente que necesite actualizarse al cambiar idioma, seguí el mismo patrón: guardá la referencia al <code>setLang</code> actual, creá tu propio wrapper que llame al anterior, y asignalo a <code>window.setLang</code>.
+  </div>
+
+  <h3>Variable global currentLang</h3>
+  <pre><code>let currentLang = <span class="val">'es'</span>; <span class="comment">// Inicializada al top del script</span>
+
+<span class="comment">// Acceso desde cualquier función:</span>
+const lang = typeof currentLang !== 'undefined' ? currentLang : 'es';</code></pre>
+</div>
+
+<!-- SECCIÓN 4 — ANIMACIONES -->
+<div class="page">
+  <div class="page-header"><strong>Nubi Creativa — Documentación Técnica</strong><span>04 · Animaciones</span></div>
+
+  <div class="section-num">04</div>
+  <h2>Sistema de animaciones</h2>
+  <div class="section-divider"></div>
+
+  <p>El sitio usa dos sistemas de animación en paralelo: <strong>CSS puro</strong> para elementos simples y <strong>GSAP 3</strong> para secuencias complejas.</p>
+
+  <h3>1. CSS Reveal (scroll)</h3>
+  <p>Cualquier elemento con clase <code>.reveal</code> se anima al entrar en el viewport via <code>IntersectionObserver</code>:</p>
+  <pre><code><span class="comment">/* CSS */</span>
+.reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.7s, transform 0.7s; }
+.reveal.in-view { opacity: 1; transform: none; }
+
+<span class="comment">/* JS — initScrollReveal() */</span>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add(<span class="str">'in-view'</span>); });
+}, { threshold: 0.12 });
+
+document.querySelectorAll(<span class="str">'.reveal, .reveal-right'</span>).forEach(el => observer.observe(el));</code></pre>
+
+  <h3>2. GSAP Hero (initHeroAnimations)</h3>
+  <p>Al cargarse la página, el hero se anima en secuencia escalonada:</p>
+  <pre><code>gsap.from(<span class="str">'#hero-eyebrow'</span>, { opacity: 0, y: 20, duration: 0.7, delay: 0.3 });
+gsap.from(<span class="str">'#hero-line-1'</span>,  { opacity: 0, x: -30, duration: 0.8, delay: 0.5 });
+gsap.from(<span class="str">'#hero-line-2'</span>,  { opacity: 0, x:  30, duration: 0.8, delay: 0.65 });
+gsap.from(<span class="str">'#hero-sub'</span>,     { opacity: 0, y: 20, duration: 0.7, delay: 0.9 });
+gsap.from(<span class="str">'#hero-ctas'</span>,    { opacity: 0, y: 20, duration: 0.7, delay: 1.05 });</code></pre>
+
+  <h3>3. GSAP ScrollTrigger (initGSAP)</h3>
+  <p>Parallax en las shapes del hero y stagger en las tarjetas de proyectos:</p>
+  <pre><code>gsap.to(<span class="str">'.shape-1'</span>, {
+  y: -140, ease: <span class="str">'none'</span>,
+  scrollTrigger: { trigger: <span class="str">'#hero'</span>, start: <span class="str">'top top'</span>, end: <span class="str">'bottom top'</span>, scrub: 1.5 }
+});
+<span class="comment">// Las project-cards usan GSAP en lugar del sistema reveal CSS</span>
+gsap.to(<span class="str">'.project-card'</span>, {
+  opacity: 1, y: 0, stagger: 0.08, duration: 0.65, ease: <span class="str">'power3.out'</span>,
+  scrollTrigger: { trigger: <span class="str">'#projects-grid'</span>, start: <span class="str">'top 80%'</span>, once: true }
+});</code></pre>
+
+  <h3>4. Cursor personalizado (initCursor)</h3>
+  <p>El cursor custom tiene un dot (8px) y un ring (36px). En elementos interactivos (<code>.hoverable</code>, <code>a</code>, <code>button</code>) el ring escala a 56px.</p>
+
+  <h3>5. Partículas y meteoros (canvas)</h3>
+  <p><code>initParticles()</code> dibuja puntos flotantes en un <code>&lt;canvas&gt;</code> con <code>requestAnimationFrame</code>. <code>initMeteors()</code> genera divs CSS con animación de entrada diagonal. Ambos se pausan fuera del viewport para no consumir CPU innecesariamente.</p>
+
+  <h3>6. Tilt 3D (initTilt)</h3>
+  <p>Las service cards tienen efecto de inclinación 3D al mover el mouse. Se calculan las coordenadas relativas del mouse respecto al centro del elemento y se aplica <code>rotateX</code> / <code>rotateY</code> via <code>style.transform</code>.</p>
+</div>
+
+<!-- SECCIÓN 5 — PROYECTO MODAL -->
+<div class="page">
+  <div class="page-header"><strong>Nubi Creativa — Documentación Técnica</strong><span>05 · Project Modal</span></div>
+
+  <div class="section-num">05</div>
+  <h2>Sistema de modal de proyectos</h2>
+  <div class="section-divider"></div>
+
+  <p>El modal de proyectos es un <strong>bottom-sheet</strong> fullscreen que se desliza desde abajo. No usa routing: actualiza el hash de la URL con <code>history.replaceState</code>.</p>
+
+  <h3>Estructura del DOM del modal</h3>
+  <pre><code>&lt;div id="project-modal"&gt;               <span class="comment">&lt;!-- Overlay contenedor --&gt;</span>
+  &lt;div class="pm-backdrop"&gt;&lt;/div&gt;       <span class="comment">&lt;!-- Fondo semitransparente --&gt;</span>
+  &lt;div class="pm-sheet"&gt;                 <span class="comment">&lt;!-- Sheet que sube --&gt;</span>
+    &lt;div class="pm-handle"&gt;&lt;/div&gt;       <span class="comment">&lt;!-- Drag handle (decorativo) --&gt;</span>
+    &lt;div class="pm-header"&gt;...&lt;/div&gt;    <span class="comment">&lt;!-- Nav ←/→ + botón X --&gt;</span>
+    &lt;div class="pm-body"&gt;               <span class="comment">&lt;!-- Área scrolleable --&gt;</span>
+      &lt;div class="pm-hero"&gt;...&lt;/div&gt;   <span class="comment">&lt;!-- Banner + título --&gt;</span>
+      &lt;div class="pm-content"&gt;...&lt;/div&gt; <span class="comment">&lt;!-- Descripción + meta + chips --&gt;</span>
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+
+  <h3>Flujo de apertura</h3>
+  <div class="flow">
+    <div class="flow-step">Click en .project-card</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">openModal(idx)</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">populate(idx)</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">CSS .is-open</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">GSAP entrada</div>
+  </div>
+
+  <h3>Array PROJECTS</h3>
+  <p>Cada objeto del array contiene:</p>
+  <table>
+    <tr><th>Propiedad</th><th>Tipo</th><th>Descripción</th></tr>
+    <tr><td><code>slug</code></td><td>string</td><td>Identificador para el URL hash</td></tr>
+    <tr><td><code>gradient</code></td><td>string</td><td>CSS gradient para el banner del modal</td></tr>
+    <tr><td><code>es</code></td><td>object</td><td>Datos en español</td></tr>
+    <tr><td><code>en</code></td><td>object</td><td>Datos en inglés</td></tr>
+    <tr><td><code>es/en.tag</code></td><td>string</td><td>Categoría (badge)</td></tr>
+    <tr><td><code>es/en.title</code></td><td>string</td><td>Nombre del proyecto</td></tr>
+    <tr><td><code>es/en.description</code></td><td>string</td><td>Descripción larga</td></tr>
+    <tr><td><code>es/en.client</code></td><td>string</td><td>Nombre del cliente</td></tr>
+    <tr><td><code>es/en.year</code></td><td>string</td><td>Año de ejecución</td></tr>
+    <tr><td><code>es/en.duration</code></td><td>string</td><td>Duración del proyecto</td></tr>
+    <tr><td><code>es/en.deliverables</code></td><td>string[]</td><td>Lista de entregables (chips)</td></tr>
+  </table>
+
+  <h3>Manejo de eventos</h3>
+  <table>
+    <tr><th>Evento</th><th>Acción</th></tr>
+    <tr><td>Click en <code>.project-card</code></td><td>Abre modal con índice de la card</td></tr>
+    <tr><td>Click en <code>#pm-backdrop</code></td><td>Cierra modal</td></tr>
+    <tr><td>Click en <code>#pm-close</code></td><td>Cierra modal</td></tr>
+    <tr><td><code>Escape</code></td><td>Cierra modal</td></tr>
+    <tr><td><code>ArrowLeft</code></td><td>Proyecto anterior</td></tr>
+    <tr><td><code>ArrowRight</code></td><td>Siguiente proyecto</td></tr>
+    <tr><td>Swipe down (touch) &gt;90px</td><td>Cierra modal (solo si scroll=0)</td></tr>
+  </table>
+
+  <div class="callout callout-info">
+    <strong>Correspondencia card ↔ proyecto</strong>
+    El modal mapea la tarjeta i-ésima del DOM con el objeto i-ésimo del array PROJECTS, por posición. Si reordenás las tarjetas HTML, reordenás también el array. No hay IDs explícitos.
+  </div>
+</div>
+
+<!-- SECCIÓN 6 — CHATBOT -->
+<div class="page">
+  <div class="page-header"><strong>Nubi Creativa — Documentación Técnica</strong><span>06 · Chatbot</span></div>
+
+  <div class="section-num">06</div>
+  <h2>Chatbot — Netlify Function</h2>
+  <div class="section-divider"></div>
+
+  <h3>Arquitectura serverless</h3>
+  <div class="flow" style="flex-direction:column; align-items:flex-start; gap:8px;">
+    <div style="display:flex; align-items:center; gap:8px;"><div class="flow-step" style="background:#e6f4ff">Browser: fetch POST /.netlify/functions/chat</div></div>
+    <div class="flow-arrow" style="padding:0 24px;">↓</div>
+    <div style="display:flex; align-items:center; gap:8px;"><div class="flow-step">Netlify Edge: enruta a la función Lambda</div></div>
+    <div class="flow-arrow" style="padding:0 24px;">↓</div>
+    <div style="display:flex; align-items:center; gap:8px;"><div class="flow-step">chat.js: valida body, sanitiza mensajes</div></div>
+    <div class="flow-arrow" style="padding:0 24px;">↓</div>
+    <div style="display:flex; align-items:center; gap:8px;"><div class="flow-step">Anthropic API: claude-haiku-4-5-20251001</div></div>
+    <div class="flow-arrow" style="padding:0 24px;">↓</div>
+    <div style="display:flex; align-items:center; gap:8px;"><div class="flow-step" style="background:#edfcf4">Respuesta JSON: { reply: "..." }</div></div>
+  </div>
+
+  <h3>Contrato de la API (chat.js)</h3>
+  <pre><code><span class="comment">// REQUEST</span>
+POST /.netlify/functions/chat
+Content-Type: application/json
+{
+  <span class="key">"messages"</span>: [
+    { <span class="key">"role"</span>: <span class="str">"user"</span>,      <span class="key">"content"</span>: <span class="str">"¿qué servicios ofrecen?"</span> },
+    { <span class="key">"role"</span>: <span class="str">"assistant"</span>, <span class="key">"content"</span>: <span class="str">"Ofrecemos..."</span> }
+  ],
+  <span class="key">"lang"</span>: <span class="str">"es"</span>   <span class="comment">// "es" | "en"</span>
+}
+
+<span class="comment">// RESPONSE (200)</span>
+{ <span class="key">"reply"</span>: <span class="str">"Respuesta del chatbot..."</span> }
+
+<span class="comment">// RESPONSE (error)</span>
+{ <span class="key">"error"</span>: <span class="str">"API error"</span> }</code></pre>
+
+  <h3>Seguridad y límites en chat.js</h3>
+  <ul>
+    <li>Solo acepta método <code>POST</code> (405 en cualquier otro)</li>
+    <li>Máximo <strong>20 mensajes</strong> por request (los últimos 20 si hay más)</li>
+    <li>Cada mensaje se trunca a <strong>2000 caracteres</strong></li>
+    <li>El role se fuerza a <code>"user"</code> o <code>"assistant"</code> (no se confía en el cliente)</li>
+    <li>La API Key nunca sale del servidor (variable de entorno de Netlify)</li>
+  </ul>
+
+  <h3>Límites en el cliente (initChatbot)</h3>
+  <ul>
+    <li><code>maxlength="500"</code> en el input del chat</li>
+    <li>El historial en memoria se mantiene en máximo 20 mensajes</li>
+    <li><code>isLoading</code> bloquea envíos concurrentes</li>
+  </ul>
+
+  <h3>Modelo de Claude usado</h3>
+  <table>
+    <tr><th>Parámetro</th><th>Valor</th></tr>
+    <tr><td>Model</td><td>claude-haiku-4-5-20251001</td></tr>
+    <tr><td>max_tokens</td><td>300</td></tr>
+    <tr><td>System prompt</td><td>Incluye: propósito de marca, 5 servicios, tono, idioma</td></tr>
+    <tr><td>Idioma</td><td>Controlado por parámetro <code>lang</code> del body</td></tr>
+  </table>
+</div>
+
+<!-- SECCIÓN 7 — EXTENSIÓN -->
+<div class="page">
+  <div class="page-header"><strong>Nubi Creativa — Documentación Técnica</strong><span>07 · Extensión</span></div>
+
+  <div class="section-num">07</div>
+  <h2>Guía de extensión</h2>
+  <div class="section-divider"></div>
+
+  <h3>Agregar una nueva sección al sitio</h3>
+  <ol>
+    <li>Agregar el HTML de la sección con un <code>id</code> único (ej: <code>&lt;section id="equipo"&gt;</code>).</li>
+    <li>Agregar el link en <code>&lt;ul class="nav-links"&gt;</code> y en el mobile menu.</li>
+    <li>Agregar las claves de texto en <code>translations.es</code> y <code>translations.en</code>.</li>
+    <li>Agregar el CSS en el bloque <code>&lt;style&gt;</code>, antes de los <code>@media</code>.</li>
+    <li>Si la sección tiene animaciones de scroll: agregar clase <code>.reveal</code> a los elementos.</li>
+    <li>Actualizar el scroll spy en <code>initScrollSpy()</code> si se quiere highlight en nav.</li>
+  </ol>
+
+  <h3>Agregar un nuevo idioma</h3>
+  <ol>
+    <li>Agregar un nuevo bloque en <code>translations</code>: <code>pt: { ... }</code></li>
+    <li>Agregar el botón en el lang toggle: <code>&lt;button class="lang-btn" data-lang="pt"&gt;PT&lt;/button&gt;</code></li>
+    <li>El sistema existente detecta automáticamente el <code>data-lang</code> y llama a <code>setLang()</code>.</li>
+  </ol>
+
+  <h3>Reemplazar el hero de texto por video</h3>
+  <pre><code><span class="comment">&lt;!-- En lugar de .retro-grid y canvas, agregar: --&gt;</span>
+&lt;video class="hero-video" autoplay muted loop playsinline&gt;
+  &lt;source src="assets/hero-video.mp4" type="video/mp4"&gt;
+&lt;/video&gt;
+
+<span class="comment">/* CSS */</span>
+.hero-video {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; opacity: 0.4;
+}</code></pre>
+
+  <h3>Integrar un formulario de contacto real</h3>
+  <p>El formulario actual hace validación client-side pero no envía datos. Para conectarlo:</p>
+
+  <h4>Opción A — Netlify Forms (más simple)</h4>
+  <p>Agregar <code>data-netlify="true"</code> al <code>&lt;form&gt;</code>. Netlify intercepta el POST automáticamente.</p>
+
+  <h4>Opción B — Netlify Function propia</h4>
+  <p>Crear <code>netlify/functions/contact.js</code> que reciba el formulario y use un servicio de email (SendGrid, Resend, etc.).</p>
+
+  <h3>Agregar Google Analytics</h3>
+  <pre><code><span class="comment">&lt;!-- Antes de &lt;/head&gt; en index.html --&gt;</span>
+&lt;script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXX"&gt;&lt;/script&gt;
+&lt;script&gt;
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXX');
+&lt;/script&gt;</code></pre>
+
+  <div class="callout callout-purple">
+    <strong>Performance</strong>
+    El sitio no usa bundler. Cada script externo (GSAP, Google Fonts) agrega una request HTTP. Si el rendimiento se vuelve crítico, considerar: self-hosting de GSAP, usar <code>font-display: swap</code> (ya configurado), y agregar un Service Worker para cache.
+  </div>
+</div>
+
+<!-- SECCIÓN 8 — FUNCIONES JS -->
+<div class="page" style="page-break-after: auto;">
+  <div class="page-header"><strong>Nubi Creativa — Documentación Técnica</strong><span>08 · Referencia de funciones</span></div>
+
+  <div class="section-num">08</div>
+  <h2>Referencia de funciones JavaScript</h2>
+  <div class="section-divider"></div>
+
+  <table>
+    <tr><th>Función</th><th>Descripción</th></tr>
+    <tr><td><code>applyTranslations()</code></td><td>Aplica el objeto <code>translations[currentLang]</code> a todos los elementos con <code>data-i18n</code></td></tr>
+    <tr><td><code>setLang(lang)</code></td><td>Cambia el idioma global y re-aplica traducciones. Decorada por chatbot y modal.</td></tr>
+    <tr><td><code>initHeroAnimations()</code></td><td>Anima el hero al cargar: logo flotante, eyebrow, headline, sub, CTAs y canvas de partículas.</td></tr>
+    <tr><td><code>initParticles()</code></td><td>Canvas con puntos animados en el hero. Pausa fuera del viewport.</td></tr>
+    <tr><td><code>initMeteors()</code></td><td>Genera divs meteoros con animación CSS en el hero.</td></tr>
+    <tr><td><code>initCursor()</code></td><td>Cursor custom: dot + ring. Escala en hover de elementos interactivos.</td></tr>
+    <tr><td><code>initNavbar()</code></td><td>Scroll → cambia background del nav. Click en links → cierra el menú móvil.</td></tr>
+    <tr><td><code>initMobileMenu()</code></td><td>Toggle del menú hamburguesa. Bloquea scroll del body cuando está abierto.</td></tr>
+    <tr><td><code>initScrollReveal()</code></td><td>IntersectionObserver para clases <code>.reveal</code> y <code>.reveal-right</code>.</td></tr>
+    <tr><td><code>initCounters()</code></td><td>Anima números del 0 al valor de <code>data-target</code> al entrar en viewport.</td></tr>
+    <tr><td><code>initTilt()</code></td><td>Efecto 3D tilt en service cards al mover el mouse.</td></tr>
+    <tr><td><code>initProjectFilter()</code></td><td>Filtro de portfolio por categoría (botones). Aplica <code>display:none</code> con transición.</td></tr>
+    <tr><td><code>initCarousel()</code></td><td>Carousel de testimonios: dots, touch swipe, autoplay cada 5s.</td></tr>
+    <tr><td><code>initForm()</code></td><td>Validación del formulario de contacto. Muestra feedback visual.</td></tr>
+    <tr><td><code>initRipple()</code></td><td>Efecto ripple (onda) en click de botones primarios.</td></tr>
+    <tr><td><code>initShimmer()</code></td><td>Efecto shimmer en bordes de tarjetas al hacer hover (via mouse-move).</td></tr>
+    <tr><td><code>initScrollSpy()</code></td><td>Resalta el link de nav correspondiente a la sección visible.</td></tr>
+    <tr><td><code>initBackTop()</code></td><td>Botón "volver arriba": aparece al scrollear >400px, scroll suave al click.</td></tr>
+    <tr><td><code>initGSAP()</code></td><td>Parallax de shapes con ScrollTrigger. Stagger de project cards.</td></tr>
+    <tr><td><code>initChatbot()</code></td><td>Chatbot completo: toggle, fetch a Netlify Function, history, i18n.</td></tr>
+    <tr><td><code>initProjectModal()</code></td><td>Modal de proyectos: apertura, cierre, nav, hash, swipe, i18n.</td></tr>
+  </table>
+
+  <div style="margin-top:48px; padding-top:32px; border-top:1px solid var(--border); display:flex; justify-content:space-between; font-size:12px; color:var(--muted);">
+    <div>
+      <strong style="color:var(--navy); font-family:'Syne',sans-serif; font-size:16px;">Nubi<span style="color:var(--accent)">Creativa</span></strong><br>
+      github.com/franjmazzo/nubi-creativa
+    </div>
+    <div style="text-align:right">
+      Documentación Técnica v1.0<br>
+      Marzo 2026 · Uso interno
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

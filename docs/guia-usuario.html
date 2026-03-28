@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nubi Creativa — Guía de Usuario</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap');
+
+  :root {
+    --navy: #0D1B2A;
+    --blue: #1F67B0;
+    --accent: #00D4FF;
+    --text: #1a2a3a;
+    --muted: #5a7080;
+    --border: #d0dce8;
+    --bg-soft: #f0f6ff;
+    --bg-tag: #e6f4ff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    background: #fff;
+    font-size: 14px;
+    line-height: 1.75;
+  }
+
+  /* ── COVER PAGE ── */
+  .cover {
+    background: var(--navy);
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 60px 72px;
+    page-break-after: always;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -120px; right: -120px;
+    width: 480px; height: 480px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,212,255,0.12) 0%, transparent 70%);
+  }
+  .cover-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px; font-weight: 800;
+    color: #fff; letter-spacing: -0.02em;
+  }
+  .cover-logo span { color: var(--accent); }
+  .cover-main { position: relative; z-index: 1; }
+  .cover-tag {
+    display: inline-block;
+    background: rgba(0,212,255,0.15);
+    border: 1px solid rgba(0,212,255,0.3);
+    color: var(--accent);
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 5px 14px; border-radius: 20px;
+    margin-bottom: 24px;
+  }
+  .cover h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 52px; font-weight: 800;
+    line-height: 1.1; letter-spacing: -0.03em;
+    margin-bottom: 20px;
+  }
+  .cover h1 em { color: var(--accent); font-style: normal; }
+  .cover-sub {
+    font-size: 16px; color: rgba(255,255,255,0.65);
+    max-width: 480px; line-height: 1.7;
+  }
+  .cover-footer {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    font-size: 12px; color: rgba(255,255,255,0.4);
+  }
+  .cover-footer strong { color: rgba(255,255,255,0.7); }
+
+  /* ── CONTENT ── */
+  .page { padding: 60px 72px; page-break-after: always; }
+  .page:last-child { page-break-after: auto; }
+
+  /* Section header */
+  .section-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px; font-weight: 800;
+    color: var(--accent); letter-spacing: 0.16em;
+    text-transform: uppercase; margin-bottom: 8px;
+  }
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 30px; font-weight: 800;
+    color: var(--navy); letter-spacing: -0.02em;
+    margin-bottom: 6px; line-height: 1.2;
+  }
+  .section-divider {
+    width: 48px; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--blue));
+    border-radius: 2px; margin-bottom: 32px;
+  }
+
+  h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 17px; font-weight: 700;
+    color: var(--navy); margin: 32px 0 10px;
+  }
+  h4 {
+    font-size: 13px; font-weight: 600;
+    color: var(--blue); text-transform: uppercase;
+    letter-spacing: 0.08em; margin: 24px 0 8px;
+  }
+  p { margin-bottom: 14px; color: #2a3a4a; }
+  ul, ol { margin: 10px 0 18px 20px; }
+  li { margin-bottom: 6px; }
+  a { color: var(--blue); }
+
+  /* Callout boxes */
+  .callout {
+    border-radius: 12px; padding: 16px 20px;
+    margin: 20px 0; font-size: 13.5px;
+  }
+  .callout-info { background: var(--bg-tag); border-left: 4px solid var(--accent); }
+  .callout-warn { background: #fff8e6; border-left: 4px solid #f0a020; }
+  .callout-ok   { background: #edfcf4; border-left: 4px solid #22c55e; }
+  .callout strong { display: block; font-weight: 600; margin-bottom: 4px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+  /* Code blocks */
+  code {
+    font-family: 'Courier New', monospace;
+    font-size: 12.5px;
+    background: #d0e4f5;
+    border: 1px solid #a8c4de;
+    padding: 2px 8px; border-radius: 5px;
+    color: #0a1e35;
+    font-weight: 600;
+  }
+  pre {
+    background: #050f18; color: #ffffff;
+    font-family: 'Courier New', monospace; font-size: 12px;
+    padding: 20px 24px; border-radius: 12px; overflow-x: auto;
+    margin: 14px 0; line-height: 1.7;
+  }
+  pre .comment { color: #8fb8cc; font-style: italic; }
+  pre .key { color: #00c8f0; font-weight: bold; }
+  pre .val { color: #00e87a; font-weight: bold; }
+
+  /* Step list */
+  .steps { counter-reset: step; margin: 20px 0; }
+  .step {
+    display: flex; gap: 18px; margin-bottom: 20px; align-items: flex-start;
+  }
+  .step-num {
+    width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+    background: var(--navy); color: #fff;
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .step-body { flex: 1; padding-top: 4px; }
+
+  /* Table */
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+  th {
+    background: var(--navy); color: #fff;
+    font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 10px 14px; text-align: left;
+  }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: var(--bg-soft); }
+
+  /* Badge */
+  .badge {
+    display: inline-block; padding: 3px 10px; border-radius: 12px;
+    font-size: 11px; font-weight: 600;
+  }
+  .badge-green { background: #edfcf4; color: #16a34a; }
+  .badge-blue  { background: var(--bg-tag); color: var(--blue); }
+  .badge-warn  { background: #fff8e6; color: #d97706; }
+
+  /* Page header stripe */
+  .page-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: 16px; margin-bottom: 40px;
+    border-bottom: 1px solid var(--border);
+    font-size: 11px; color: var(--muted);
+    font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .page-header strong { color: var(--navy); }
+
+  /* Print tweaks */
+  @media print {
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .page { page-break-after: always; }
+    .no-break { page-break-inside: avoid; }
+    a { color: var(--blue) !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════ -->
+<!--  COVER                                     -->
+<!-- ══════════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-logo">Nubi<span>Creativa</span></div>
+  <div class="cover-main">
+    <div class="cover-tag">Documentación interna</div>
+    <h1>Guía de<br><em>Usuario</em></h1>
+    <p class="cover-sub">Todo lo que necesitás saber para administrar, actualizar y gestionar el sitio web de Nubi Creativa.</p>
+  </div>
+  <div class="cover-footer">
+    <div>
+      <strong>Nubi Creativa</strong><br>
+      hola@nubicreativa.com · @nubicreativa<br>
+      CABA, Buenos Aires, Argentina
+    </div>
+    <div style="text-align:right">
+      Versión 1.0<br>
+      Marzo 2026
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!--  SECCIÓN 1 — ESTRUCTURA DEL SITIO         -->
+<!-- ══════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <strong>Nubi Creativa — Guía de Usuario</strong>
+    <span>Sección 1 · Estructura</span>
+  </div>
+
+  <div class="section-num">01</div>
+  <h2>Estructura del sitio</h2>
+  <div class="section-divider"></div>
+
+  <p>El sitio web de Nubi Creativa es una <strong>Single Page Application (SPA)</strong>: todo el contenido vive en un único archivo <code>index.html</code>. No hay base de datos ni panel de administración — los cambios se hacen editando directamente el código y subiendo a GitHub.</p>
+
+  <h3>Archivos del proyecto</h3>
+  <table>
+    <tr><th>Archivo / Carpeta</th><th>Qué contiene</th></tr>
+    <tr><td><code>index.html</code></td><td>Todo el sitio: CSS, HTML y JavaScript en un solo archivo</td></tr>
+    <tr><td><code>netlify/functions/chat.js</code></td><td>Función serverless que conecta el chatbot con la API de Claude</td></tr>
+    <tr><td><code>netlify.toml</code></td><td>Configuración de Netlify (directorio de funciones, headers CORS)</td></tr>
+    <tr><td><code>package.json</code></td><td>Dependencias Node.js (SDK de Anthropic para el chatbot)</td></tr>
+    <tr><td><code>.env</code></td><td>Variables de entorno locales — <strong>nunca se sube a GitHub</strong></td></tr>
+    <tr><td><code>assets/</code></td><td>Imágenes, logos y fuentes tipográficas</td></tr>
+    <tr><td><code>docs/</code></td><td>Esta documentación</td></tr>
+  </table>
+
+  <h3>Secciones del sitio</h3>
+  <table>
+    <tr><th>Sección</th><th>ID en el HTML</th><th>Descripción</th></tr>
+    <tr><td>Inicio / Hero</td><td><code>#hero</code></td><td>Pantalla principal con animación de partículas</td></tr>
+    <tr><td>Servicios</td><td><code>#servicios</code></td><td>5 tarjetas de servicios</td></tr>
+    <tr><td>Nosotros</td><td><code>#nosotros</code></td><td>Descripción del equipo y estadísticas</td></tr>
+    <tr><td>Proyectos</td><td><code>#proyectos</code></td><td>Portfolio con filtro por categoría y modal de detalle</td></tr>
+    <tr><td>Testimonios</td><td><code>#testimonios</code></td><td>Carousel de opiniones de clientes</td></tr>
+    <tr><td>Contacto</td><td><code>#contacto</code></td><td>Formulario + datos de contacto</td></tr>
+    <tr><td>Footer</td><td><code>footer</code></td><td>Links, redes sociales y copyright</td></tr>
+  </table>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!--  SECCIÓN 2 — ACTUALIZAR TEXTOS            -->
+<!-- ══════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <strong>Nubi Creativa — Guía de Usuario</strong>
+    <span>Sección 2 · Textos</span>
+  </div>
+
+  <div class="section-num">02</div>
+  <h2>Actualizar textos</h2>
+  <div class="section-divider"></div>
+
+  <p>El sitio es <strong>bilingüe (ES/EN)</strong>. Todos los textos visibles están centralizados en el objeto <code>translations</code> dentro del <code>&lt;script&gt;</code> del archivo <code>index.html</code>, cerca de la línea 1750.</p>
+
+  <h3>Cómo encontrar un texto</h3>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">Abrí <code>index.html</code> en un editor de texto (VS Code recomendado).</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">Usá <strong>Ctrl+F</strong> para buscar el texto que querés cambiar, o buscá su clave (ej: <code>"hero.sub"</code>).</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">Vas a encontrar dos entradas: una en el bloque <code>es: { ... }</code> y otra en <code>en: { ... }</code>. Editá ambas.</div>
+    </div>
+  </div>
+
+  <h3>Ejemplo: cambiar el subtítulo del hero</h3>
+  <pre><code><span class="comment">// Buscá en el objeto translations:</span>
+es: {
+  <span class="key">"hero.sub"</span>: <span class="val">"No hacemos solo diseño — construimos marcas..."</span>,
+  <span class="comment">// ↑ Reemplazá este texto</span>
+},
+en: {
+  <span class="key">"hero.sub"</span>: <span class="val">"We don't just design — we build brands..."</span>,
+  <span class="comment">// ↑ Y su equivalente en inglés</span>
+},</code></pre>
+
+  <h3>Claves principales de texto</h3>
+  <table>
+    <tr><th>Clave</th><th>Dónde aparece</th></tr>
+    <tr><td><code>hero.eyebrow</code></td><td>Texto pequeño arriba del título ("Agencia Creativa · Buenos Aires")</td></tr>
+    <tr><td><code>hero.sub</code></td><td>Párrafo debajo del título principal</td></tr>
+    <tr><td><code>about.statement</code></td><td>Frase grande de la sección Nosotros</td></tr>
+    <tr><td><code>about.desc</code></td><td>Párrafo descriptivo de la sección Nosotros</td></tr>
+    <tr><td><code>services.design.desc</code></td><td>Descripción del servicio Diseño Gráfico</td></tr>
+    <tr><td><code>contact.title</code></td><td>Título de la sección Contacto</td></tr>
+    <tr><td><code>footer.desc</code></td><td>Descripción breve en el footer</td></tr>
+    <tr><td><code>footer.copyright</code></td><td>Texto de copyright (actualizar el año)</td></tr>
+  </table>
+
+  <div class="callout callout-info">
+    <strong>Tip</strong>
+    Si un texto aparece en el HTML con el atributo <code>data-i18n="clave"</code>, significa que ese elemento usa el sistema de traducciones. Editá solo el objeto <code>translations</code>, no el HTML directamente.
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!--  SECCIÓN 3 — PROYECTOS                    -->
+<!-- ══════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <strong>Nubi Creativa — Guía de Usuario</strong>
+    <span>Sección 3 · Proyectos</span>
+  </div>
+
+  <div class="section-num">03</div>
+  <h2>Gestionar proyectos</h2>
+  <div class="section-divider"></div>
+
+  <p>Los proyectos tienen <strong>dos capas</strong>: las tarjetas del portfolio (HTML) y los detalles del modal (JavaScript). Hay que actualizar ambas.</p>
+
+  <h3>Editar un proyecto existente</h3>
+  <p>Buscá el array <code>const PROJECTS = [</code> en el script. Cada proyecto tiene esta estructura:</p>
+  <pre><code>{
+  <span class="key">slug</span>: <span class="val">'nombre-unico-sin-espacios'</span>,
+  <span class="key">gradient</span>: <span class="val">'linear-gradient(135deg, #color1, #color2)'</span>,
+  <span class="key">es</span>: {
+    <span class="key">tag</span>: <span class="val">'Diseño'</span>,
+    <span class="key">title</span>: <span class="val">'Nombre del proyecto'</span>,
+    <span class="key">description</span>: <span class="val">'Descripción larga del proyecto...'</span>,
+    <span class="key">client</span>: <span class="val">'Nombre del cliente'</span>,
+    <span class="key">year</span>: <span class="val">'2025'</span>,
+    <span class="key">duration</span>: <span class="val">'4 semanas'</span>,
+    <span class="key">deliverables</span>: [<span class="val">'Entregable 1'</span>, <span class="val">'Entregable 2'</span>]
+  },
+  <span class="key">en</span>: { <span class="comment">/* misma estructura en inglés */</span> }
+},</code></pre>
+
+  <h3>Agregar una imagen de fondo al modal</h3>
+  <p>Por defecto los modales usan degradados CSS. Para usar una imagen real:</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">Copiá la imagen a <code>assets/projects/nombre-imagen.jpg</code></div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">En el objeto del proyecto, cambiá <code>gradient</code> por: <code>image: 'assets/projects/nombre-imagen.jpg'</code></div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">En la función <code>populate()</code>, agregá lógica para usar <code>background-image</code> si existe <code>p.image</code>.</div>
+    </div>
+  </div>
+
+  <h3>Agregar un nuevo proyecto</h3>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body"><strong>Agregar la tarjeta HTML:</strong> Copiá un bloque <code>&lt;article class="project-card"&gt;</code> existente en la sección <code>#proyectos</code> y actualizá la categoría (<code>data-category</code>) y los textos.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body"><strong>Agregar datos al array PROJECTS:</strong> Copiá un objeto existente y completá con la info del nuevo proyecto.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body"><strong>Verificar el orden:</strong> El modal asocia cada tarjeta con su posición en el DOM. El primer proyecto en el HTML corresponde al primer objeto del array, y así sucesivamente.</div>
+    </div>
+  </div>
+
+  <div class="callout callout-warn">
+    <strong>Importante</strong>
+    El orden de los proyectos en el HTML debe coincidir exactamente con el orden en el array <code>PROJECTS</code>. Si agregás un proyecto en medio del HTML, también insertalo en la misma posición del array.
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!--  SECCIÓN 4 — SERVICIOS Y CONTACTO         -->
+<!-- ══════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <strong>Nubi Creativa — Guía de Usuario</strong>
+    <span>Sección 4 · Servicios y Contacto</span>
+  </div>
+
+  <div class="section-num">04</div>
+  <h2>Servicios y datos de contacto</h2>
+  <div class="section-divider"></div>
+
+  <h3>Actualizar datos de contacto</h3>
+  <p>Los datos de contacto están en dos lugares del HTML. Buscá con Ctrl+F:</p>
+  <table>
+    <tr><th>Dato</th><th>Qué buscar</th><th>Dónde está</th></tr>
+    <tr><td>Email</td><td><code>hola@nubicreativa.com</code></td><td>Sección contacto + footer</td></tr>
+    <tr><td>WhatsApp</td><td><code>wa.me/5491100000000</code></td><td>Botón flotante + sección contacto</td></tr>
+    <tr><td>Instagram</td><td><code>@nubicreativa</code></td><td>Sección contacto + footer</td></tr>
+    <tr><td>Teléfono visible</td><td><code>+54 9 11 XXXX XXXX</code></td><td>Sección contacto + footer</td></tr>
+  </table>
+
+  <div class="callout callout-warn">
+    <strong>WhatsApp</strong>
+    Para actualizar el número del botón flotante de WhatsApp, buscá el atributo <code>href="https://wa.me/..."</code> en el HTML. El formato es: <code>https://wa.me/549[código_área][número]</code> sin espacios ni guiones.
+  </div>
+
+  <h3>Editar la descripción de un servicio</h3>
+  <p>Buscá la clave correspondiente en el objeto <code>translations</code>:</p>
+  <table>
+    <tr><th>Servicio</th><th>Clave del título</th><th>Clave de la descripción</th></tr>
+    <tr><td>Diseño Gráfico</td><td><code>services.design.title</code></td><td><code>services.design.desc</code></td></tr>
+    <tr><td>Marketing Digital</td><td><code>services.marketing.title</code></td><td><code>services.marketing.desc</code></td></tr>
+    <tr><td>Desarrollo Web</td><td><code>services.web.title</code></td><td><code>services.web.desc</code></td></tr>
+    <tr><td>Producción Audiovisual</td><td><code>services.av.title</code></td><td><code>services.av.desc</code></td></tr>
+    <tr><td>Gestión de Redes Sociales</td><td><code>services.social.title</code></td><td><code>services.social.desc</code></td></tr>
+  </table>
+
+  <h3>Actualizar las estadísticas ("50+ Clientes")</h3>
+  <p>Buscá en el HTML los elementos con clase <code>counter</code>:</p>
+  <pre><code>&lt;span class="counter" <span class="key">data-target="50"</span>&gt;0&lt;/span&gt;
+<span class="comment">&lt;!-- Cambiá el número en data-target --&gt;</span></code></pre>
+
+  <h3>Actualizar testimonios</h3>
+  <p>Buscá las claves en <code>translations</code>:</p>
+  <ul>
+    <li><code>testimonials.t1.text</code> — Texto del testimonio</li>
+    <li><code>testimonials.t1.name</code> — Nombre del cliente</li>
+    <li><code>testimonials.t1.company</code> — Empresa/cargo</li>
+    <li><code>testimonials.t2.*</code>, <code>t3.*</code>, <code>t4.*</code> — Los demás</li>
+  </ul>
+  <p>El avatar se genera automáticamente con la primera letra del nombre.</p>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!--  SECCIÓN 5 — NETLIFY Y DEPLOY             -->
+<!-- ══════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <strong>Nubi Creativa — Guía de Usuario</strong>
+    <span>Sección 5 · Deploy</span>
+  </div>
+
+  <div class="section-num">05</div>
+  <h2>Deploy y Netlify</h2>
+  <div class="section-divider"></div>
+
+  <p>El sitio se despliega automáticamente en <strong>Netlify</strong> cada vez que se sube (push) código a GitHub. No hay pasos manuales de compilación.</p>
+
+  <h3>Flujo de trabajo para actualizar el sitio</h3>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body"><strong>Editá</strong> los archivos localmente (en tu computadora).</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body"><strong>Guardá</strong> los cambios y verificá en el navegador abriendo <code>index.html</code> localmente.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body"><strong>Subí a GitHub</strong> con los comandos:
+        <pre><code>git add index.html
+git commit -m "descripción del cambio"
+git push</code></pre>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">Netlify detecta el push y <strong>re-despliega automáticamente</strong> en 1–2 minutos.</div>
+    </div>
+  </div>
+
+  <h3>Configurar la API Key del chatbot</h3>
+  <div class="callout callout-warn">
+    <strong>Solo necesario la primera vez o si cambiás la clave</strong>
+    La API Key nunca debe estar en el código. Vive únicamente en el panel de Netlify.
+  </div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">Ingresá a <strong>netlify.com</strong> → tu sitio → <em>Site configuration</em> → <em>Environment variables</em>.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">Hacé click en <em>Add a variable</em>.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">Nombre: <code>ANTHROPIC_API_KEY</code> · Valor: tu clave de Anthropic (empieza con <code>sk-ant-</code>).</div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">Guardá y volvé a hacer deploy: <em>Deploys → Trigger deploy → Deploy site</em>.</div>
+    </div>
+  </div>
+
+  <h3>Verificar que el deploy fue exitoso</h3>
+  <ul>
+    <li>Entrá al panel de Netlify → <em>Deploys</em>. Si el último deploy tiene ícono verde ✓, está listo.</li>
+    <li>Si hay un error, hacé click en el deploy fallido para ver el log.</li>
+    <li>Error más común: <code>Cannot find module '@anthropic-ai/sdk'</code> → verificá que <code>package.json</code> esté incluido en el repositorio.</li>
+  </ul>
+
+  <div class="callout callout-ok">
+    <strong>Chatbot funcionando correctamente cuando:</strong>
+    El botón de chat (esquina inferior izquierda) responde mensajes sobre los servicios de Nubi Creativa en menos de 3 segundos.
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!--  SECCIÓN 6 — CHATBOT                      -->
+<!-- ══════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <strong>Nubi Creativa — Guía de Usuario</strong>
+    <span>Sección 6 · Chatbot</span>
+  </div>
+
+  <div class="section-num">06</div>
+  <h2>Chatbot Nubi IA</h2>
+  <div class="section-divider"></div>
+
+  <p>El chatbot está integrado en la esquina inferior izquierda del sitio. Usa la API de Claude (Anthropic) para responder preguntas sobre los servicios de la agencia.</p>
+
+  <h3>Qué puede responder el chatbot</h3>
+  <ul>
+    <li>Información sobre los 5 servicios de Nubi Creativa</li>
+    <li>Cómo es el proceso de trabajo</li>
+    <li>Preguntas sobre presupuesto (deriva a contacto)</li>
+    <li>Datos de contacto: email, Instagram, WhatsApp</li>
+    <li>Información general de la agencia</li>
+  </ul>
+
+  <h3>Actualizar el comportamiento del chatbot</h3>
+  <p>El "comportamiento" del chatbot está definido en el <strong>system prompt</strong> del archivo <code>netlify/functions/chat.js</code>. Es un texto en inglés que describe a Claude cómo debe responder.</p>
+  <p>Para modificarlo, editá el bloque que empieza con <code>const SYSTEM_PROMPT = (lang) =&gt;</code>.</p>
+
+  <h3>Costos del chatbot</h3>
+  <table>
+    <tr><th>Modelo usado</th><th>Costo aproximado</th><th>Límite por consulta</th></tr>
+    <tr><td>claude-haiku-4-5</td><td>~$0.0003 por conversación</td><td>300 tokens de respuesta</td></tr>
+  </table>
+  <p>Es el modelo más económico de Anthropic. Una agencia con uso moderado (500 consultas/mes) gastará aproximadamente <strong>$0.15 USD/mes</strong>.</p>
+
+  <h3>El chatbot no responde — checklist</h3>
+  <table>
+    <tr><th>Síntoma</th><th>Causa probable</th><th>Solución</th></tr>
+    <tr><td>Responde "Lo siento, hubo un problema"</td><td>API Key incorrecta o ausente</td><td>Verificar variable en Netlify</td></tr>
+    <tr><td>No aparece el botón de chat</td><td>Error de JS en la página</td><td>Abrir consola del navegador (F12)</td></tr>
+    <tr><td>Demora más de 10 segundos</td><td>Cold start de la función serverless</td><td>Normal en el primer uso del día</td></tr>
+    <tr><td>Responde en el idioma incorrecto</td><td>Bug en detección de idioma</td><td>Reportar al equipo técnico</td></tr>
+  </table>
+
+  <div class="callout callout-info">
+    <strong>Privacidad</strong>
+    Los mensajes del chat se envían a la API de Anthropic para generar respuestas. No se almacenan en ninguna base de datos del sitio. El historial de conversación se mantiene solo durante la sesión activa del navegador.
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!--  SECCIÓN 7 — LOGOS E IMÁGENES            -->
+<!-- ══════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <strong>Nubi Creativa — Guía de Usuario</strong>
+    <span>Sección 7 · Assets</span>
+  </div>
+
+  <div class="section-num">07</div>
+  <h2>Logos, imágenes y fuentes</h2>
+  <div class="section-divider"></div>
+
+  <h3>Estructura de la carpeta assets</h3>
+  <pre><code>assets/
+├── logo/
+│   ├── logo-icon.png      <span class="comment"># Ícono de nube con anteojos (nav + favicon)</span>
+│   └── logo-blue.jpg      <span class="comment"># Logo completo (Open Graph)</span>
+└── fonts/
+    ├── Sniglet-ExtraBold.ttf   <span class="comment"># Tipografía display (títulos)</span>
+    ├── Sniglet-Regular.ttf
+    └── SourceSerif4-VariableFont_opsz,wght.ttf</code></pre>
+
+  <h3>Reemplazar el logo</h3>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">Guardá el nuevo logo en <code>assets/logo/</code> con el mismo nombre de archivo, o cambiá las referencias en el HTML si usás un nombre diferente.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">El logo aparece en: la barra de navegación (<code>.nav-logo-img</code>), el hero (<code>.hero-logo-float</code>) y el footer (<code>.footer-logo-img</code>).</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">Para el favicon, reemplazá <code>logo-icon.png</code> con una imagen cuadrada de al menos 32×32px.</div>
+    </div>
+  </div>
+
+  <h3>Agregar imágenes a proyectos</h3>
+  <p>Guardá las imágenes en <code>assets/projects/</code> (carpeta a crear). Tamaño recomendado: <strong>1400×800px</strong>, formato JPG o WebP para mejor rendimiento.</p>
+
+  <div class="callout callout-info">
+    <strong>Optimización</strong>
+    Antes de subir imágenes, comprimilas en <a href="https://squoosh.app">squoosh.app</a>. Esto mejora la velocidad de carga del sitio, que impacta directamente en el SEO y la experiencia del usuario.
+  </div>
+
+  <h3>Cambiar colores de marca</h3>
+  <p>Los colores están definidos como variables CSS al inicio del <code>&lt;style&gt;</code>:</p>
+  <pre><code>:root {
+  <span class="key">--blue</span>:   <span class="val">#1F67B0</span>;   <span class="comment">/* Azul principal */</span>
+  <span class="key">--navy</span>:   <span class="val">#0D1B2A</span>;   <span class="comment">/* Fondo oscuro */</span>
+  <span class="key">--accent</span>: <span class="val">#00D4FF</span>;   <span class="comment">/* Cian brillante (acentos) */</span>
+  <span class="key">--white</span>:  <span class="val">#F8FAFF</span>;   <span class="comment">/* Blanco ligeramente azulado */</span>
+}</code></pre>
+  <p>Cambiar cualquiera de estas variables actualiza automáticamente todos los elementos que las usan.</p>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!--  SECCIÓN 8 — REFERENCIAS RÁPIDAS         -->
+<!-- ══════════════════════════════════════════ -->
+<div class="page" style="page-break-after: auto;">
+  <div class="page-header">
+    <strong>Nubi Creativa — Guía de Usuario</strong>
+    <span>Sección 8 · Referencia rápida</span>
+  </div>
+
+  <div class="section-num">08</div>
+  <h2>Referencia rápida</h2>
+  <div class="section-divider"></div>
+
+  <h3>Checklist para subir cambios al sitio</h3>
+  <table>
+    <tr><th>#</th><th>Paso</th><th>Estado</th></tr>
+    <tr><td>1</td><td>Edité los textos en <code>translations</code> (ES y EN)</td><td><span class="badge badge-blue">Verificar</span></td></tr>
+    <tr><td>2</td><td>Probé el sitio localmente abriendo <code>index.html</code></td><td><span class="badge badge-blue">Verificar</span></td></tr>
+    <tr><td>3</td><td>No incluí datos sensibles (API keys, contraseñas)</td><td><span class="badge badge-blue">Verificar</span></td></tr>
+    <tr><td>4</td><td>Corrí <code>git add</code>, <code>git commit</code> y <code>git push</code></td><td><span class="badge badge-blue">Verificar</span></td></tr>
+    <tr><td>5</td><td>Confirmé deploy exitoso en Netlify</td><td><span class="badge badge-blue">Verificar</span></td></tr>
+  </table>
+
+  <h3>Comandos Git esenciales</h3>
+  <table>
+    <tr><th>Comando</th><th>Qué hace</th></tr>
+    <tr><td><code>git status</code></td><td>Ver qué archivos cambiaron</td></tr>
+    <tr><td><code>git add index.html</code></td><td>Preparar archivo para el commit</td></tr>
+    <tr><td><code>git commit -m "mensaje"</code></td><td>Guardar los cambios con descripción</td></tr>
+    <tr><td><code>git push</code></td><td>Subir a GitHub (activa el deploy)</td></tr>
+    <tr><td><code>git log --oneline</code></td><td>Ver historial de cambios</td></tr>
+  </table>
+
+  <h3>Links útiles</h3>
+  <table>
+    <tr><th>Recurso</th><th>URL</th></tr>
+    <tr><td>Repositorio GitHub</td><td>github.com/franjmazzo/nubi-creativa</td></tr>
+    <tr><td>Panel Netlify</td><td>app.netlify.com</td></tr>
+    <tr><td>Console Anthropic (API)</td><td>console.anthropic.com</td></tr>
+    <tr><td>Comprimir imágenes</td><td>squoosh.app</td></tr>
+  </table>
+
+  <div style="margin-top:48px; padding-top:32px; border-top:1px solid var(--border); display:flex; justify-content:space-between; font-size:12px; color:var(--muted);">
+    <div>
+      <strong style="color:var(--navy); font-family:'Syne',sans-serif; font-size:16px;">Nubi<span style="color:var(--accent)">Creativa</span></strong><br>
+      hola@nubicreativa.com · @nubicreativa
+    </div>
+    <div style="text-align:right">
+      Guía de Usuario v1.0<br>
+      Marzo 2026 · Confidencial
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
