@@ -1091,8 +1091,9 @@
     }
 
     /* =============================================
-       CHAT FAB + WINDOW
+       CHAT FAB + WINDOW (commented out — not active)
     ============================================= */
+    /*
     #chat-fab {
       position: fixed; bottom: 28px; left: 28px; z-index: 200;
       width: 56px; height: 56px; border-radius: 50%;
@@ -1208,6 +1209,7 @@
       #chat-fab, #chat-close, #chat-send { cursor: pointer; }
       #chat-input { cursor: text; }
     }
+    */
 
     /* =============================================
        PROJECT MODAL
@@ -1800,8 +1802,9 @@
 </a>
 
 <!-- =============================================
-     FLOATING CHAT BUTTON + CHAT WINDOW
+     FLOATING CHAT BUTTON + CHAT WINDOW (commented out — not active)
 ============================================= -->
+<!--
 <button id="chat-fab" aria-label="Abrir chat" aria-expanded="false" aria-controls="chat-window">
   <span id="chat-unread-dot" aria-hidden="true"></span>
   <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -1832,6 +1835,7 @@
     </button>
   </div>
 </div>
+-->
 
 <!-- PROJECT MODAL -->
 <div id="project-modal" role="dialog" aria-modal="true" aria-label="Detalle de proyecto" aria-hidden="true">
@@ -2819,8 +2823,9 @@ function initGSAP() {
 }
 
 /* ==============================================
-   CHATBOT
+   CHATBOT (commented out — not active)
 ============================================== */
+/*
 function initChatbot() {
   const fab        = document.getElementById('chat-fab');
   const win        = document.getElementById('chat-window');
@@ -2934,6 +2939,7 @@ function initChatbot() {
     };
   }
 }
+*/
 
 /* ==============================================
    PROJECT MODAL
@@ -3184,7 +3190,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollSpy();
   initBackTop();
   initGSAP();
-  initChatbot();
+  // initChatbot();   // chatbot disabled — uncomment to re-enable
   initProjectModal();
   loadProjects();           // async: updates cards from CMS if configured
 });
