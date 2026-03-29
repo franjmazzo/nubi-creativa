@@ -1715,6 +1715,10 @@
               data-i18n-placeholder="contact.form.emailPlaceholder" placeholder="Tu email">
           </div>
           <div class="form-group">
+            <input type="tel" id="form-phone" name="phone" autocomplete="tel"
+              data-i18n-placeholder="contact.form.phonePlaceholder" placeholder="Tu teléfono (opcional)">
+          </div>
+          <div class="form-group">
             <select id="form-service" name="service" required aria-label="Servicio de interés">
               <option value="" data-i18n="contact.form.servicePlaceholder">Servicio de interés</option>
               <option value="diseno" data-i18n="services.design.title">Diseño Gráfico</option>
@@ -1963,6 +1967,7 @@ const translations = {
     "contact.form.namePlaceholder": "Tu nombre",
     "contact.form.apellidoPlaceholder": "Tu apellido",
     "contact.form.emailPlaceholder": "Tu email",
+    "contact.form.phonePlaceholder": "Tu teléfono (opcional)",
     "contact.form.servicePlaceholder": "Servicio de interés",
     "contact.form.messagePlaceholder": "Contanos tu proyecto...",
     "contact.form.submit": "Enviar mensaje",
@@ -2054,6 +2059,7 @@ const translations = {
     "contact.form.namePlaceholder": "Your name",
     "contact.form.apellidoPlaceholder": "Your last name",
     "contact.form.emailPlaceholder": "Your email",
+    "contact.form.phonePlaceholder": "Your phone (optional)",
     "contact.form.servicePlaceholder": "Service of interest",
     "contact.form.messagePlaceholder": "Tell us about your project...",
     "contact.form.submit": "Send message",
@@ -2690,6 +2696,7 @@ function initForm() {
       name:     form.querySelector('#form-name').value.trim(),
       apellido: form.querySelector('#form-apellido').value.trim(),
       email:    form.querySelector('#form-email').value.trim(),
+      phone:    (form.querySelector('#form-phone') || {}).value?.trim() || '',
       service:  form.querySelector('#form-service').value.trim(),
       message:  form.querySelector('#form-message').value.trim(),
       _trap:    (form.querySelector('#form-trap') || {}).value || '',

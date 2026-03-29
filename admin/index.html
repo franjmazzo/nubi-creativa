@@ -575,6 +575,7 @@
           <th>Nombre</th>
           <th>Apellido</th>
           <th>Email</th>
+          <th>Teléfono</th>
           <th>Servicio</th>
           <th>Fecha</th>
         </tr></thead>
@@ -584,6 +585,7 @@
               <td>${esc(c.nombre)}</td>
               <td>${esc(c.apellido)}</td>
               <td><a href="mailto:${esc(c.email)}" style="color:var(--accent)">${esc(c.email)}</a></td>
+              <td>${c.phone ? `<a href="https://wa.me/${c.phone.replace(/[^\d]/g,'')}" target="_blank" style="color:#25D366;text-decoration:none;font-size:13px">${esc(c.phone)}</a>` : '<span style="color:rgba(255,255,255,0.3)">—</span>'}</td>
               <td>${c.servicio ? `<span class="badge">${esc(serviceLabel[c.servicio] || c.servicio)}</span>` : '<span style="color:rgba(255,255,255,0.3)">—</span>'}</td>
               <td style="color:rgba(255,255,255,0.5);font-size:13px">${new Date(c.created_at).toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit',year:'numeric'})}</td>
             </tr>
@@ -605,9 +607,10 @@
   function exportCSV() {
     if (!clientes.length) { toast('No hay clientes para exportar', 'err'); return; }
     const serviceLabel = { diseno:'Diseño', marketing:'Marketing', web:'Web', audiovisual:'Audiovisual', redes:'Redes Sociales', otro:'Otro' };
-    const rows = [['Nombre','Apellido','Email','Servicio','Fecha']];
+    const rows = [['Nombre','Apellido','Email','Teléfono','Servicio','Fecha']];
     clientes.forEach(c => rows.push([
       c.nombre, c.apellido, c.email,
+      c.phone || '',
       serviceLabel[c.servicio] || c.servicio || '',
       new Date(c.created_at).toLocaleDateString('es-AR'),
     ]));

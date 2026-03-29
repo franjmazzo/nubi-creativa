@@ -70,6 +70,7 @@ exports.handler = async (event) => {
   const name     = sanitize(body.name);
   const apellido = sanitize(body.apellido);
   const email    = sanitize(body.email);
+  const phone    = sanitize(body.phone).replace(/[^\d+\s\-().]/g, '').slice(0, 30);
   const service  = sanitize(body.service);
   const message  = sanitize(body.message);
 
@@ -96,12 +97,12 @@ exports.handler = async (event) => {
       dbFetch('rate_limits', { method: 'POST', body: JSON.stringify({ ip_hash: ipHash }) }),
       dbFetch('contact_submissions', {
         method: 'POST',
-        body: JSON.stringify({ name, apellido, email, service: service || null, message, ip_hash: ipHash }),
+        body: JSON.stringify({ name, apellido, email, phone: phone || null, service: service || null, message, ip_hash: ipHash }),
       }),
       dbFetch('clientes', {
         method: 'POST',
         headers: { Prefer: 'resolution=merge-duplicates,return=minimal' },
-        body: JSON.stringify({ nombre: name, apellido, email, servicio: service || null, updated_at: new Date().toISOString() }),
+        body: JSON.stringify({ nombre: name, apellido, email, phone: phone || null, servicio: service || null, updated_at: new Date().toISOString() }),
       }),
     ]);
   }
@@ -155,6 +156,16 @@ exports.handler = async (event) => {
               </tr>
               <tr><td colspan="2" style="border-top:1px solid #e2e8f0"></td></tr>
               <tr>
+                <td style="padding:8px 0;font-size:12px;font-weight:700;color:#8a9ab0;text-transform:uppercase;letter-spacing:0.06em;vertical-align:top">Teléfono</td>
+                <td style="padding:8px 0">
+                  ${phone
+                    ? `<a href="https://wa.me/${phone.replace(/[^\d]/g,'')}" style="font-size:15px;color:#25D366;font-weight:600;text-decoration:none">${phone}</a>`
+                    : '<span style="color:#8a9ab0;font-size:14px">—</span>'
+                  }
+                </td>
+              </tr>
+              <tr><td colspan="2" style="border-top:1px solid #e2e8f0"></td></tr>
+              <tr>
                 <td style="padding:8px 0;font-size:12px;font-weight:700;color:#8a9ab0;text-transform:uppercase;letter-spacing:0.06em;vertical-align:top">Servicio</td>
                 <td style="padding:8px 0">
                   ${serviceLabel !== '—' ? `<span style="display:inline-block;background:#e8f4ff;color:#1F67B0;padding:3px 12px;border-radius:20px;font-size:13px;font-weight:700">${serviceLabel}</span>` : '<span style="color:#8a9ab0;font-size:14px">—</span>'}
@@ -179,7 +190,10 @@ exports.handler = async (event) => {
               <a href="mailto:${email}?subject=Re: tu consulta en Nubi Creativa" style="display:block;text-align:center;background:linear-gradient(135deg,#1F67B0,#00D4FF);color:#0D1B2A;font-weight:700;font-size:15px;padding:13px 20px;border-radius:50px;text-decoration:none">Responder ahora →</a>
             </td>
             <td style="padding-left:8px;width:160px">
-              <a href="https://wa.me/5491132378410?text=Hola%20${encodeURIComponent(name)}%2C%20te%20contactamos%20de%20Nubi%20Creativa..." style="display:block;text-align:center;background:#25D366;color:#ffffff;font-weight:700;font-size:14px;padding:13px 20px;border-radius:50px;text-decoration:none">WhatsApp</a>
+              ${phone
+                ? `<a href="https://wa.me/${phone.replace(/[^\d]/g,'')}?text=Hola%20${encodeURIComponent(name)}%2C%20te%20contactamos%20de%20Nubi%20Creativa..." style="display:block;text-align:center;background:#25D366;color:#ffffff;font-weight:700;font-size:14px;padding:13px 20px;border-radius:50px;text-decoration:none">WhatsApp cliente</a>`
+                : `<a href="https://wa.me/5491132378410" style="display:block;text-align:center;background:rgba(37,211,102,0.15);color:#25D366;border:1px solid rgba(37,211,102,0.35);font-weight:700;font-size:14px;padding:13px 20px;border-radius:50px;text-decoration:none">Sin teléfono</a>`
+              }
             </td>
           </tr>
         </table>

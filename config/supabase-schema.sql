@@ -46,6 +46,7 @@ CREATE TABLE IF NOT EXISTS contact_submissions (
   name       TEXT NOT NULL,
   apellido   TEXT NOT NULL DEFAULT '',
   email      TEXT NOT NULL,
+  phone      TEXT,
   service    TEXT,
   message    TEXT NOT NULL,
   ip_hash    TEXT,
@@ -58,6 +59,7 @@ CREATE TABLE IF NOT EXISTS clientes (
   nombre     TEXT NOT NULL,
   apellido   TEXT NOT NULL,
   email      TEXT NOT NULL UNIQUE,
+  phone      TEXT,
   servicio   TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
