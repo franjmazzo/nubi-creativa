@@ -112,16 +112,89 @@ exports.handler = async (event) => {
   };
   const serviceLabel = serviceLabels[service] || service || '—';
 
-  const agencyHtml = `
-    <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px">
-      <h2 style="color:#1f67b0;margin-bottom:20px">Nuevo mensaje — nubicreativa.com</h2>
-      <table style="width:100%;border-collapse:collapse;font-size:15px">
-        <tr><td style="padding:10px 12px;font-weight:600;width:110px;background:#f8f9fa;border:1px solid #e0e0e0">Nombre</td><td style="padding:10px 12px;border:1px solid #e0e0e0">${name}</td></tr>
-        <tr><td style="padding:10px 12px;font-weight:600;background:#f8f9fa;border:1px solid #e0e0e0">Email</td><td style="padding:10px 12px;border:1px solid #e0e0e0"><a href="mailto:${email}" style="color:#1f67b0">${email}</a></td></tr>
-        <tr><td style="padding:10px 12px;font-weight:600;background:#f8f9fa;border:1px solid #e0e0e0">Servicio</td><td style="padding:10px 12px;border:1px solid #e0e0e0">${serviceLabel}</td></tr>
-        <tr><td style="padding:10px 12px;font-weight:600;vertical-align:top;background:#f8f9fa;border:1px solid #e0e0e0">Mensaje</td><td style="padding:10px 12px;white-space:pre-wrap;border:1px solid #e0e0e0">${message}</td></tr>
-      </table>
-    </div>`;
+  const now = new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires', day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+
+  const agencyHtml = `<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#f0f4f8;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f0f4f8;padding:40px 0">
+  <tr><td align="center">
+    <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%">
+
+      <!-- Header -->
+      <tr><td style="background:linear-gradient(135deg,#0D1B2A 0%,#1F67B0 60%,#00D4FF 100%);border-radius:16px 16px 0 0;padding:32px 40px;text-align:center">
+        <div style="display:inline-block;background:rgba(0,212,255,0.15);border:1px solid rgba(0,212,255,0.35);border-radius:50px;padding:5px 16px;margin-bottom:14px">
+          <span style="font-size:11px;font-weight:700;color:#00D4FF;text-transform:uppercase;letter-spacing:0.12em">🔔 Nueva consulta</span>
+        </div>
+        <div style="font-size:26px;font-weight:900;color:#ffffff;letter-spacing:-0.5px;margin-bottom:4px">Nubi<span style="color:#00D4FF">Creativa</span></div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.45);letter-spacing:0.12em;text-transform:uppercase">Panel de notificaciones</div>
+      </td></tr>
+
+      <!-- Body -->
+      <tr><td style="background:#ffffff;padding:36px 40px 32px">
+
+        <h1 style="margin:0 0 6px;font-size:22px;font-weight:800;color:#0D1B2A">Nuevo cliente potencial</h1>
+        <p style="margin:0 0 24px;font-size:14px;color:#8a9ab0">${now} · Recibido desde nubicreativa.com</p>
+
+        <!-- Contact card -->
+        <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8faff;border:1px solid #e2e8f0;border-radius:12px;margin-bottom:24px">
+          <tr><td style="padding:20px 24px">
+            <div style="font-size:11px;font-weight:700;color:#1F67B0;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:16px">Datos del contacto</div>
+            <table width="100%" cellpadding="0" cellspacing="0">
+              <tr>
+                <td style="padding:8px 0;width:110px;font-size:12px;font-weight:700;color:#8a9ab0;text-transform:uppercase;letter-spacing:0.06em;vertical-align:top">Nombre</td>
+                <td style="padding:8px 0;font-size:15px;font-weight:700;color:#0D1B2A">${name} ${apellido}</td>
+              </tr>
+              <tr><td colspan="2" style="border-top:1px solid #e2e8f0"></td></tr>
+              <tr>
+                <td style="padding:8px 0;font-size:12px;font-weight:700;color:#8a9ab0;text-transform:uppercase;letter-spacing:0.06em;vertical-align:top">Email</td>
+                <td style="padding:8px 0">
+                  <a href="mailto:${email}" style="font-size:15px;color:#1F67B0;font-weight:600;text-decoration:none">${email}</a>
+                </td>
+              </tr>
+              <tr><td colspan="2" style="border-top:1px solid #e2e8f0"></td></tr>
+              <tr>
+                <td style="padding:8px 0;font-size:12px;font-weight:700;color:#8a9ab0;text-transform:uppercase;letter-spacing:0.06em;vertical-align:top">Servicio</td>
+                <td style="padding:8px 0">
+                  ${serviceLabel !== '—' ? `<span style="display:inline-block;background:#e8f4ff;color:#1F67B0;padding:3px 12px;border-radius:20px;font-size:13px;font-weight:700">${serviceLabel}</span>` : '<span style="color:#8a9ab0;font-size:14px">—</span>'}
+                </td>
+              </tr>
+            </table>
+          </td></tr>
+        </table>
+
+        <!-- Message -->
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px">
+          <tr><td style="background:#0D1B2A;border-radius:12px;padding:20px 24px">
+            <div style="font-size:11px;font-weight:700;color:#00D4FF;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:12px">Mensaje</div>
+            <div style="font-size:15px;color:rgba(255,255,255,0.85);line-height:1.75;white-space:pre-wrap">${message}</div>
+          </td></tr>
+        </table>
+
+        <!-- CTA -->
+        <table width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td style="padding-right:8px">
+              <a href="mailto:${email}?subject=Re: tu consulta en Nubi Creativa" style="display:block;text-align:center;background:linear-gradient(135deg,#1F67B0,#00D4FF);color:#0D1B2A;font-weight:700;font-size:15px;padding:13px 20px;border-radius:50px;text-decoration:none">Responder ahora →</a>
+            </td>
+            <td style="padding-left:8px;width:160px">
+              <a href="https://wa.me/5491132378410?text=Hola%20${encodeURIComponent(name)}%2C%20te%20contactamos%20de%20Nubi%20Creativa..." style="display:block;text-align:center;background:#25D366;color:#ffffff;font-weight:700;font-size:14px;padding:13px 20px;border-radius:50px;text-decoration:none">WhatsApp</a>
+            </td>
+          </tr>
+        </table>
+
+      </td></tr>
+
+      <!-- Footer -->
+      <tr><td style="background:#0D1B2A;border-radius:0 0 16px 16px;padding:22px 40px;text-align:center">
+        <div style="font-size:13px;color:rgba(255,255,255,0.3)">Nubi Creativa · Notificación interna · <a href="https://nubicreativa.com" style="color:#00D4FF;text-decoration:none">nubicreativa.com</a></div>
+      </td></tr>
+
+    </table>
+  </td></tr>
+</table>
+</body></html>`;
 
   const clientHtml = `<!DOCTYPE html>
 <html lang="es">
