@@ -44,11 +44,23 @@ CREATE TABLE IF NOT EXISTS rate_limits (
 CREATE TABLE IF NOT EXISTS contact_submissions (
   id         SERIAL PRIMARY KEY,
   name       TEXT NOT NULL,
+  apellido   TEXT NOT NULL DEFAULT '',
   email      TEXT NOT NULL,
   service    TEXT,
   message    TEXT NOT NULL,
   ip_hash    TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- CRM client database (deduplicated, upserted from contact form)
+CREATE TABLE IF NOT EXISTS clientes (
+  id         SERIAL PRIMARY KEY,
+  nombre     TEXT NOT NULL,
+  apellido   TEXT NOT NULL,
+  email      TEXT NOT NULL UNIQUE,
+  servicio   TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 -- ============================================================
@@ -65,9 +77,10 @@ CREATE INDEX IF NOT EXISTS idx_projects_published_order
 -- ROW LEVEL SECURITY
 -- ============================================================
 
-ALTER TABLE projects           ENABLE ROW LEVEL SECURITY;
-ALTER TABLE rate_limits        ENABLE ROW LEVEL SECURITY;
+ALTER TABLE projects            ENABLE ROW LEVEL SECURITY;
+ALTER TABLE rate_limits         ENABLE ROW LEVEL SECURITY;
 ALTER TABLE contact_submissions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE clientes            ENABLE ROW LEVEL SECURITY;
 
 -- Public (anon key): can only read published projects
 CREATE POLICY "Public read published projects"
@@ -87,6 +100,10 @@ CREATE POLICY "Public insert contact_submissions"
 CREATE POLICY "Public read rate_limits"
   ON rate_limits FOR SELECT
   USING (true);
+
+-- clientes: service key only (no public access)
+CREATE POLICY "Service key clientes access"
+  ON clientes USING (true) WITH CHECK (true);
 
 -- Note: SUPABASE_SERVICE_KEY bypasses RLS — used by admin.js and contact.js for full access
 

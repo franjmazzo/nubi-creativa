@@ -67,12 +67,14 @@ exports.handler = async (event) => {
     return jsonRes(200, { ok: true }); // silent success for bots
   }
 
-  const name    = sanitize(body.name);
-  const email   = sanitize(body.email);
-  const service = sanitize(body.service);
-  const message = sanitize(body.message);
+  const name     = sanitize(body.name);
+  const apellido = sanitize(body.apellido);
+  const email    = sanitize(body.email);
+  const service  = sanitize(body.service);
+  const message  = sanitize(body.message);
 
   if (!name || name.length < 2)                              return jsonRes(400, { error: 'Nombre inválido' });
+  if (!apellido || apellido.length < 2)                      return jsonRes(400, { error: 'Apellido inválido' });
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))  return jsonRes(400, { error: 'Email inválido' });
   if (!message || message.length < 10)                       return jsonRes(400, { error: 'Mensaje demasiado corto' });
 
@@ -94,7 +96,12 @@ exports.handler = async (event) => {
       dbFetch('rate_limits', { method: 'POST', body: JSON.stringify({ ip_hash: ipHash }) }),
       dbFetch('contact_submissions', {
         method: 'POST',
-        body: JSON.stringify({ name, email, service: service || null, message, ip_hash: ipHash }),
+        body: JSON.stringify({ name, apellido, email, service: service || null, message, ip_hash: ipHash }),
+      }),
+      dbFetch('clientes', {
+        method: 'POST',
+        headers: { Prefer: 'resolution=merge-duplicates,return=minimal' },
+        body: JSON.stringify({ nombre: name, apellido, email, servicio: service || null, updated_at: new Date().toISOString() }),
       }),
     ]);
   }

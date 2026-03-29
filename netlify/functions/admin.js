@@ -45,7 +45,8 @@ exports.handler = async (event) => {
     return jsonRes(503, { error: 'Database not configured' });
   }
 
-  const method = event.httpMethod;
+  const method   = event.httpMethod;
+  const resource = event.queryStringParameters?.resource || 'projects';
   let body;
   if (event.body) {
     try { body = JSON.parse(event.body); }
@@ -53,6 +54,13 @@ exports.handler = async (event) => {
   }
 
   try {
+    // Clientes — read-only CRM list
+    if (resource === 'clientes') {
+      if (method !== 'GET') return jsonRes(405, { error: 'Method Not Allowed' });
+      const res = await supaFetch('clientes?order=created_at.desc&select=*');
+      return jsonRes(res.ok ? 200 : 502, await res.json());
+    }
+
     // GET — list all projects (ordered)
     if (method === 'GET') {
       const res = await supaFetch('projects?order=order_index.asc');

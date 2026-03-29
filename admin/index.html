@@ -103,6 +103,18 @@
     .confirm-card p { font-size: 14px; color: rgba(255,255,255,0.45); margin-bottom: 22px; line-height: 1.5; }
     .confirm-acts { display: flex; gap: 10px; justify-content: center; }
 
+    /* ── NAV TABS ── */
+    .nav-tabs { display: flex; gap: 3px; background: rgba(255,255,255,0.04); padding: 3px; border-radius: 10px; width: fit-content; margin-bottom: 28px; }
+    .nav-tab { padding: 8px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; color: rgba(255,255,255,0.45); border: none; background: transparent; font-family: var(--font-b); }
+    .nav-tab.active { background: var(--blue); color: var(--white); }
+    .tab-section { display: none; }
+    .tab-section.active { display: block; }
+
+    /* ── SEARCH ── */
+    .search-input { padding: 9px 14px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 9px; color: var(--white); font-size: 14px; font-family: var(--font-b); outline: none; width: 220px; transition: border-color 0.2s; }
+    .search-input:focus { border-color: var(--blue); }
+    .search-input::placeholder { color: rgba(255,255,255,0.25); }
+
     /* ── TOAST ── */
     #toast { position: fixed; bottom: 24px; right: 24px; z-index: 300; padding: 11px 20px; border-radius: 12px; font-size: 14px; font-weight: 500; transform: translateY(16px); opacity: 0; transition: all 0.28s; pointer-events: none; }
     #toast.show { transform: translateY(0); opacity: 1; }
@@ -143,11 +155,31 @@
     </div>
   </header>
   <main class="main">
-    <div class="section-head">
-      <h1 class="section-title">Proyectos del portfolio</h1>
-      <button class="btn btn-primary" id="add-btn">+ Nuevo proyecto</button>
+    <div class="nav-tabs">
+      <button class="nav-tab active" id="tab-proyectos" onclick="switchSection('proyectos')">Proyectos</button>
+      <button class="nav-tab" id="tab-clientes" onclick="switchSection('clientes')">Clientes</button>
     </div>
-    <div id="table-wrap"><div class="loading-msg">Cargando proyectos…</div></div>
+
+    <!-- Proyectos section -->
+    <div class="tab-section active" id="section-proyectos">
+      <div class="section-head">
+        <h1 class="section-title">Proyectos del portfolio</h1>
+        <button class="btn btn-primary" id="add-btn">+ Nuevo proyecto</button>
+      </div>
+      <div id="table-wrap"><div class="loading-msg">Cargando proyectos…</div></div>
+    </div>
+
+    <!-- Clientes section -->
+    <div class="tab-section" id="section-clientes">
+      <div class="section-head">
+        <h1 class="section-title">Base de clientes</h1>
+        <div style="display:flex;gap:10px;align-items:center">
+          <input type="text" class="search-input" id="clientes-search" placeholder="Buscar por nombre o email…" oninput="filterClientes()">
+          <button class="btn btn-ghost" id="export-csv-btn" onclick="exportCSV()">↓ Exportar CSV</button>
+        </div>
+      </div>
+      <div id="clientes-wrap"><div class="loading-msg">Cargando clientes…</div></div>
+    </div>
   </main>
 </div>
 
@@ -248,6 +280,8 @@
   let projects = [];
   let editingId = null;
   let deletingId = null;
+  let clientes = [];
+  let clientesLoaded = false;
 
   // ── AUTH ────────────────────────────────────────────────
   const loginScreen = document.getElementById('login-screen');
@@ -275,9 +309,12 @@
   document.getElementById('logout-btn').addEventListener('click', () => {
     sessionStorage.removeItem('nubi-secret');
     secret = '';
+    clientesLoaded = false;
+    clientes = [];
     appEl.style.display = 'none';
     loginScreen.style.display = 'flex';
     document.getElementById('secret-input').value = '';
+    switchSection('proyectos');
   });
 
   // Auto-restore session
@@ -503,6 +540,86 @@
   function tryParseArr(val) {
     try { return JSON.parse(val || '[]'); } catch { return []; }
   }
+
+  // ── SECTION SWITCHING ────────────────────────────────────
+  function switchSection(name) {
+    ['proyectos', 'clientes'].forEach(s => {
+      document.getElementById(`section-${s}`).classList.toggle('active', s === name);
+      document.getElementById(`tab-${s}`).classList.toggle('active', s === name);
+    });
+    if (name === 'clientes' && !clientesLoaded) loadClientes();
+  }
+
+  // ── CLIENTES ─────────────────────────────────────────────
+  async function loadClientes() {
+    const res = await fetch(`${API}?resource=clientes`, { headers: { 'x-admin-secret': secret } });
+    if (res.ok) {
+      clientes = await res.json();
+      clientesLoaded = true;
+      renderClientes(clientes);
+    } else {
+      document.getElementById('clientes-wrap').innerHTML = '<div class="empty-msg">Error al cargar clientes.</div>';
+    }
+  }
+
+  function renderClientes(list) {
+    const wrap = document.getElementById('clientes-wrap');
+    if (!list.length) {
+      wrap.innerHTML = '<div class="empty-msg">No hay clientes todavía. Los datos se cargan cuando alguien complete el formulario de contacto.</div>';
+      return;
+    }
+    const serviceLabel = { diseno:'Diseño', marketing:'Marketing', web:'Web', audiovisual:'Audiovisual', redes:'Redes Sociales', otro:'Otro' };
+    wrap.innerHTML = `
+      <table class="proj-table">
+        <thead><tr>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Email</th>
+          <th>Servicio</th>
+          <th>Fecha</th>
+        </tr></thead>
+        <tbody>
+          ${list.map(c => `
+            <tr>
+              <td>${esc(c.nombre)}</td>
+              <td>${esc(c.apellido)}</td>
+              <td><a href="mailto:${esc(c.email)}" style="color:var(--accent)">${esc(c.email)}</a></td>
+              <td>${c.servicio ? `<span class="badge">${esc(serviceLabel[c.servicio] || c.servicio)}</span>` : '<span style="color:rgba(255,255,255,0.3)">—</span>'}</td>
+              <td style="color:rgba(255,255,255,0.5);font-size:13px">${new Date(c.created_at).toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit',year:'numeric'})}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+      <div style="margin-top:12px;font-size:12px;color:rgba(255,255,255,0.3)">${list.length} cliente${list.length !== 1 ? 's' : ''}</div>
+    `;
+  }
+
+  function filterClientes() {
+    const q = document.getElementById('clientes-search').value.toLowerCase();
+    if (!q) { renderClientes(clientes); return; }
+    renderClientes(clientes.filter(c =>
+      (c.nombre + ' ' + c.apellido + ' ' + c.email).toLowerCase().includes(q)
+    ));
+  }
+
+  function exportCSV() {
+    if (!clientes.length) { toast('No hay clientes para exportar', 'err'); return; }
+    const serviceLabel = { diseno:'Diseño', marketing:'Marketing', web:'Web', audiovisual:'Audiovisual', redes:'Redes Sociales', otro:'Otro' };
+    const rows = [['Nombre','Apellido','Email','Servicio','Fecha']];
+    clientes.forEach(c => rows.push([
+      c.nombre, c.apellido, c.email,
+      serviceLabel[c.servicio] || c.servicio || '',
+      new Date(c.created_at).toLocaleDateString('es-AR'),
+    ]));
+    const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' }));
+    a.download = `clientes_${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+
+  function esc(s) { return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
   let toastT;
   function toast(msg, type = 'ok') {
