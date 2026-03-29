@@ -123,17 +123,128 @@ exports.handler = async (event) => {
       </table>
     </div>`;
 
-  const clientHtml = `
-    <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px">
-      <h2 style="color:#1f67b0">¡Recibimos tu mensaje, ${name}!</h2>
-      <p style="color:#444;line-height:1.7;margin:16px 0">Gracias por escribirnos. Revisamos tu consulta y te respondemos en menos de 24 horas.</p>
-      <p style="color:#444;line-height:1.7">Mientras tanto, podés explorar nuestro trabajo en
-        <a href="https://nubicreativa.com" style="color:#1f67b0">nubicreativa.com</a>
-        o seguirnos en
-        <a href="https://instagram.com/nubi_creativa" style="color:#1f67b0">@nubi_creativa</a>.
-      </p>
-      <p style="color:#888;margin-top:28px;font-size:14px">— El equipo de Nubi Creativa</p>
-    </div>`;
+  const clientHtml = `<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#f0f4f8;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f0f4f8;padding:40px 0">
+  <tr><td align="center">
+    <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%">
+
+      <!-- Header -->
+      <tr><td style="background:linear-gradient(135deg,#0D1B2A 0%,#1F67B0 60%,#00D4FF 100%);border-radius:16px 16px 0 0;padding:40px 40px 36px;text-align:center">
+        <div style="font-size:28px;font-weight:900;color:#ffffff;letter-spacing:-0.5px;margin-bottom:4px">Nubi<span style="color:#00D4FF">Creativa</span></div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.55);letter-spacing:0.15em;text-transform:uppercase">Agencia Digital · Buenos Aires</div>
+      </td></tr>
+
+      <!-- Body -->
+      <tr><td style="background:#ffffff;padding:40px 40px 32px">
+
+        <!-- Greeting -->
+        <h1 style="margin:0 0 8px;font-size:26px;font-weight:800;color:#0D1B2A;line-height:1.2">¡Hola, ${name}!</h1>
+        <p style="margin:0 0 24px;font-size:16px;color:#1F67B0;font-weight:600">Recibimos tu mensaje. ✓</p>
+        <p style="margin:0 0 28px;font-size:15px;color:#4a5568;line-height:1.75">
+          Gracias por contactarnos. Ya tenemos tu consulta y nos ponemos a trabajar para darte la mejor respuesta posible.<br>
+          <strong style="color:#0D1B2A">Te respondemos en menos de 24 horas.</strong>
+        </p>
+
+        <!-- Summary card -->
+        <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8faff;border:1px solid #e2e8f0;border-radius:12px;margin-bottom:32px">
+          <tr><td style="padding:20px 24px 16px">
+            <div style="font-size:11px;font-weight:700;color:#1F67B0;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:14px">Resumen de tu consulta</div>
+            <table width="100%" cellpadding="0" cellspacing="0">
+              <tr>
+                <td style="padding:7px 0;font-size:13px;color:#8a9ab0;font-weight:600;width:100px;vertical-align:top">Nombre</td>
+                <td style="padding:7px 0;font-size:14px;color:#0D1B2A;font-weight:600">${name} ${apellido}</td>
+              </tr>
+              <tr>
+                <td colspan="2" style="border-top:1px solid #e2e8f0"></td>
+              </tr>
+              <tr>
+                <td style="padding:7px 0;font-size:13px;color:#8a9ab0;font-weight:600;vertical-align:top">Servicio</td>
+                <td style="padding:7px 0;font-size:14px;color:#0D1B2A">${serviceLabel !== '—' ? `<span style="display:inline-block;background:#e8f4ff;color:#1F67B0;padding:2px 10px;border-radius:20px;font-size:13px;font-weight:600">${serviceLabel}</span>` : '<span style="color:#8a9ab0">—</span>'}</td>
+              </tr>
+              <tr>
+                <td colspan="2" style="border-top:1px solid #e2e8f0"></td>
+              </tr>
+              <tr>
+                <td style="padding:7px 0;font-size:13px;color:#8a9ab0;font-weight:600;vertical-align:top">Mensaje</td>
+                <td style="padding:7px 0;font-size:14px;color:#4a5568;line-height:1.6;white-space:pre-wrap">${message}</td>
+              </tr>
+            </table>
+          </td></tr>
+        </table>
+
+        <!-- What happens next -->
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:32px">
+          <tr>
+            <td style="padding:0 0 12px">
+              <div style="font-size:11px;font-weight:700;color:#1F67B0;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:14px">¿Qué pasa ahora?</div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="width:36px;vertical-align:top;padding-top:2px">
+                    <div style="width:28px;height:28px;background:linear-gradient(135deg,#1F67B0,#00D4FF);border-radius:50%;text-align:center;line-height:28px;font-size:13px;font-weight:700;color:#0D1B2A">1</div>
+                  </td>
+                  <td style="padding:0 0 16px 10px;font-size:14px;color:#4a5568;line-height:1.6">Revisamos tu consulta y preparamos una respuesta personalizada.</td>
+                </tr>
+                <tr>
+                  <td style="width:36px;vertical-align:top;padding-top:2px">
+                    <div style="width:28px;height:28px;background:linear-gradient(135deg,#1F67B0,#00D4FF);border-radius:50%;text-align:center;line-height:28px;font-size:13px;font-weight:700;color:#0D1B2A">2</div>
+                  </td>
+                  <td style="padding:0 0 16px 10px;font-size:14px;color:#4a5568;line-height:1.6">Te contactamos a <strong style="color:#0D1B2A">${email}</strong> con propuesta y próximos pasos.</td>
+                </tr>
+                <tr>
+                  <td style="width:36px;vertical-align:top;padding-top:2px">
+                    <div style="width:28px;height:28px;background:linear-gradient(135deg,#1F67B0,#00D4FF);border-radius:50%;text-align:center;line-height:28px;font-size:13px;font-weight:700;color:#0D1B2A">3</div>
+                  </td>
+                  <td style="padding:0 0 0 10px;font-size:14px;color:#4a5568;line-height:1.6">Arrancamos a construir tu marca juntos. 🚀</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+
+        <!-- CTA -->
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:8px">
+          <tr>
+            <td align="center">
+              <a href="https://nubicreativa.com" style="display:inline-block;background:linear-gradient(135deg,#1F67B0,#00D4FF);color:#0D1B2A;font-weight:700;font-size:15px;padding:14px 36px;border-radius:50px;text-decoration:none;letter-spacing:0.02em">Ver nuestro portfolio →</a>
+            </td>
+          </tr>
+        </table>
+
+      </td></tr>
+
+      <!-- Footer -->
+      <tr><td style="background:#0D1B2A;border-radius:0 0 16px 16px;padding:28px 40px;text-align:center">
+        <div style="font-size:16px;font-weight:800;color:#ffffff;margin-bottom:4px">Nubi<span style="color:#00D4FF">Creativa</span></div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:16px">Agencia digital en Buenos Aires</div>
+        <table align="center" cellpadding="0" cellspacing="0" style="margin-bottom:16px">
+          <tr>
+            <td style="padding:0 8px">
+              <a href="https://nubicreativa.com" style="font-size:13px;color:#00D4FF;text-decoration:none">nubicreativa.com</a>
+            </td>
+            <td style="color:rgba(255,255,255,0.2);font-size:13px">·</td>
+            <td style="padding:0 8px">
+              <a href="https://instagram.com/nubi_creativa" style="font-size:13px;color:#00D4FF;text-decoration:none">@nubi_creativa</a>
+            </td>
+            <td style="color:rgba(255,255,255,0.2);font-size:13px">·</td>
+            <td style="padding:0 8px">
+              <a href="mailto:nubicreativa@gmail.com" style="font-size:13px;color:#00D4FF;text-decoration:none">nubicreativa@gmail.com</a>
+            </td>
+          </tr>
+        </table>
+        <div style="font-size:11px;color:rgba(255,255,255,0.2)">Este email fue enviado porque completaste el formulario de contacto en nubicreativa.com</div>
+      </td></tr>
+
+    </table>
+  </td></tr>
+</table>
+</body></html>`;
 
   await Promise.all([
     sendEmail(AGENCY_EMAIL, `Nuevo contacto: ${name} — ${serviceLabel}`, agencyHtml),
