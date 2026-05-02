@@ -1093,7 +1093,6 @@
     /* =============================================
        CHAT FAB + WINDOW (commented out — not active)
     ============================================= */
-    /*
     #chat-fab {
       position: fixed; bottom: 28px; left: 28px; z-index: 200;
       width: 56px; height: 56px; border-radius: 50%;
@@ -1209,9 +1208,22 @@
       #chat-fab, #chat-close, #chat-send { cursor: pointer; }
       #chat-input { cursor: text; }
     }
-    */
 
-    /* =============================================
+    /* Chat quick suggestions */
+    .chat-suggestion {
+      padding: 6px 13px; border-radius: 20px; font-size: 12.5px; font-weight: 500;
+      background: rgba(31,103,176,0.12); border: 1px solid rgba(31,103,176,0.28);
+      color: rgba(248,250,255,0.75); cursor: none; transition: background 0.2s, color 0.2s, transform 0.2s;
+      white-space: nowrap;
+    }
+    .chat-suggestion:hover {
+      background: rgba(31,103,176,0.28); color: var(--white);
+      transform: translateY(-1px);
+    }
+    #chat-suggestions.hidden { display: none !important; }
+    @media (hover: none) { .chat-suggestion { cursor: pointer; } }
+
+        /* =============================================
        PROJECT MODAL
     ============================================= */
     #project-modal {
@@ -1812,7 +1824,6 @@
 <!-- =============================================
      FLOATING CHAT BUTTON + CHAT WINDOW (commented out — not active)
 ============================================= -->
-<!--
 <button id="chat-fab" aria-label="Abrir chat" aria-expanded="false" aria-controls="chat-window">
   <span id="chat-unread-dot" aria-hidden="true"></span>
   <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -1834,6 +1845,12 @@
     </button>
   </div>
   <div id="chat-messages" aria-live="polite" aria-atomic="false"></div>
+  <div id="chat-suggestions" style="display:flex;flex-wrap:wrap;gap:7px;padding:10px 16px 4px;">
+    <button class="chat-suggestion" data-es="¿Qué servicios ofrecen?" data-en="What services do you offer?">¿Qué servicios ofrecen?</button>
+    <button class="chat-suggestion" data-es="¿Cómo es el proceso de trabajo?" data-en="How does your process work?">¿Cómo trabajan?</button>
+    <button class="chat-suggestion" data-es="¿Cuánto cuesta un sitio web?" data-en="How much does a website cost?">Precios</button>
+    <button class="chat-suggestion" data-es="Quiero cotizar un proyecto" data-en="I want to get a quote">Cotizar</button>
+  </div>
   <div id="chat-input-row">
     <input type="text" id="chat-input" autocomplete="off" maxlength="500" placeholder="Escribí tu mensaje...">
     <button id="chat-send" aria-label="Enviar mensaje" disabled>
@@ -1843,7 +1860,6 @@
     </button>
   </div>
 </div>
--->
 
 <!-- PROJECT MODAL -->
 <div id="project-modal" role="dialog" aria-modal="true" aria-label="Detalle de proyecto" aria-hidden="true">
@@ -2840,7 +2856,6 @@ function initGSAP() {
 /* ==============================================
    CHATBOT (commented out — not active)
 ============================================== */
-/*
 function initChatbot() {
   const fab        = document.getElementById('chat-fab');
   const win        = document.getElementById('chat-window');
@@ -2851,6 +2866,22 @@ function initChatbot() {
   const unreadDot  = document.getElementById('chat-unread-dot');
   const statusEl   = document.getElementById('chat-header-status');
   if (!fab || !win) return;
+
+  // Quick suggestion chips
+  const suggestionsEl = document.getElementById('chat-suggestions');
+  if (suggestionsEl) {
+    suggestionsEl.querySelectorAll('.chat-suggestion').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const lang = getLang();
+        input.value = btn.dataset[lang] || btn.dataset.es;
+        suggestionsEl.classList.add('hidden');
+        sendMessage();
+      });
+    });
+  }
+  // Hide suggestions once user sends first message (original sendMessage)
+  const _origSendMessage = sendMessage;
+  // patch: hide chips on first user msg — done inline in openChat/sendMessage
 
   let isOpen = false, isLoading = false, history = [], greeted = false;
 
@@ -2874,7 +2905,7 @@ function initChatbot() {
     fab.setAttribute('aria-expanded', 'true'); fab.setAttribute('aria-label', ui('ariaClose'));
     if (unreadDot) unreadDot.classList.add('hidden');
     input.focus();
-    if (!greeted) { greeted = true; appendMessage('bot', ui('greeting')); }
+    if (!greeted) { greeted = true; appendMessage('bot', ui('greeting')); if (suggestionsEl) suggestionsEl.classList.remove('hidden'); }
   }
   function closeChat() {
     isOpen = false;
@@ -2912,6 +2943,7 @@ function initChatbot() {
   async function sendMessage() {
     const text = input.value.trim();
     if (!text || isLoading) return;
+    if (suggestionsEl) suggestionsEl.classList.add('hidden');
     appendMessage('user', text);
     history.push({ role: 'user', content: text });
     if (history.length > 20) history = history.slice(-20);
@@ -2950,11 +2982,11 @@ function initChatbot() {
       _origSetLang(lang);
       input.placeholder = ui('placeholder');
       if (statusEl && !isLoading) statusEl.textContent = ui('online');
+    if (suggestionsEl) { suggestionsEl.querySelectorAll('.chat-suggestion').forEach(btn => { btn.textContent = btn.dataset[lang] || btn.dataset.es; }); }
       fab.setAttribute('aria-label', isOpen ? ui('ariaClose') : ui('ariaOpen'));
     };
   }
 }
-*/
 
 /* ==============================================
    PROJECT MODAL
@@ -3205,7 +3237,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollSpy();
   initBackTop();
   initGSAP();
-  // initChatbot();   // chatbot disabled — uncomment to re-enable
+  initChatbot();
   initProjectModal();
   loadProjects();           // async: updates cards from CMS if configured
 });
