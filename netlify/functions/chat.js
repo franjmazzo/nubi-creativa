@@ -1,6 +1,6 @@
-const Anthropic = require("@anthropic-ai/sdk");
+import Anthropic from "@anthropic-ai/sdk";
 
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const client = new Anthropic();
 
 // Cached system prompt — served from cache after first call, reducing latency & cost
 const SYSTEM_PROMPT = (lang) => ({
@@ -49,22 +49,22 @@ RESPONSE RULES
   cache_control: { type: "ephemeral" },
 });
 
-exports.handler = async (event) => {
-  if (event.httpMethod !== "POST") {
-    return { statusCode: 405, body: "Method Not Allowed" };
+export default async (req) => {
+  if (req.method !== "POST") {
+    return new Response("Method Not Allowed", { status: 405 });
   }
 
   let body;
   try {
-    body = JSON.parse(event.body);
+    body = await req.json();
   } catch {
-    return { statusCode: 400, body: "Invalid JSON" };
+    return new Response("Invalid JSON", { status: 400 });
   }
 
   const { messages, lang } = body;
 
   if (!Array.isArray(messages) || messages.length === 0) {
-    return { statusCode: 400, body: "Missing messages" };
+    return new Response("Missing messages", { status: 400 });
   }
 
   // Sanitize: keep only role + content, max 20 messages, cap content length
@@ -84,16 +84,9 @@ exports.handler = async (event) => {
     });
 
     const text = response.content[0]?.text ?? "";
-    return {
-      statusCode: 200,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ reply: text }),
-    };
+    return Response.json({ reply: text });
   } catch (err) {
     console.error("Anthropic error:", err);
-    return {
-      statusCode: 502,
-      body: JSON.stringify({ error: "API error" }),
-    };
+    return Response.json({ error: "API error" }, { status: 502 });
   }
-};
+}
